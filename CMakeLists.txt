@@ -18,48 +18,32 @@ message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
 #Sources
 set(core_path "${CMAKE_SOURCE_DIR}/core")
 file(GLOB_RECURSE core_sources
-        ${core_path}/*.c
-        ${core_path}/*.h
-        ${core_path}/*.cpp
-        ${core_path}/*.hpp
-        ${core_path}/avr/*.c
-        ${core_path}/avr/*.h
-        ${core_path}/avr/*.cpp
-        ${core_path}/avr/*.hpp
+        ${core_path}/*
+        ${core_path}/avr/*
         )
 
 set(libraries_path "${CMAKE_SOURCE_DIR}/libraries")
 file(GLOB_RECURSE libraries_sources
-        ${libraries_path}/*.c
-        ${libraries_path}/*.h
-        ${libraries_path}/*.cpp
-        ${libraries_path}/*.hpp
+        ${libraries_path}/*
         )
 
 set(sketch_path "${CMAKE_SOURCE_DIR}/sketch")
 file(GLOB_RECURSE sketch_sources
-        ${sketch_path}/*.c
-        ${sketch_path}/*.h
-        ${sketch_path}/*.cpp
-        ${sketch_path}/*.hpp
+        ${sketch_path}/*
         )
 
 set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
 
 set(cmsis_include_path "${cmsis_path}/Include")
 file(GLOB_RECURSE cmsis_include_sources
-        ${cmsis_include_path}/*.c
-        ${cmsis_include_path}/*.h
-        ${cmsis_include_path}/*.cpp
-        ${cmsis_include_path}/*.hpp
+        ${cmsis_include_path}/*
         )
 
 set(cmsis_source_path "${cmsis_path}/Source")
+set(cmsis_source_templates_path "${cmsis_source_path}/Templates")
 file(GLOB_RECURSE cmsis_source_sources
-        ${cmsis_source_path}/Templates/*.c
-        ${cmsis_source_path}/Templates/*.h
-        ${cmsis_source_path}/Templates/*.cpp
-        ${cmsis_source_path}/Templates/*.hpp
+        ${cmsis_source_path}/*
+        ${cmsis_source_templates_path}/*
         )
 
 set(cmsis_startup_path "${cmsis_source_path}/Templates/gcc")
@@ -67,24 +51,24 @@ file(GLOB_RECURSE cmsis_startup_sources
         ${cmsis_startup_path}/*.S
         )
 
+
 set(std_periph_driver_path "${CMAKE_SOURCE_DIR}/system/Drivers/${cpu_name}_StdPeriph_Driver")
+
+set(std_periph_driver_inc_path "${std_periph_driver_path}/inc")
+set(std_periph_driver_inc_usb_path "${std_periph_driver_inc_path}/USB_Library")
+set(std_periph_driver_src_path "${std_periph_driver_path}/src")
+set(std_periph_driver_src_usb_path "${std_periph_driver_src_path}/USB_Library")
 file(GLOB_RECURSE std_periph_driver_sources
-        ${std_periph_driver_path}/inc/*.c
-        ${std_periph_driver_path}/inc/*.h
-        ${std_periph_driver_path}/inc/*.cpp
-        ${std_periph_driver_path}/inc/*.hpp
-        ${std_periph_driver_path}/inc/USB_Library/*.c
-        ${std_periph_driver_path}/inc/USB_Library/*.h
-        ${std_periph_driver_path}/inc/USB_Library/*.cpp
-        ${std_periph_driver_path}/inc/USB_Library/*.hpp
-        ${std_periph_driver_path}/src/*.c
-        ${std_periph_driver_path}/src/*.h
-        ${std_periph_driver_path}/src/*.cpp
-        ${std_periph_driver_path}/src/*.hpp
-        ${std_periph_driver_path}/src/USB_Library/*.c
-        ${std_periph_driver_path}/src/USB_Library/*.h
-        ${std_periph_driver_path}/src/USB_Library/*.cpp
-        ${std_periph_driver_path}/src/USB_Library/*.hpp
+        ${std_periph_driver_inc_path}/*
+        ${std_periph_driver_inc_usb_path}/*
+        ${std_periph_driver_src_path}/*
+        ${std_periph_driver_src_usb_path}/*
+        )
+
+
+set(system_path "${CMAKE_SOURCE_DIR}/system/${cpu_name}")
+file(GLOB_RECURSE system_sources
+        ${system_path}/*
         )
 
 
@@ -107,18 +91,30 @@ set(SRC_LIST
         ${cmsis_source_sources}
         ${cmsis_startup_sources}
         ${std_periph_driver_sources}
+        ${system_sources}
         )
 
 add_executable(${EXECUTABLE} ${SRC_LIST})
 
 #Includes
 target_include_directories(${EXECUTABLE} PRIVATE
-
+        ${core_path}
+        ${libraries_path}
+        ${sketch_path}
+        ${cmsis_include_path}
+        ${cmsis_source_path}
+        ${cmsis_source_templates_path}
+        ${cmsis_startup_path}
+        ${std_periph_driver_inc_path}
+        ${std_periph_driver_inc_usb_path}
+        ${std_periph_driver_src_path}
+        ${std_periph_driver_src_usb_path}
+        ${system_path}
         )
 
 # List of compiler defines, prefix with -D compiler option
 target_compile_definitions(${EXECUTABLE} PRIVATE
-
+        
         )
 
 

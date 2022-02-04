@@ -1,4 +1,7 @@
 {
     "makefile.extensionOutputFolder": "./.vscode",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "mdr32f9qx_config.h": "c"
+    }
 }

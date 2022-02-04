@@ -65,7 +65,7 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-#include "board.h"
+
 #include "MDR32F9Qx_lib.h"
 #include <stdint.h>
 #include "MDR32Fx.h"

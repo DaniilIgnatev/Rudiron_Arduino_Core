@@ -19,6 +19,10 @@
 
 #define ARDUINO_MAIN
 
+#include <stdint.h>
+
+
+uint32_t _millis = 0;
 
 /*
  * \brief Main entry point of Arduino application
