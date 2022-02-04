@@ -2,14 +2,16 @@ set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR ARM)
 
 
-string(FIND $ENV{PATH} "RUDironDistributive/components/gcc-arm-none-eabi/bin" TOOLCHAIN_FOUND_IN_PATH)
+string(FIND $ENV{PATH} "components/gcc-arm-none-eabi/bin" TOOLCHAIN_FOUND_IN_PATH)
+
+message(${TOOLCHAIN_FOUND_IN_PATH})
 
 #проверка нахождения gcc в path
 if (NOT ${TOOLCHAIN_FOUND_IN_PATH} MATCHES "-1")
     set(TOOLCHAIN_PREFIX arm-none-eabi-)
 else ()
     #при необходимости укажите полный путь к gcc
-    set(ARM_TOOLCHAIN_DIR "/Users/../RUDironDistributive/components/gcc-arm-none-eabi/bin")
+    set(ARM_TOOLCHAIN_DIR ../macOS_x64/components/gcc-arm-none-eabi/bin)
     set(BINUTILS_PATH ${ARM_TOOLCHAIN_DIR})
     set(TOOLCHAIN_PREFIX ${ARM_TOOLCHAIN_DIR}/arm-none-eabi-)
 endif ()
