@@ -1,0 +1,3 @@
+/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/cmake-build-debug/CMakeFiles/Arduino_Core_Rudiron.elf.dir

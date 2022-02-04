@@ -1,0 +1,1004 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "Arduino_Core_Rudiron.elf"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"target_link_options",
+			"target_compile_options",
+			"target_include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 220,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 263,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 251,
+				"parent" : 0
+			},
+			{
+				"command" : 3,
+				"file" : 0,
+				"line" : 230,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-mcpu=cortex-m3"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-mthumb"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-pipe"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DUSE_MDR32F9Qx"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-D__STARTUP_CLEAR_BSS"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-D_start=main"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/CoreSupport"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/gcc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/inc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/Config"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/Config/MDR32F9Qx"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/app"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/rudiron_sdk"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/rudiron_sdk/Core"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/libraries"
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				9
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-mcpu=cortex-m3"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-mthumb"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-pipe"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DUSE_MDR32F9Qx"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-D__STARTUP_CLEAR_BSS"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-D_start=main"
+				},
+				{
+					"fragment" : "-std=c99"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/CoreSupport"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/gcc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/inc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/Config"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/Config/MDR32F9Qx"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/app"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/rudiron_sdk"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/rudiron_sdk/Core"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/libraries"
+				}
+			],
+			"language" : "C",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "99"
+			},
+			"sourceIndexes" : 
+			[
+				10,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				76
+			]
+		},
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.1.sdk"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-mcpu=cortex-m3"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-mthumb"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-ffunction-sections"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-fdata-sections"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-pipe"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-DUSE_MDR32F9Qx"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-D__STARTUP_CLEAR_BSS"
+				},
+				{
+					"backtrace" : 3,
+					"fragment" : "-D_start=main"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/CoreSupport"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/gcc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/inc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/Config"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/Config/MDR32F9Qx"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/app"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/rudiron_sdk"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/rudiron_sdk/Core"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/libraries"
+				}
+			],
+			"language" : "ASM",
+			"sourceIndexes" : 
+			[
+				13
+			]
+		}
+	],
+	"id" : "Arduino_Core_Rudiron.elf::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-T/Users/daniilignatev/GitHub/Arduino_Core_Rudiron/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/gcc/MDR32F9Qx.ld",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-mcpu=cortex-m3",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-mthumb",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-Wl,--gc-sections",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-specs=nosys.specs",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-specs=nano.specs",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-ffreestanding",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 2,
+				"fragment" : "-nostartfiles",
+				"role" : "flags"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "Arduino_Core_Rudiron.elf",
+	"nameOnDisk" : "Arduino_Core_Rudiron.elf",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				11,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				75,
+				77,
+				78
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				9,
+				10,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				76
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				12,
+				13
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/cmsis_compiler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/cmsis_gcc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/cmsis_version.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/core_cm3.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/core_cmFunc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/core_cmInstr.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/mpu_armv7.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/CoreSupport/old/core_cm3_old.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/inc/MDR32Fx.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/gcc/MDR32F9Qx.ld",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 2,
+			"path" : "std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/gcc/startup_MDR32F9Qx.S",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_adc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_arinc429r.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_arinc429t.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_audio.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_bkp.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_can.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_comp.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_dac.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_dma.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_dsp.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_ebc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_eeprom.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_eth.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_i2c.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_iwdg.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_keypad.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_led.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_lib.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_mil_std_1553.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_port.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_power.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_rst_clk.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_sdio.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_ssp.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_timer.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_uart.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_usb.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/MDR32F9Qx_wwdg.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library/MDR32F9Qx_usb_CDC.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library/MDR32F9Qx_usb_default_handlers.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library/MDR32F9Qx_usb_device.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/inc/USB_Library/MDR32F9Qx_usb_handlers.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_adc.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_arinc429r.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_arinc429t.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_audio.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_bkp.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_can.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_comp.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_dac.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_dma.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_dsp.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_ebc.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_eeprom.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_eth.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_i2c.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_iwdg.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_keypad.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_led.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_mil_std_1553.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_port.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_power.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_rst_clk.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_sdio.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_ssp.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_timer.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_uart.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_usb.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_wwdg.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/USB_Library/MDR32F9Qx_usb_CDC.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/USB_Library/MDR32F9Qx_usb_device.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/Config/MDR32F9Qx/MDR32F9Qx_config.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "std-per-lib/Config/MDR32F9Qx/MDR32F9Qx_it.c",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/Config/MDR32F9Qx/MDR32F9Qx_it.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "std-per-lib/Config/board.h",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "EXECUTABLE"
+}

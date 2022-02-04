@@ -1,0 +1,8 @@
+# ninja log v5
+584	639	1643963026931251052	Arduino_Core_Rudiron	c327abc1b9eabfba
+0	583	1643963026874766016	CMakeFiles/Arduino_Core_Rudiron.dir/main.cpp.o	392aa69dbf72248a
+1	170	1643963575168709426	build.ninja	4dd2211b6af082
+3	86	1643963581097463208	CMakeFiles/Arduino_Core_Rudiron.elf.dir/std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_arinc429r.c.o	9f90134dace74d8e
+1	101	1643963581114857200	CMakeFiles/Arduino_Core_Rudiron.elf.dir/std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_adc.c.o	a9952d1ac27e73b6
+0	119	1643963581132169653	CMakeFiles/Arduino_Core_Rudiron.elf.dir/std-per-lib/CMSIS/m3/DeviceSupport/MDR32F9Qx/startup/system_MDR32F9Qx.c.o	fd0926a2c331cd13
+6	121	1643963581134776109	CMakeFiles/Arduino_Core_Rudiron.elf.dir/std-per-lib/MDR32F9Qx_StdPeriph_Driver/src/MDR32F9Qx_arinc429t.c.o	a8a7bb8d6b4c003a
