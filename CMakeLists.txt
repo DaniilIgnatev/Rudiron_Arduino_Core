@@ -17,9 +17,12 @@ message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
 
 #Sources
 set(core_path "${CMAKE_SOURCE_DIR}/core")
+set(core_avr_path "${core_path}/avr")
+set(core_milandr_path "${core_path}/milandr")
 file(GLOB_RECURSE core_sources
         ${core_path}/*
-        ${core_path}/avr/*
+        ${core_avr_path}/*
+        ${core_milandr_path}/*
         )
 
 set(libraries_path "${CMAKE_SOURCE_DIR}/libraries")
@@ -71,6 +74,10 @@ file(GLOB_RECURSE system_sources
         ${system_path}/*
         )
 
+set(variants_path "${CMAKE_SOURCE_DIR}/variants/${cpu_name}")
+file(GLOB_RECURSE variants_sources
+        ${variants_path}/*
+        )
 
 #Executable
 set(EXECUTABLE "${PROJECT_NAME}.elf")
@@ -92,6 +99,7 @@ set(SRC_LIST
         ${cmsis_startup_sources}
         ${std_periph_driver_sources}
         ${system_sources}
+        ${variants_sources}
         )
 
 add_executable(${EXECUTABLE} ${SRC_LIST})
@@ -110,11 +118,12 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${std_periph_driver_src_path}
         ${std_periph_driver_src_usb_path}
         ${system_path}
+        ${variants_path}
         )
 
 # List of compiler defines, prefix with -D compiler option
 target_compile_definitions(${EXECUTABLE} PRIVATE
-        
+        RUDIRON_BUTERBROD_rev5
         )
 
 

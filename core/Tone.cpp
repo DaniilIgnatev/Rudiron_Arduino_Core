@@ -1,6 +1,8 @@
-/*
-  main.cpp - Main loop for Arduino sketches
-  Copyright (c) 2005-2013 Arduino Team.  All right reserved.
+/* Tone.cpp
+
+  A Tone Generator Library
+
+  Written by Brett Hagman
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,26 +19,19 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
-
 #include "Arduino.h"
+#include "HardwareTimer.h"
 
 
-uint32_t _millis = 0;
-
-/*
- * \brief Main entry point of Arduino application
- */
-int main(void)
+void tone(uint8_t _pin, unsigned int frequency, unsigned long duration)
 {
-  initVariant();
+  UNUSED(_pin);
+  UNUSED(frequency);
+  UNUSED(duration);
+}
 
-  setup();
-
-  for (;;) {
-    loop();
-//    serialEventRun();
-  }
-
-  return 0;
+void noTone(uint8_t _pin, bool destruct)
+{
+  UNUSED(_pin);
+  UNUSED(destruct);
 }

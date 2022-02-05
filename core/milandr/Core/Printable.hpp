@@ -1,6 +1,6 @@
 /*
-  main.cpp - Main loop for Arduino sketches
-  Copyright (c) 2005-2013 Arduino Team.  All right reserved.
+  Printable.h - Interface class that allows printing of complex types
+  Copyright (c) 2011 Adrian McEwen.  All right reserved.
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -17,26 +17,24 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
+#ifndef Printable_h
+#define Printable_h
 
-#include "Arduino.h"
+#include <stdlib.h>
 
+class Print;
 
-uint32_t _millis = 0;
+/** The Printable class provides a way for new classes to allow themselves to be printed.
+    By deriving from Printable and implementing the printTo method, it will then be possible
+    for users to print out instances of this class by passing them into the usual
+    Print::print and Print::println methods.
+*/
 
-/*
- * \brief Main entry point of Arduino application
- */
-int main(void)
+class Printable
 {
-  initVariant();
+  public:
+    virtual size_t printTo(Print& p) const = 0;
+};
 
-  setup();
+#endif
 
-  for (;;) {
-    loop();
-//    serialEventRun();
-  }
-
-  return 0;
-}

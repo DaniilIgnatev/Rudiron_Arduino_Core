@@ -1,5 +1,5 @@
 /*
-  main.cpp - Main loop for Arduino sketches
+  Arduino.h - Main include file for the Arduino SDK
   Copyright (c) 2005-2013 Arduino Team.  All right reserved.
 
   This library is free software; you can redistribute it and/or
@@ -17,26 +17,29 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-#define ARDUINO_MAIN
+#ifndef Arduino_h
+#define Arduino_h
 
-#include "Arduino.h"
+#include "wiring.h"
 
+/* sketch */
 
-uint32_t _millis = 0;
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
+// Weak empty variant initialization function.
+// May be redefined by variant files.
+extern void initVariant() __attribute__((weak));
 
-/*
- * \brief Main entry point of Arduino application
- */
-int main(void)
-{
-  initVariant();
+extern void setup(void) ;
+extern void loop(void) ;
 
-  setup();
+void yield(void);
+#ifdef __cplusplus
+} // extern "C"
+#endif // __cplusplus
 
-  for (;;) {
-    loop();
-//    serialEventRun();
-  }
+// Include pins variant
+#include "pins_arduino.h"
 
-  return 0;
-}
+#endif // Arduino_h
