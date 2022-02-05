@@ -4,9 +4,9 @@ set(CMAKE_SYSTEM_PROCESSOR ARM)
 
 #проверка нахождения gcc в path
 if (WIN32)
-    string(FIND "$ENV{PATH}" "RUDironDistributive\\components\\gcc-arm-none-eabi\\bin" TOOLCHAIN_FOUND_IN_PATH)
+    string(FIND "$ENV{PATH}" "components\\gcc-arm-none-eabi\\bin" TOOLCHAIN_FOUND_IN_PATH)
 else ()
-    string(FIND "$ENV{PATH}" "RUDironDistributive/components/gcc-arm-none-eabi/bin" TOOLCHAIN_FOUND_IN_PATH)
+    string(FIND "$ENV{PATH}" "components/gcc-arm-none-eabi/bin" TOOLCHAIN_FOUND_IN_PATH)
 endif ()
 
 if (NOT ${TOOLCHAIN_FOUND_IN_PATH} MATCHES "-1")
@@ -14,7 +14,7 @@ if (NOT ${TOOLCHAIN_FOUND_IN_PATH} MATCHES "-1")
 else ()
     message("GCC NOT FOUND IN PATH. SPECIFY FULL PATH TO GCC BIN FOLDER!")
     #при необходимости укажите полный путь к gcc
-    set(ARM_TOOLCHAIN_DIR "/Users/../RUDironDistributive/components/gcc-arm-none-eabi/bin")
+    set(ARM_TOOLCHAIN_DIR "/Users/../components/gcc-arm-none-eabi/bin")
     set(BINUTILS_PATH ${ARM_TOOLCHAIN_DIR})
     set(TOOLCHAIN_PREFIX ${ARM_TOOLCHAIN_DIR}/arm-none-eabi-)
 endif ()
