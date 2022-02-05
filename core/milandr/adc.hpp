@@ -28,7 +28,7 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR32F9Qx_adc.h"
 #include "MDR32F9Qx_dma.h"
 #include "MDR32F9Qx_it.h"
-#include "gpio.hpp"
+#include "gpio.h"
 
 
 typedef enum{
@@ -74,9 +74,6 @@ protected:
 
 
     ADCResult readValues[7];
-
-
-    GPIO port = GPIO();
 
 
     void initPinADC(PortPinName pinName);

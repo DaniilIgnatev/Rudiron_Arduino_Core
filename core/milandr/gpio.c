@@ -1,14 +1,9 @@
-#include "gpio.hpp"
+#include "gpio.h"
 
 
 
-GPIO::GPIO()
-{
 
-}
-
-
-uint16_t GPIO::getPinNumber(PortPinName pinName)
+uint16_t getPinNumber(PortPinName pinName)
 {
     if (pinName >= PIN_A0 && pinName <= PIN_A7){
         return 1 << (pinName - PIN_A0);
@@ -38,7 +33,7 @@ uint16_t GPIO::getPinNumber(PortPinName pinName)
 }
 
 
-MDR_PORT_TypeDef* GPIO::getPortPointer(PortPinName pinName)
+MDR_PORT_TypeDef* getPortPointer(PortPinName pinName)
 {
     if (pinName >= PIN_A0 && pinName <= PIN_A7){
         return MDR_PORTA;
@@ -68,7 +63,7 @@ MDR_PORT_TypeDef* GPIO::getPortPointer(PortPinName pinName)
 }
 
 
-PortName GPIO::getPortName(PortPinName pinName)
+PortName getPortName(PortPinName pinName)
 {
     if (pinName >= PIN_A0 && pinName <= PIN_A7){
         return ::PORT_A;
@@ -95,7 +90,7 @@ PortName GPIO::getPortName(PortPinName pinName)
 }
 
 
-void GPIO::configPin(PortPinName pinName, PORT_InitTypeDef &config)
+void configPin(PortPinName pinName, PORT_InitTypeDef &config)
 {
     MDR_PORT_TypeDef* PORT = getPortPointer(pinName);
     uint32_t pin = getPinNumber(pinName);
@@ -105,7 +100,7 @@ void GPIO::configPin(PortPinName pinName, PORT_InitTypeDef &config)
 }
 
 
-void GPIO::configPinInput(PortPinName name)
+void configPinInput(PortPinName name)
 {
     PORT_InitTypeDef config;
     config.PORT_FUNC = ::PORT_FUNC_PORT;
@@ -122,7 +117,7 @@ void GPIO::configPinInput(PortPinName name)
 }
 
 
-void GPIO::configPinInputPullUp(PortPinName name)
+void configPinInputPullUp(PortPinName name)
 {
     PORT_InitTypeDef config;
     config.PORT_FUNC = ::PORT_FUNC_PORT;
@@ -139,7 +134,7 @@ void GPIO::configPinInputPullUp(PortPinName name)
 }
 
 
-void GPIO::configPinInputPullDown(PortPinName name)
+void configPinInputPullDown(PortPinName name)
 {
     PORT_InitTypeDef config;
     config.PORT_FUNC = ::PORT_FUNC_PORT;
@@ -156,7 +151,7 @@ void GPIO::configPinInputPullDown(PortPinName name)
 }
 
 
-void GPIO::configPinOutput(PortPinName name)
+void configPinOutput(PortPinName name)
 {
     PORT_InitTypeDef config;
     config.PORT_FUNC = ::PORT_FUNC_PORT;
@@ -173,7 +168,7 @@ void GPIO::configPinOutput(PortPinName name)
 }
 
 
-void GPIO::writeWord(PortName name, uint16_t value)
+void writeWord(PortName name, uint16_t value)
 {
     switch (name) {
     case PortName::PORT_A:
@@ -198,7 +193,7 @@ void GPIO::writeWord(PortName name, uint16_t value)
 }
 
 
-void GPIO::writePin(PortPinName name, bool value)
+void writePin(PortPinName name, bool value)
 {
     if (name >= PIN_A0 && name <= PIN_A7){
         PORT_WriteBit(MDR_PORTA, 1 << (name - PIN_A0),(BitAction)value);
@@ -226,7 +221,7 @@ void GPIO::writePin(PortPinName name, bool value)
 }
 
 
-uint16_t GPIO::readWord(PortName name)
+uint16_t readWord(PortName name)
 {
     switch (name) {
     case PortName::PORT_A:
@@ -247,7 +242,7 @@ uint16_t GPIO::readWord(PortName name)
 }
 
 
-bool GPIO::readPin(PortPinName name)
+bool readPin(PortPinName name)
 {
     if (name >= PIN_A0 && name <= PIN_A7){
         return (bool)PORT_ReadInputDataBit(MDR_PORTA,1 << (name - PIN_A0));

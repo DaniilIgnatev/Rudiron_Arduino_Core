@@ -21,7 +21,7 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #define GPIOMAP_H
 
 
-#include "gpio.hpp"
+#include "gpio.h"
 
 
 ///Описывает связь функций ввода/вывода и пинов
