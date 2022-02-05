@@ -1,4 +1,4 @@
-#include "timer.hpp"
+#include "timer.h"
 
 
 bool Timer::hasTimerForPin(PortPinName pinName) {
@@ -99,7 +99,7 @@ void Timer::PWM_initPin(PortPinName pinName) {
 
     PORT_InitTypeDef initTypeDef = TimerUtility::getChannelInit(pinName, PWMInit_MAIN, PWMInit_ALTER, PWMInit_OVERRID);
 
-    configPin(pinName, initTypeDef);
+    GPIO::configPin(pinName, initTypeDef);
 }
 
 
@@ -107,7 +107,7 @@ PORT_InitTypeDef Timer::PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDe
     PORT_InitTypeDef PORT_InitStructure;
     PORT_StructInit(&PORT_InitStructure);
 
-    uint16_t pin = getPinNumber(pinName);
+    uint16_t pin = GPIO::getPinNumber(pinName);
     PORT_InitStructure.PORT_Pin = pin;
     PORT_InitStructure.PORT_OE = PORT_OE_OUT;
     PORT_InitStructure.PORT_FUNC = func;

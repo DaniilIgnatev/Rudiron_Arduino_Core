@@ -17,16 +17,19 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 
 
-#ifndef GPIO_H
-#define GPIO_H
+#ifndef PORT_H
+#define PORT_H
 
 
-#include <stdbool.h>
 #include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
 #include "MDR32F9Qx_uart.h"
 #include "MDR32F9Qx_port.h"
 #include "MDR32F9Qx_rst_clk.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 
 typedef enum {
@@ -91,87 +94,97 @@ typedef enum {
 } __attribute__ ((__packed__)) PortPinName;
 
 
-uint16_t getPinNumber(PortPinName pinName);
-
-
-MDR_PORT_TypeDef *getPortPointer(PortPinName pinName);
-
-
-PortName getPortName(PortPinName pibName);
-
-
-void configPin(PortPinName name, PORT_InitTypeDef &config);
-
-
-void configPinInput(PortPinName name);
-
-
-void configPinInputPullUp(PortPinName name);
-
-
-void configPinInputPullDown(PortPinName name);
-
-
-void configPinOutput(PortPinName name);
-
-
-void writeWord(PortName name, uint16_t value);
-
-
-void writePin(PortPinName name, bool value);
-
-
-uint16_t readWord(PortName name);
-
-
-bool readPin(PortPinName name);
-
-
+class GPIO {
+public:
 #ifdef RUDIRON_BUTERBROD_rev3
-const PortPinName LED_BUILTIN_1 = PIN_A4;
-    const PortPinName LED_BUILTIN_2 = PIN_A5;
-    const PortPinName BUTTON_BUILTIN_1 = PIN_A1;
-    const PortPinName BUTTON_BUILTIN_2 = PIN_A2;
-    const PortPinName BUTTON_BUILTIN_3 = PIN_A3;
+    static const PortPinName LED_BUILTIN_1 = PIN_A4;
+    static const PortPinName LED_BUILTIN_2 = PIN_A5;
+    static const PortPinName BUTTON_BUILTIN_1 = PIN_A1;
+    static const PortPinName BUTTON_BUILTIN_2 = PIN_A2;
+    static const PortPinName BUTTON_BUILTIN_3 = PIN_A3;
 #endif
 
 #ifdef RUDIRON_BUTERBROD_rev4
-const PortPinName LED_BUILTIN_1 = PIN_A2;
-    const PortPinName LED_BUILTIN_2 = PIN_A4;
-    const PortPinName BUTTON_BUILTIN_1 = PIN_A0;
-    const PortPinName BUTTON_BUILTIN_2 = PIN_B10;
+    static const PortPinName LED_BUILTIN_1 = PIN_A2;
+    static const PortPinName LED_BUILTIN_2 = PIN_A4;
+    static const PortPinName BUTTON_BUILTIN_1 = PIN_A0;
+    static const PortPinName BUTTON_BUILTIN_2 = PIN_B10;
 #endif
 
 #if defined RUDIRON_BUTERBROD_rev5
-const PortPinName LED_BUILTIN_1 = PIN_A2;
-const PortPinName LED_BUILTIN_2 = PIN_A4;
-const PortPinName BUTTON_BUILTIN_1 = PIN_A0;
-const PortPinName BUTTON_BUILTIN_2 = PIN_B10;
-const PortPinName BUTTON_BUILTIN_3 = PIN_B9;
+    const static PortPinName LED_BUILTIN_1 = PIN_A2;
+    const static PortPinName LED_BUILTIN_2 = PIN_A4;
+    const static PortPinName BUTTON_BUILTIN_1 = PIN_A0;
+    const static PortPinName BUTTON_BUILTIN_2 = PIN_B10;
+    const static PortPinName BUTTON_BUILTIN_3 = PIN_B9;
 #endif
 
-inline void writeLED_1(bool value) {
-    writePin(LED_BUILTIN_1, value);
-}
+public:
 
-void writeLED_2(bool value) {
-    writePin(LED_BUILTIN_2, value);
-}
+    GPIO();
 
-inline bool readButton_1() {
-    return readPin(BUTTON_BUILTIN_1);
-}
+    static inline void writeLED_1(bool value) {
+        GPIO::writePin(LED_BUILTIN_1, value);
+    }
 
-inline bool readButton_2() {
-    return readPin(BUTTON_BUILTIN_2);
-}
+    static inline void writeLED_2(bool value) {
+        GPIO::writePin(LED_BUILTIN_2, value);
+    }
+
+    static inline bool readButton_1() {
+        return GPIO::readPin(BUTTON_BUILTIN_1);
+    }
+
+    static inline bool readButton_2() {
+        return GPIO::readPin(BUTTON_BUILTIN_2);
+    }
 
 #if !defined RUDIRON_BUTERBROD_rev4
 
-inline bool readButton_3() {
-    return readPin(BUTTON_BUILTIN_3);
-}
+    static inline bool readButton_3() {
+        return GPIO::readPin(BUTTON_BUILTIN_3);
+    }
 
 #endif
 
-#endif // GPIO_H
+
+    static uint16_t getPinNumber(PortPinName pinName);
+
+
+    static MDR_PORT_TypeDef *getPortPointer(PortPinName pinName);
+
+
+    static PortName getPortName(PortPinName pibName);
+
+
+    static void configPin(PortPinName name, PORT_InitTypeDef &config);
+
+
+    static void configPinInput(PortPinName name);
+
+
+    static void configPinInputPullUp(PortPinName name);
+
+
+    static void configPinInputPullDown(PortPinName name);
+
+
+    static void configPinOutput(PortPinName name);
+
+
+    static void writeWord(PortName name, uint16_t value);
+
+
+    static void writePin(PortPinName name, bool value);
+
+
+    static uint16_t readWord(PortName name);
+
+
+    static bool readPin(PortPinName name);
+
+};
+
+}
+
+#endif // PORT_H

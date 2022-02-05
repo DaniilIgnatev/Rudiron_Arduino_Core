@@ -1,11 +1,11 @@
-#include "adc.hpp"
+#include "adc.h"
 
 
 
 void ADC::initPinADC(PortPinName pinName)
 {
     PORT_InitTypeDef PORT_InitStructure;
-    uint16_t pin = getPinNumber(pinName);
+    uint16_t pin = GPIO::getPinNumber(pinName);
 
     PORT_InitStructure.PORT_Pin   = pin;
     PORT_InitStructure.PORT_OE    = PORT_OE_IN;
@@ -19,7 +19,7 @@ void ADC::initPinADC(PortPinName pinName)
     PORT_InitStructure.PORT_PULL_UP = ::PORT_PULL_UP_OFF;
     PORT_InitStructure.PORT_SPEED = ::PORT_SPEED_FAST;
 
-    configPin(pinName, PORT_InitStructure);
+    GPIO::configPin(pinName, PORT_InitStructure);
 }
 
 
@@ -51,7 +51,7 @@ void ADC::configureDefault()
 
 bool ADC::configurePin(PortPinName pinName, bool enable)
 {
-    PortName portName = getPortName(pinName);
+    PortName portName = GPIO::getPortName(pinName);
     if (portName != ::PORT_D){
         return false;
     }
@@ -112,7 +112,7 @@ ADCResult ADC::readPin(PortPinName pinName)
     ADCResult result;
     result.valid = false;
 
-    PortName portName = getPortName(pinName);
+    PortName portName = GPIO::getPortName(pinName);
     if (portName != ::PORT_D){
         return result;
     }

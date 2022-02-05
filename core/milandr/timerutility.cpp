@@ -1,4 +1,4 @@
-#include "timerutility.hpp"
+#include "timerutility.h"
 
 
 TimerChannel_PortPin TimerUtility::pinChannel(PortPinName pinName)
