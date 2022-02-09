@@ -61,40 +61,29 @@ struct ADCResult {
 };
 
 
-class ADC {
-private:
-
-protected:
-
-    ADCName name;
+uint32_t channelMask = 0;
 
 
-    uint32_t channelMask = 0;
+ADCResult readValues[7];
 
 
-    ADCResult readValues[7];
+void initPinADC(PortPinName pinName);
 
 
-    void initPinADC(PortPinName pinName);
-
-public:
-    ADC(ADCName name);
+void configureDefault();
 
 
-    void configureDefault();
+bool configurePin(PortPinName pinName, bool enable);
 
 
-    bool configurePin(PortPinName pinName, bool enable);
+void start();
 
 
-    void start();
+void stop();
 
 
-    void stop();
+ADCResult readPin(PortPinName pinName);
 
-
-    ADCResult readPin(PortPinName pinName);
-};
 
 #ifdef __cplusplus
 }

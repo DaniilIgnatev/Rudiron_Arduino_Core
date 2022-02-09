@@ -23,7 +23,7 @@
  */
 
 #include "Stream.h"
-#include "CLK/clk.hpp"
+#include "milandr/clk.h"
 
 
 #define PARSE_TIMEOUT 1000  // default number of milli-seconds to wait

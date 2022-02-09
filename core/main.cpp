@@ -19,6 +19,8 @@
 
 #include <Arduino.h>
 
+
+
 // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }
 
@@ -44,7 +46,7 @@ int main(void)
     
 	for (;;) {
 		loop();
-		if (serialEventRun) serialEventRun();
+//		if (serialEventRun) serialEventRun();
 	}
         
 	return 0;
