@@ -51,7 +51,7 @@
 //    }
 //    initPinADC(pinName);
 //
-//    ADCChannelName channelName = (ADCChannelName)(pinName - PIN_D0);
+//    ADCChannelName channelName = (ADCChannelName)(pinName - PORT_PIN_D0);
 //    if (enable){
 //        channelMask |= (1 << channelName);
 //    }
@@ -111,7 +111,7 @@
 //        return result;
 //    }
 //
-//    ADCChannelName channelName = (ADCChannelName)(pinName - PIN_D0);
+//    ADCChannelName channelName = (ADCChannelName)(pinName - PORT_PIN_D0);
 //    result.channel = channelName;
 //
 //    uint32_t resultReg = -1;

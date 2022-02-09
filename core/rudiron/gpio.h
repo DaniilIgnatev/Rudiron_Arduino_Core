@@ -17,8 +17,8 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 
 
-#ifndef PORT_H
-#define PORT_H
+#ifndef GPIO_H
+#define GPIO_H
 
 
 #include "MDR32F9Qx_config.h"
@@ -43,80 +43,80 @@ typedef enum {
 
 
 typedef enum {
-    PIN_NONE,
-    PIN_A0,
-    PIN_A1,
-    PIN_A2,
-    PIN_A3,
-    PIN_A4,
-    PIN_A5,
-    PIN_A6,
-    PIN_A7,
+    PORT_PIN_NONE,
+    PORT_PIN_A0,
+    PORT_PIN_A1,
+    PORT_PIN_A2,
+    PORT_PIN_A3,
+    PORT_PIN_A4,
+    PORT_PIN_A5,
+    PORT_PIN_A6,
+    PORT_PIN_A7,
 
-    PIN_B0,
-    PIN_B1,
-    PIN_B2,
-    PIN_B3,
-    PIN_B4,
-    PIN_B5,
-    PIN_B6,
-    PIN_B7,
-    PIN_B8,
-    PIN_B9,
-    PIN_B10,
+    PORT_PIN_B0,
+    PORT_PIN_B1,
+    PORT_PIN_B2,
+    PORT_PIN_B3,
+    PORT_PIN_B4,
+    PORT_PIN_B5,
+    PORT_PIN_B6,
+    PORT_PIN_B7,
+    PORT_PIN_B8,
+    PORT_PIN_B9,
+    PORT_PIN_B10,
 
-    PIN_C0,
-    PIN_C1,
-    PIN_C2,
+    PORT_PIN_C0,
+    PORT_PIN_C1,
+    PORT_PIN_C2,
 
-    PIN_D0,
-    PIN_D1,
-    PIN_D2,
-    PIN_D3,
-    PIN_D4,
-    PIN_D5,
-    PIN_D6,
-    PIN_D7,
+    PORT_PIN_D0,
+    PORT_PIN_D1,
+    PORT_PIN_D2,
+    PORT_PIN_D3,
+    PORT_PIN_D4,
+    PORT_PIN_D5,
+    PORT_PIN_D6,
+    PORT_PIN_D7,
 
-    PIN_E0,
-    PIN_E1,
-    PIN_E2,
-    PIN_E3,
-    PIN_E4,
-    PIN_E5,
-    PIN_E6,
-    PIN_E7,
+    PORT_PIN_E0,
+    PORT_PIN_E1,
+    PORT_PIN_E2,
+    PORT_PIN_E3,
+    PORT_PIN_E4,
+    PORT_PIN_E5,
+    PORT_PIN_E6,
+    PORT_PIN_E7,
 
-    PIN_F0,
-    PIN_F1,
-    PIN_F2,
-    PIN_F3
+    PORT_PIN_F0,
+    PORT_PIN_F1,
+    PORT_PIN_F2,
+    PORT_PIN_F3
 } __attribute__ ((__packed__)) PortPinName;
 
 
 class GPIO {
 public:
 #ifdef RUDIRON_BUTERBROD_rev3
-    static const PortPinName LED_BUILTIN_1 = PIN_A4;
-    static const PortPinName LED_BUILTIN_2 = PIN_A5;
-    static const PortPinName BUTTON_BUILTIN_1 = PIN_A1;
-    static const PortPinName BUTTON_BUILTIN_2 = PIN_A2;
-    static const PortPinName BUTTON_BUILTIN_3 = PIN_A3;
+    static const PortPinName LED_BUILTIN_1 = PORT_PIN_A4;
+    static const PortPinName LED_BUILTIN_2 = PORT_PIN_A5;
+    static const PortPinName BUTTON_BUILTIN_1 = PORT_PIN_A1;
+    static const PortPinName BUTTON_BUILTIN_2 = PORT_PIN_A2;
+    static const PortPinName BUTTON_BUILTIN_3 = PORT_PIN_A3;
 #endif
 
 #ifdef RUDIRON_BUTERBROD_rev4
-    static const PortPinName LED_BUILTIN_1 = PIN_A2;
-    static const PortPinName LED_BUILTIN_2 = PIN_A4;
-    static const PortPinName BUTTON_BUILTIN_1 = PIN_A0;
-    static const PortPinName BUTTON_BUILTIN_2 = PIN_B10;
+    static const PortPinName LED_BUILTIN_1 = PORT_PIN_A2;
+    static const PortPinName LED_BUILTIN_2 = PORT_PIN_A4;
+    static const PortPinName BUTTON_BUILTIN_1 = PORT_PIN_A0;
+    static const PortPinName BUTTON_BUILTIN_2 = PORT_PIN_B10;
 #endif
 
 #if defined RUDIRON_BUTERBROD_rev5
-    const static PortPinName LED_BUILTIN_1 = PIN_A2;
-    const static PortPinName LED_BUILTIN_2 = PIN_A4;
-    const static PortPinName BUTTON_BUILTIN_1 = PIN_A0;
-    const static PortPinName BUTTON_BUILTIN_2 = PIN_B10;
-    const static PortPinName BUTTON_BUILTIN_3 = PIN_B9;
+    const static PortPinName LED_BUILTIN_1 = PORT_PIN_A2;
+    const static PortPinName LED_BUILTIN_2 = PORT_PIN_A4;
+    const static PortPinName BUTTON_BUILTIN_1 = PORT_PIN_A0;
+    const static PortPinName BUTTON_BUILTIN_2 = PORT_PIN_B10;
+    const static PortPinName BUTTON_BUILTIN_3 = PORT_PIN_B9;
 #endif
 
 public:
@@ -185,6 +185,8 @@ public:
 
 };
 
+#ifdef __cplusplus
 }
+#endif
 
-#endif // PORT_H
+#endif // GPIO_H

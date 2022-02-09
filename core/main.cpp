@@ -20,7 +20,6 @@
 #include <Arduino.h>
 
 
-
 // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }
 
@@ -41,7 +40,7 @@ int main(void)
 #if defined(USBCON)
 	USBDevice.attach();
 #endif
-	
+
 	setup();
     
 	for (;;) {

@@ -55,7 +55,7 @@ typedef enum {
 struct TimerChannel_PortPin {
     bool has = false;
 
-    PortPinName pinName = PIN_NONE;
+    PortPinName pinName = PORT_PIN_NONE;
 
     TimerChannelName channelName = Timer1_Channel1;
 

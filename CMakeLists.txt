@@ -18,11 +18,11 @@ message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
 #Sources
 set(core_path "${CMAKE_SOURCE_DIR}/core")
 set(core_avr_path "${core_path}/avr")
-set(core_milandr_path "${core_path}/milandr")
+set(core_rudiron_path "${core_path}/rudiron")
 file(GLOB_RECURSE core_sources
         ${core_path}/*
         ${core_avr_path}/*
-        ${core_milandr_path}/*
+        ${core_rudiron_path}/*
         )
 
 set(libraries_path "${CMAKE_SOURCE_DIR}/libraries")

@@ -10,28 +10,28 @@ GPIO::GPIO()
 
 uint16_t GPIO::getPinNumber(PortPinName pinName)
 {
-    if (pinName >= PIN_A0 && pinName <= PIN_A7){
-        return 1 << (pinName - PIN_A0);
+    if (pinName >= PORT_PIN_A0 && pinName <= PORT_PIN_A7){
+        return 1 << (pinName - PORT_PIN_A0);
     }
     else
-        if (pinName >= PIN_B0 && pinName <= PIN_B10){
-            return 1 << (pinName - PIN_B0);
+        if (pinName >= PORT_PIN_B0 && pinName <= PORT_PIN_B10){
+            return 1 << (pinName - PORT_PIN_B0);
         }
         else
-            if (pinName >= PIN_C0 && pinName <= PIN_C2){
-                return 1 << (pinName - PIN_C0);
+            if (pinName >= PORT_PIN_C0 && pinName <= PORT_PIN_C2){
+                return 1 << (pinName - PORT_PIN_C0);
             }
             else
-                if (pinName >= PIN_D0 && pinName <= PIN_D7){
-                    return 1 << (pinName - PIN_D0);
+                if (pinName >= PORT_PIN_D0 && pinName <= PORT_PIN_D7){
+                    return 1 << (pinName - PORT_PIN_D0);
                 }
                 else
-                    if (pinName >= PIN_E0 && pinName <= PIN_E7){
-                        return 1 << (pinName - PIN_E0);
+                    if (pinName >= PORT_PIN_E0 && pinName <= PORT_PIN_E7){
+                        return 1 << (pinName - PORT_PIN_E0);
                     }
                     else
-                        if (pinName >= PIN_F0 && pinName <= PIN_F3){
-                            return 1 << (pinName - PIN_F0);
+                        if (pinName >= PORT_PIN_F0 && pinName <= PORT_PIN_F3){
+                            return 1 << (pinName - PORT_PIN_F0);
                         }
 
     return 0;
@@ -40,27 +40,27 @@ uint16_t GPIO::getPinNumber(PortPinName pinName)
 
 MDR_PORT_TypeDef* GPIO::getPortPointer(PortPinName pinName)
 {
-    if (pinName >= PIN_A0 && pinName <= PIN_A7){
+    if (pinName >= PORT_PIN_A0 && pinName <= PORT_PIN_A7){
         return MDR_PORTA;
     }
     else
-        if (pinName >= PIN_B0 && pinName <= PIN_B10){
+        if (pinName >= PORT_PIN_B0 && pinName <= PORT_PIN_B10){
             return MDR_PORTB;
         }
         else
-            if (pinName >= PIN_C0 && pinName <= PIN_C2){
+            if (pinName >= PORT_PIN_C0 && pinName <= PORT_PIN_C2){
                 return MDR_PORTC;
             }
             else
-                if (pinName >= PIN_D0 && pinName <= PIN_D7){
+                if (pinName >= PORT_PIN_D0 && pinName <= PORT_PIN_D7){
                     return MDR_PORTD;
                 }
                 else
-                    if (pinName >= PIN_E0 && pinName <= PIN_E7){
+                    if (pinName >= PORT_PIN_E0 && pinName <= PORT_PIN_E7){
                         return MDR_PORTE;
                     }
                     else
-                        if (pinName >= PIN_F0 && pinName <= PIN_F3){
+                        if (pinName >= PORT_PIN_F0 && pinName <= PORT_PIN_F3){
                             return MDR_PORTF;
                         }
 
@@ -70,23 +70,23 @@ MDR_PORT_TypeDef* GPIO::getPortPointer(PortPinName pinName)
 
 PortName GPIO::getPortName(PortPinName pinName)
 {
-    if (pinName >= PIN_A0 && pinName <= PIN_A7){
+    if (pinName >= PORT_PIN_A0 && pinName <= PORT_PIN_A7){
         return ::PORT_A;
     }
     else
-        if (pinName >= PIN_B0 && pinName <= PIN_B10){
+        if (pinName >= PORT_PIN_B0 && pinName <= PORT_PIN_B10){
             return ::PORT_B;
         }
         else
-            if (pinName >= PIN_C0 && pinName <= PIN_C2){
+            if (pinName >= PORT_PIN_C0 && pinName <= PORT_PIN_C2){
                 return ::PORT_C;
             }
             else
-                if (pinName >= PIN_D0 && pinName <= PIN_D7){
+                if (pinName >= PORT_PIN_D0 && pinName <= PORT_PIN_D7){
                     return ::PORT_D;
                 }
                 else
-                    if (pinName >= PIN_E0 && pinName <= PIN_E7){
+                    if (pinName >= PORT_PIN_E0 && pinName <= PORT_PIN_E7){
                         return ::PORT_E;
                     }
                     else{
@@ -200,28 +200,28 @@ void GPIO::writeWord(PortName name, uint16_t value)
 
 void GPIO::writePin(PortPinName name, bool value)
 {
-    if (name >= PIN_A0 && name <= PIN_A7){
-        PORT_WriteBit(MDR_PORTA, 1 << (name - PIN_A0),(BitAction)value);
+    if (name >= PORT_PIN_A0 && name <= PORT_PIN_A7){
+        PORT_WriteBit(MDR_PORTA, 1 << (name - PORT_PIN_A0), (BitAction)value);
     }
     else
-        if (name >= PIN_B0 && name <= PIN_B10){
-            PORT_WriteBit(MDR_PORTB, 1 << (name - PIN_B0),(BitAction)value);
+        if (name >= PORT_PIN_B0 && name <= PORT_PIN_B10){
+            PORT_WriteBit(MDR_PORTB, 1 << (name - PORT_PIN_B0), (BitAction)value);
         }
         else
-            if (name >= PIN_C0 && name <= PIN_C2){
-                PORT_WriteBit(MDR_PORTC, 1 << (name - PIN_C0),(BitAction)value);
+            if (name >= PORT_PIN_C0 && name <= PORT_PIN_C2){
+                PORT_WriteBit(MDR_PORTC, 1 << (name - PORT_PIN_C0), (BitAction)value);
             }
             else
-                if (name >= PIN_D0 && name <= PIN_D7){
-                    PORT_WriteBit(MDR_PORTD, 1 << (name - PIN_D0),(BitAction)value);
+                if (name >= PORT_PIN_D0 && name <= PORT_PIN_D7){
+                    PORT_WriteBit(MDR_PORTD, 1 << (name - PORT_PIN_D0), (BitAction)value);
                 }
                 else
-                    if (name >= PIN_E0 && name <= PIN_E7){
-                        PORT_WriteBit(MDR_PORTE, 1 << (name - PIN_E0),(BitAction)value);
+                    if (name >= PORT_PIN_E0 && name <= PORT_PIN_E7){
+                        PORT_WriteBit(MDR_PORTE, 1 << (name - PORT_PIN_E0), (BitAction)value);
                     }
                     else
-                        if (name >= PIN_F0 && name <= PIN_F3){
-                            PORT_WriteBit(MDR_PORTF, 1 << (name - PIN_F0),(BitAction)value);
+                        if (name >= PORT_PIN_F0 && name <= PORT_PIN_F3){
+                            PORT_WriteBit(MDR_PORTF, 1 << (name - PORT_PIN_F0), (BitAction)value);
                         }
 }
 
@@ -249,28 +249,28 @@ uint16_t GPIO::readWord(PortName name)
 
 bool GPIO::readPin(PortPinName name)
 {
-    if (name >= PIN_A0 && name <= PIN_A7){
-        return (bool)PORT_ReadInputDataBit(MDR_PORTA,1 << (name - PIN_A0));
+    if (name >= PORT_PIN_A0 && name <= PORT_PIN_A7){
+        return (bool)PORT_ReadInputDataBit(MDR_PORTA,1 << (name - PORT_PIN_A0));
     }
     else
-        if (name >= PIN_B0 && name <= PIN_B10){
-            return (bool)PORT_ReadInputDataBit(MDR_PORTB,1 << (name - PIN_B0));
+        if (name >= PORT_PIN_B0 && name <= PORT_PIN_B10){
+            return (bool)PORT_ReadInputDataBit(MDR_PORTB,1 << (name - PORT_PIN_B0));
         }
         else
-            if (name >= PIN_C0 && name <= PIN_C2){
-                return (bool)PORT_ReadInputDataBit(MDR_PORTC,1 << (name - PIN_C0));
+            if (name >= PORT_PIN_C0 && name <= PORT_PIN_C2){
+                return (bool)PORT_ReadInputDataBit(MDR_PORTC,1 << (name - PORT_PIN_C0));
             }
             else
-                if (name >= PIN_D0 && name <= PIN_D7){
-                    return (bool)PORT_ReadInputDataBit(MDR_PORTD,1 << (name - PIN_D0));
+                if (name >= PORT_PIN_D0 && name <= PORT_PIN_D7){
+                    return (bool)PORT_ReadInputDataBit(MDR_PORTD,1 << (name - PORT_PIN_D0));
                 }
                 else
-                    if (name >= PIN_E0 && name <= PIN_E7){
-                        return (bool)PORT_ReadInputDataBit(MDR_PORTE,1 << (name - PIN_E0));
+                    if (name >= PORT_PIN_E0 && name <= PORT_PIN_E7){
+                        return (bool)PORT_ReadInputDataBit(MDR_PORTE,1 << (name - PORT_PIN_E0));
                     }
                     else
-                        if (name >= PIN_F0 && name <= PIN_F3){
-                            return (bool)PORT_ReadInputDataBit(MDR_PORTF,1 << (name - PIN_F0));
+                        if (name >= PORT_PIN_F0 && name <= PORT_PIN_F3){
+                            return (bool)PORT_ReadInputDataBit(MDR_PORTF,1 << (name - PORT_PIN_F0));
                         }
     return false;
 }
