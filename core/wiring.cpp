@@ -21,39 +21,35 @@
 */
 
 #include "wiring_private.h"
+#include "rudiron/clk.h"
 
 uint32_t _millis = 0;
 
+
 unsigned long millis()
 {
-	unsigned long m;
-
-
-	return m;
+	return Rudiron::CLK::millis();
 }
 
-unsigned long micros() {
-	unsigned long m;
 
-	
-	return m;
+unsigned long micros()
+{
+    return Rudiron::CLK::micros();
 }
+
 
 void delay(unsigned long ms)
 {
-
+    Rudiron::CLK::delay(ms);
 }
 
-/* Delay for the given number of microseconds.  Assumes a 1, 8, 12, 16, 20 or 24 MHz clock. */
+
 void delayMicroseconds(unsigned int us)
 {
-
+    Rudiron::CLK::delayMicroseconds(us);
 }
 
 void init()
 {
-	// this needs to be called before setup() or some functions won't
-	// work there
-    //настройка тактирования
-
+    Rudiron::CLK::Initialize();
 }

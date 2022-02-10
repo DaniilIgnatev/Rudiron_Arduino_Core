@@ -28,59 +28,63 @@ extern "C" {
 #endif
 
 
-typedef enum {
-    None,
-    Timer1,
-    Timer2,
-    Timer3
-} __attribute__ ((__packed__)) TimerName;
+namespace Rudiron {
+
+    typedef enum {
+        None,
+        Timer1,
+        Timer2,
+        Timer3
+    } __attribute__ ((__packed__)) TimerName;
 
 
-typedef enum {
-    Timer1_Channel1,
-    Timer1_Channel2,
-    Timer1_Channel3,
-    Timer1_Channel4,
-    Timer2_Channel1,
-    Timer2_Channel2,
-    Timer2_Channel3,
-    Timer2_Channel4,
-    Timer3_Channel1,
-    Timer3_Channel2,
-    Timer3_Channel3,
-    Timer3_Channel4
-} __attribute__ ((__packed__)) TimerChannelName;
+    typedef enum {
+        Timer1_Channel1,
+        Timer1_Channel2,
+        Timer1_Channel3,
+        Timer1_Channel4,
+        Timer2_Channel1,
+        Timer2_Channel2,
+        Timer2_Channel3,
+        Timer2_Channel4,
+        Timer3_Channel1,
+        Timer3_Channel2,
+        Timer3_Channel3,
+        Timer3_Channel4
+    } __attribute__ ((__packed__)) TimerChannelName;
 
 
-struct TimerChannel_PortPin {
-    bool has = false;
+    struct TimerChannel_PortPin {
+        bool has = false;
 
-    PortPinName pinName = PORT_PIN_NONE;
+        PortPinName pinName = PORT_PIN_NONE;
 
-    TimerChannelName channelName = Timer1_Channel1;
+        TimerChannelName channelName = Timer1_Channel1;
 
-    TimerName timer = Timer1;
+        TimerName timer = Timer1;
 
-    uint16_t channelNum = 0;
-};
-
-
-class TimerUtility {
-
-private:
-    static int channelToNumber(TimerChannelName channelName);
-
-public:
-    static TimerName channelToTimerName(TimerChannelName channelName);
+        uint16_t channelNum = 0;
+    };
 
 
-    static TimerChannel_PortPin pinChannel(PortPinName pinName);
+    class TimerUtility {
+
+    private:
+        static int channelToNumber(TimerChannelName channelName);
+
+    public:
+        static TimerName channelToTimerName(TimerChannelName channelName);
 
 
-    static PORT_InitTypeDef
-    getChannelInit(PortPinName pinName, PORT_InitTypeDef PWMInit_MAIN, PORT_InitTypeDef PWMInit_ALTER,
-                   PORT_InitTypeDef PWMInit_OVERRID);
-};
+        static TimerChannel_PortPin pinChannel(PortPinName pinName);
+
+
+        static PORT_InitTypeDef
+        getChannelInit(PortPinName pinName, PORT_InitTypeDef PWMInit_MAIN, PORT_InitTypeDef PWMInit_ALTER,
+                       PORT_InitTypeDef PWMInit_OVERRID);
+    };
+
+}
 
 #ifdef __cplusplus
 }

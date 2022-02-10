@@ -33,61 +33,67 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-class SPI : public Stream {
-protected:
-    PORT_InitTypeDef PORT_InitStructure;
+namespace Rudiron {
+
+    class SPI : public Stream {
+    protected:
+        PORT_InitTypeDef PORT_InitStructure;
 
 
-    SSP_InitTypeDef sSSP;
+        SSP_InitTypeDef sSSP;
 
 
-    void InitSPIPortMaster();
+        void InitSPIPortMaster();
 
 
-    void InitSPIController(uint32_t SSP_Mode);
+        void InitSPIController(uint32_t SSP_Mode);
 
 
-    uint8_t read_write(uint8_t data);
+        uint8_t read_write(uint8_t data);
 
-public:
+    public:
 
-    explicit SPI() : Stream() {}
-
-
-    //Посылается в шину для получения данных (No operation)
-    uint8_t NOP = (uint8_t) 0xFF;
+        explicit SPI() : Stream() {}
 
 
-    bool begin(uint32_t SSP_Mode);
+        //Посылается в шину для получения данных (No operation)
+        uint8_t NOP = (uint8_t) 0xFF;
 
 
-    void end();
+        bool begin(uint32_t SSP_Mode);
 
 
-    virtual int available(void);
+        void end();
 
 
-    virtual int peek(void);
+        virtual int available(void);
 
 
-    virtual int read(void);
+        virtual int peek(void);
 
 
-    int availableForWrite();
+        virtual int read(void);
 
 
-    void flush();
+        int availableForWrite();
 
 
-    virtual size_t write(uint8_t byte);
+        void flush();
 
 
-    using Print::write;
+        virtual size_t write(uint8_t byte);
 
 
-    operator bool() { return true; }
-};
+        using Print::write;
+
+
+        operator bool() { return true; }
+    };
 
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SPI_H

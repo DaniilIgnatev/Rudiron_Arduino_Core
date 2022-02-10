@@ -25,65 +25,68 @@
 extern "C" {
 #endif
 
+namespace Rudiron {
 
-class Timer {
-public:
+    class Timer {
+    public:
 
-    static bool hasTimerForPin(PortPinName pinName);
-
-
-    static TimerName getTimerNameForPin(PortPinName pinName);
-
-protected:
-
-    TimerName name;
+        static bool hasTimerForPin(PortPinName pinName);
 
 
-    MDR_TIMER_TypeDef *MDR_TIMER_BASE;
+        static TimerName getTimerNameForPin(PortPinName pinName);
+
+    protected:
+
+        TimerName name;
 
 
-    uint32_t RST_CLK_PCLK;
+        MDR_TIMER_TypeDef *MDR_TIMER_BASE;
 
 
-    uint16_t prescaler;
+        uint32_t RST_CLK_PCLK;
 
 
-    uint16_t ARR;
-
-public:
-    explicit Timer(TimerName name);
+        uint16_t prescaler;
 
 
-    void start();
+        uint16_t ARR;
+
+    public:
+        explicit Timer(TimerName name);
 
 
-    void stop();
+        void start();
 
 
-protected:
-
-    PORT_InitTypeDef PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDef func);
+        void stop();
 
 
-    void PWM_initPin(PortPinName pinName);
+    protected:
+
+        PORT_InitTypeDef PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDef func);
 
 
-    void PWM_activateChannel(PortPinName pinName, uint8_t percentage, bool withNegative);
-
-public:
-
-    void PWM_setup(uint16_t frequency = 500);
+        void PWM_initPin(PortPinName pinName);
 
 
-    void PWM_start(PortPinName pinName, uint8_t percentage);
+        void PWM_activateChannel(PortPinName pinName, uint8_t percentage, bool withNegative);
+
+    public:
+
+        void PWM_setup(uint16_t frequency = 500);
 
 
-    void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t percentage);
+        void PWM_start(PortPinName pinName, uint8_t percentage);
 
 
-    void PWM_stop(PortPinName pinName);
+        void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t percentage);
 
-};
+
+        void PWM_stop(PortPinName pinName);
+
+    };
+
+}
 
 #ifdef __cplusplus
 }

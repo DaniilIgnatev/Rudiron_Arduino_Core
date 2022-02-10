@@ -34,56 +34,74 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-typedef enum {
-    ADC1,
-    ADC2
-} ADCName;
+namespace Rudiron {
+
+    typedef enum {
+        ADC1,
+        ADC2
+    } ADCName;
 
 
 //Не удалять недоступные каналы!!!
-typedef enum {
-    ADC_Channel0,
-    ADC_Channel1,
-    ADC_Channel2,
-    ADC_Channel3,
-    ADC_Channel4,
-    ADC_Channel5,
-    ADC_Channel6,
-    ADC_Channel7
-} ADCChannelName;
+    typedef enum {
+        ADC_Channel0,
+        ADC_Channel1,
+        ADC_Channel2,
+        ADC_Channel3,
+        ADC_Channel4,
+        ADC_Channel5,
+        ADC_Channel6,
+        ADC_Channel7
+    } ADCChannelName;
 
 
-struct ADCResult {
-    bool valid = false;
-    bool override = false;
-    uint16_t value = 0;
-    ADCChannelName channel = ADC_Channel0;
-};
+    struct ADCResult {
+        bool valid = false;
+        bool override = false;
+        uint16_t value = 0;
+        ADCChannelName channel = ADC_Channel0;
+    };
 
 
-uint32_t channelMask = 0;
+    class ADC
+    {
+    private:
+
+    protected:
+
+        ADCName name;
 
 
-ADCResult readValues[7];
+        uint32_t channelMask = 0;
 
 
-void initPinADC(PortPinName pinName);
+        ADCResult readValues[7];
 
 
-void configureDefault();
+        GPIO port = GPIO();
 
 
-bool configurePin(PortPinName pinName, bool enable);
+        void initPinADC(PortPinName pinName);
+
+    public:
+        ADC(ADCName name);
 
 
-void start();
+        void configureDefault();
 
 
-void stop();
+        bool configurePin(PortPinName pinName, bool enable);
 
 
-ADCResult readPin(PortPinName pinName);
+        void start();
 
+
+        void stop();
+
+
+        ADCResult readPin(PortPinName pinName);
+    };
+}
 
 #ifdef __cplusplus
 }

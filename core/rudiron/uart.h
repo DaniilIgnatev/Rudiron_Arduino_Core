@@ -33,41 +33,44 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
+namespace Rudiron {
 
-class UART : public Stream {
-public:
-    explicit UART() : Stream() {}
-
-
-    bool begin(uint32_t baudRate);
+    class UART : public Stream {
+    public:
+        explicit UART() : Stream() {}
 
 
-    void end();
+        bool begin(uint32_t baudRate);
 
 
-    virtual int available(void);
+        void end();
 
 
-    virtual int peek(void);
+        virtual int available(void);
 
 
-    virtual int read(void);
+        virtual int peek(void);
 
 
-    int availableForWrite();
+        virtual int read(void);
 
 
-    void flush();
+        int availableForWrite();
 
 
-    virtual size_t write(uint8_t byte);
+        void flush();
 
 
-    using Print::write;
+        virtual size_t write(uint8_t byte);
 
 
-    operator bool() { return true; }
-};
+        using Print::write;
+
+
+        operator bool() { return true; }
+    };
+
+}
 
 #ifdef __cplusplus
 }

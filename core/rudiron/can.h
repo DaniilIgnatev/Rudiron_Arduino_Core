@@ -33,26 +33,29 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
+namespace Rudiron {
 
-class Can {
-private:
-    uint8_t tx_buf = 0;
-    uint8_t rx_buf = 1;
+    class Can {
+    private:
+        uint8_t tx_buf = 0;
+        uint8_t rx_buf = 1;
 
-public:
-    Can();
+    public:
+        Can();
 
-    bool begin();
-
-
-    void end();
+        bool begin();
 
 
-    void write();
+        void end();
 
 
-    void read();
-};
+        void write();
+
+
+        void read();
+    };
+
+}
 
 #ifdef __cplusplus
 }

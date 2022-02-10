@@ -32,11 +32,11 @@
 int Stream::timedRead()
 {
   int c;
-  _startMillis = CLK::millis();
+  _startMillis = Rudiron::CLK::millis();
   do {
     c = read();
     if (c >= 0) return c;
-  } while(CLK::millis() - _startMillis < _timeout);
+  } while(Rudiron::CLK::millis() - _startMillis < _timeout);
   return -1;     // -1 indicates timeout
 }
 
@@ -44,11 +44,11 @@ int Stream::timedRead()
 int Stream::timedPeek()
 {
   int c;
-  _startMillis = CLK::millis();
+  _startMillis = Rudiron::CLK::millis();
   do {
     c = peek();
     if (c >= 0) return c;
-  } while(CLK::millis() - _startMillis < _timeout);
+  } while(Rudiron::CLK::millis() - _startMillis < _timeout);
   return -1;     // -1 indicates timeout
 }
 
