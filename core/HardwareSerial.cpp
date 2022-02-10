@@ -234,7 +234,7 @@ size_t HardwareSerial::write(uint8_t c)
     // is still being transmitted causing flush() to return too soon.
     // So writing UDR must happen first.
     // Writing UDR and clearing TC must be done atomically, otherwise
-    // interrupts might delay the TXC clear so the byte written to UDR
+    // interrupts might delay_millis the TXC clear so the byte written to UDR
     // is transmitted (setting TXC) before clearing TXC. Then TXC will
     // be cleared when no bytes are left, causing flush() to hang
     ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {

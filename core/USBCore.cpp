@@ -277,7 +277,7 @@
 //		{
 //			if (!(--timeout))
 //				return -1;
-//			delay(1);
+//			delay_millis(1);
 //			continue;
 //		}
 //
@@ -717,8 +717,8 @@
 //
 //	// Some tests on specific versions of macosx (10.7.3), reported some
 //	// strange behaviors when the board is reset using the serial
-//	// port touch at 1200 bps. This delay fixes this behavior.
-//	delay(1);
+//	// port touch at 1200 bps. This delay_millis fixes this behavior.
+//	delay_millis(1);
 //#if defined(OTGPADE)
 //	USBCON = (USBCON & ~(1<<FRZCLK)) | (1<<OTGPADE);	// start USB clock, enable VBUS Pad
 //#else
@@ -793,7 +793,7 @@
 //u8 USBConnected()
 //{
 //	u8 f = UDFNUML;
-//	delay(3);
+//	delay_millis(3);
 //	return f != UDFNUML;
 //}
 //

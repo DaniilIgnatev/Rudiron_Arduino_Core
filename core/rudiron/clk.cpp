@@ -47,8 +47,8 @@ namespace Rudiron {
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
         uint32_t SystemCoreClock = RST_CLK_Clocks.CPU_CLK_Frequency;
 
-        // Set reload register to generate IRQ every millisecond
-        SysTick->LOAD = (uint32_t) ((SystemCoreClock / 1000) - 1);
+        // Set reload register to generate IRQ every microsecond
+        SysTick->LOAD = (uint32_t) ((SystemCoreClock / 1000000) - 1);
 
         // Set priority for SysTick IRQ
         NVIC_SetPriority(SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL);
@@ -61,7 +61,19 @@ namespace Rudiron {
     }
 
 
-    void CLK::delay(uint32_t ms) {
+    void CLK::delay_millis(uint32_t ms) {
+        __IO uint32_t target_counter = _millis + ms;
+
+        while (_millis != target_counter) {}
+    }
+
+
+    void CLK::delay_micros(uint32_t ms) {
+        if (ms >= 1000) {
+            uint32_t target_millis = ms / 1000;
+            delay_millis(target_millis);
+            ms = ms % 1000;
+        }
         __IO uint32_t delay_counter = ms;
 
         while (delay_counter) {
@@ -72,6 +84,7 @@ namespace Rudiron {
     }
 
 
+    ///Выбор внешнего источника тактирования и коэффициента умножения частоты, 8Мгц
     void CLK::runHSE(uint32_t RST_CLK_CPU_PLLmul) {
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
         if (RST_CLK_HSEstatus() == SUCCESS)                     /* Good HSE clock */
@@ -98,7 +111,7 @@ namespace Rudiron {
     }
 
 
-///Выбор источника тактирования процессора и коэффициента умножения частоты, 8Мгц
+    ///Выбор внутреннего источника тактирования и коэффициента умножения частоты, 8Мгц
     void CLK::runHSI(uint32_t RST_CLK_CPU_PLLmul) {
         /* Enable HSI clock source */
         RST_CLK_HSIcmd(ENABLE);

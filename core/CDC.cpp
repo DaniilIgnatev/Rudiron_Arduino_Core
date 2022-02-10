@@ -251,7 +251,7 @@ Serial_::operator bool() {
 	bool result = false;
 	if (_usbLineInfo.lineState > 0) 
 		result = true;
-	delay(10);
+	delay_millis(10);
 	return result;
 }
 

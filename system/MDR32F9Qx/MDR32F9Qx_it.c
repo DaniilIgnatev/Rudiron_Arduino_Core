@@ -127,6 +127,7 @@ void PendSV_Handler(void)
 
 
 extern uint32_t _millis;
+extern uint32_t _micros;
 
 /*******************************************************************************
 * Function Name  : SysTick_Handler
@@ -137,7 +138,11 @@ extern uint32_t _millis;
 *******************************************************************************/
 void SysTick_Handler(void)
 {
-    _millis += 1;
+    _micros++;
+    if (_micros == 1000){
+        _micros ^= _micros;
+        _millis++;
+    }
 }
 /*******************************************************************************
 * Function Name  : CAN1_IRQHandler

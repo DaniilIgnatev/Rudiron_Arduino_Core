@@ -24,32 +24,6 @@
 #include "rudiron/clk.h"
 
 uint32_t _millis = 0;
+uint32_t _micros = 0;
 
 
-unsigned long millis()
-{
-	return Rudiron::CLK::millis();
-}
-
-
-unsigned long micros()
-{
-    return Rudiron::CLK::micros();
-}
-
-
-void delay(unsigned long ms)
-{
-    Rudiron::CLK::delay(ms);
-}
-
-
-void delayMicroseconds(unsigned int us)
-{
-    Rudiron::CLK::delayMicroseconds(us);
-}
-
-void init()
-{
-    Rudiron::CLK::Initialize();
-}

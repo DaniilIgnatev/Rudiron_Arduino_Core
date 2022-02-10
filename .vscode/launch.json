@@ -10,7 +10,7 @@
             "type": "cortex-debug",
             "cwd": "${workspaceRoot}",
             "servertype": "openocd",
-            "executable": "build/RUDironTemplate.elf",
+            "executable": "build/Arduino_Core_Rudiron.elf",
             "svdFile": "${workspaceRoot}/MDR32F9Q1.svd",
             "configFiles": [
                 "interface/1986be92_jlink.cfg"

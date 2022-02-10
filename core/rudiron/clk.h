@@ -34,6 +34,7 @@ extern "C" {
     RST_CLK_PCLK_PORTE | RST_CLK_PCLK_PORTF)
 
 extern uint32_t _millis;
+extern uint32_t _micros;
 
 namespace Rudiron {
 
@@ -52,14 +53,7 @@ namespace Rudiron {
         static void Initialize();
 
     public:
-        static inline uint32_t millis() {
-            return _millis;
-        }
-
-
-        static inline unsigned long micros(void) {
-            return CLK::millis() * 1000;
-        }
+        static void Delay_Init(void);
 
 
         static inline RST_CLK_FreqTypeDef getCLKDescriptor() {
@@ -69,15 +63,22 @@ namespace Rudiron {
         }
 
 
-        static void Delay_Init(void);
-
-
-        static void delay(uint32_t ms);
-
-
-        static inline void delayMicroseconds(uint32_t us) {
-            CLK::delay(us / 1000);
+        ///Значение переменной _millis
+        static inline uint32_t millis(void) {
+            return _millis;
         }
+
+
+        ///Значение переменной _micros
+        static inline uint32_t micros(void) {
+            return _micros;
+        }
+
+
+        static void delay_millis(uint32_t ms);
+
+
+        static void delay_micros(uint32_t us);
     };
 }
 
