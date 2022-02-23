@@ -11,6 +11,8 @@ SET(CMAKE_BUILD_TYPE "Debug")
 
 set(core M3)
 set(cpu_name "MDR32F9Qx")
+set(board_name "Buterbrod")
+set(revision "revision_1")
 
 # Optional: issue a message to be sure it uses the correct toolchain file.
 message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
@@ -74,7 +76,7 @@ file(GLOB_RECURSE system_sources
         ${system_path}/*
         )
 
-set(variants_path "${CMAKE_SOURCE_DIR}/variants/${cpu_name}")
+set(variants_path "${CMAKE_SOURCE_DIR}/variants/${board_name}")
 file(GLOB_RECURSE variants_sources
         ${variants_path}/*
         )
@@ -123,7 +125,8 @@ target_include_directories(${EXECUTABLE} PRIVATE
 
 # List of compiler defines, prefix with -D compiler option
 target_compile_definitions(${EXECUTABLE} PRIVATE
-        RUDIRON_BUTERBROD_rev5
+        ${board_name}
+        ${revision}
         )
 
 

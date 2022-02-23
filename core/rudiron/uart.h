@@ -23,15 +23,11 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_uart.h"
-#include "MDR32F9Qx_port.h"
-#include "MDR32F9Qx_rst_clk.h"
+#include "MDR_uart.h"
+#include "MDR_port.h"
+#include "MDR_rst_clk.h"
 
 #include "Stream.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 namespace Rudiron {
 
@@ -71,9 +67,5 @@ namespace Rudiron {
     };
 
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // UART_H

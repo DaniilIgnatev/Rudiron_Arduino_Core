@@ -23,16 +23,12 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_port.h"
-#include "MDR32F9Qx_rst_clk.h"
-#include "MDR32F9Qx_adc.h"
-#include "MDR32F9Qx_dma.h"
+#include "MDR_port.h"
+#include "MDR_rst_clk.h"
+#include "MDR_adc.h"
+#include "MDR_dma.h"
 #include "MDR32F9Qx_it.h"
 #include "gpio.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 namespace Rudiron {
 
@@ -102,9 +98,5 @@ namespace Rudiron {
         ADCResult readPin(PortPinName pinName);
     };
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // ADC_H

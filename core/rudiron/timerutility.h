@@ -20,13 +20,8 @@
 #define TIMERUTILITY_H
 
 
-#include "MDR32F9Qx_timer.h"
+#include "MDR_timer.h"
 #include "gpio.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 
 namespace Rudiron {
 
@@ -85,9 +80,5 @@ namespace Rudiron {
     };
 
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // TIMERUTILITY_H

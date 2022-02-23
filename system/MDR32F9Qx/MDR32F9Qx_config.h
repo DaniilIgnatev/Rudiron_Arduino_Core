@@ -66,7 +66,7 @@ extern "C" {
 #endif
 
 
-#include "MDR32F9Qx_lib.h"
+#include "MDR_lib.h"
 #include <stdint.h>
 #include "MDR32Fx.h"
 

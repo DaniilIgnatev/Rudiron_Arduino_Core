@@ -148,13 +148,12 @@ namespace Rudiron {
 #ifndef HCLK_DISABLE
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
         while (RST_CLK_HSEstatus() != SUCCESS);
-        CLK::runHSE(RST_CLK_CPU_PLLmul10);
+        CLK::runHSE(RST_CLK_CPU_PLLmul2);
 #else
         Clk::runHSI(RST_CLK_CPU_PLLmul1);
 #endif
         RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
         RST_CLK_PCLKcmd((RST_CLK_PCLK_SSP1), ENABLE);
-        RST_CLK_PCLKcmd((ALL_PORTS_CLK), ENABLE);
 
         IRQ_INIT();
     }

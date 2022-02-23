@@ -23,13 +23,11 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_uart.h"
-#include "MDR32F9Qx_port.h"
-#include "MDR32F9Qx_rst_clk.h"
+#include "MDR_uart.h"
+#include "MDR_port.h"
+#include "MDR_rst_clk.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "pins_arduino.h"
 
 namespace Rudiron {
 
@@ -95,58 +93,48 @@ namespace Rudiron {
     } __attribute__ ((__packed__)) PortPinName;
 
 
+    extern const PortPinName pinMap[NUM_DIGITAL_PINS];
+
+    extern const PortPinName pinADCMap[NUM_ANALOG_INPUTS];
+
+
     class GPIO {
     public:
-#ifdef RUDIRON_BUTERBROD_rev3
-        static const PortPinName LED_BUILTIN_1 = PORT_PIN_A4;
-        static const PortPinName LED_BUILTIN_2 = PORT_PIN_A5;
-        static const PortPinName BUTTON_BUILTIN_1 = PORT_PIN_A1;
-        static const PortPinName BUTTON_BUILTIN_2 = PORT_PIN_A2;
-        static const PortPinName BUTTON_BUILTIN_3 = PORT_PIN_A3;
-#endif
 
-#ifdef RUDIRON_BUTERBROD_rev4
-        static const PortPinName LED_BUILTIN_1 = PORT_PIN_A2;
-        static const PortPinName LED_BUILTIN_2 = PORT_PIN_A4;
-        static const PortPinName BUTTON_BUILTIN_1 = PORT_PIN_A0;
-        static const PortPinName BUTTON_BUILTIN_2 = PORT_PIN_B10;
-#endif
-
-#if defined RUDIRON_BUTERBROD_rev5
-        const static PortPinName LED_BUILTIN_1 = PORT_PIN_A2;
-        const static PortPinName LED_BUILTIN_2 = PORT_PIN_A4;
-        const static PortPinName BUTTON_BUILTIN_1 = PORT_PIN_A0;
-        const static PortPinName BUTTON_BUILTIN_2 = PORT_PIN_B10;
-        const static PortPinName BUTTON_BUILTIN_3 = PORT_PIN_B9;
-#endif
-
-    public:
-
-        GPIO();
-
+#ifdef LED_BUILTIN_1
         static inline void writeLED_1(bool value) {
             GPIO::writePin(LED_BUILTIN_1, value);
         }
+#endif
 
+#ifdef LED_BUILTIN_2
         static inline void writeLED_2(bool value) {
             GPIO::writePin(LED_BUILTIN_2, value);
         }
+#endif
 
+#ifdef BUTTON_BUILTIN_1
         static inline bool readButton_1() {
             return GPIO::readPin(BUTTON_BUILTIN_1);
         }
+#endif
 
+#ifdef BUTTON_BUILTIN_2
         static inline bool readButton_2() {
             return GPIO::readPin(BUTTON_BUILTIN_2);
         }
+#endif
 
-#if !defined RUDIRON_BUTERBROD_rev4
-
+#ifdef BUTTON_BUILTIN_3
         static inline bool readButton_3() {
             return GPIO::readPin(BUTTON_BUILTIN_3);
         }
-
 #endif
+
+        static void enableCLK(PortName portName);
+
+
+        static void disableCLK(PortName portName);
 
 
         static uint16_t getPinNumber(PortPinName pinName);
@@ -187,9 +175,5 @@ namespace Rudiron {
     };
 
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // GPIO_H

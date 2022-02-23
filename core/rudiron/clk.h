@@ -20,18 +20,10 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_uart.h"
-#include "MDR32F9Qx_port.h"
-#include "MDR32F9Qx_rst_clk.h"
-#include "MDR32F9Qx_eeprom.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#define ALL_PORTS_CLK (RST_CLK_PCLK_PORTA | RST_CLK_PCLK_PORTB | \
-    RST_CLK_PCLK_PORTC | RST_CLK_PCLK_PORTD | \
-    RST_CLK_PCLK_PORTE | RST_CLK_PCLK_PORTF)
+#include "MDR_uart.h"
+#include "MDR_port.h"
+#include "MDR_rst_clk.h"
+#include "MDR_eeprom.h"
 
 extern uint32_t _millis;
 extern uint32_t _micros;
@@ -81,10 +73,5 @@ namespace Rudiron {
         static void delay_micros(uint32_t us);
     };
 }
-
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // PORT_H

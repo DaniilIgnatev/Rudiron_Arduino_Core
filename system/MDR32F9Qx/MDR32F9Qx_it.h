@@ -45,8 +45,8 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #define __MDR32F9QX_IT_H
 
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_port.h"
-#include "MDR32F9Qx_bkp.h"
+#include "MDR_port.h"
+#include "MDR_bkp.h"
 
 #ifdef __cplusplus
 extern "C" {  // only need to export C interface if

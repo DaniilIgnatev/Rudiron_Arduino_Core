@@ -21,10 +21,6 @@
 
 #include "timerutility.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 namespace Rudiron {
 
     class Timer {
@@ -87,9 +83,5 @@ namespace Rudiron {
     };
 
 }
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif // TIMER_H

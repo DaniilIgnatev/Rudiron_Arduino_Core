@@ -24,14 +24,10 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #include "Print.h"
 #include "MDR32Fx.h"
 #include "MDR32F9Qx_config.h"
-#include "MDR32F9Qx_can.h"
-#include "MDR32F9Qx_rst_clk.h"
-#include "MDR32F9Qx_port.h"
+#include "MDR_can.h"
+#include "MDR_rst_clk.h"
+#include "MDR_port.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 namespace Rudiron {
 
@@ -57,8 +53,5 @@ namespace Rudiron {
 
 }
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif // CAN_H

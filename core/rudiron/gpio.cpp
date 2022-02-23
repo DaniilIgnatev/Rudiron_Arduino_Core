@@ -1,9 +1,59 @@
 #include "gpio.h"
+#include "MDR_rst_clk.h"
 
 namespace Rudiron {
 
-    GPIO::GPIO() {
+    void GPIO::enableCLK(PortName portName){
+        uint32_t PORT;
 
+        switch (portName) {
+            case PORT_A:
+                PORT = RST_CLK_PCLK_PORTA;
+                break;
+            case PORT_B:
+                PORT = RST_CLK_PCLK_PORTB;
+                break;
+            case PORT_C:
+                PORT = RST_CLK_PCLK_PORTC;
+                break;
+            case PORT_D:
+                PORT = RST_CLK_PCLK_PORTD;
+                break;
+            case PORT_E:
+                PORT = RST_CLK_PCLK_PORTE;
+                break;
+            case PORT_F:
+                PORT = RST_CLK_PCLK_PORTF;
+                break;
+        }
+        RST_CLK_PCLKcmd(PORT, ENABLE);
+    }
+
+
+    void GPIO::disableCLK(PortName portName){
+        uint32_t PORT;
+
+        switch (portName) {
+            case PORT_A:
+                PORT = RST_CLK_PCLK_PORTA;
+                break;
+            case PORT_B:
+                PORT = RST_CLK_PCLK_PORTB;
+                break;
+            case PORT_C:
+                PORT = RST_CLK_PCLK_PORTC;
+                break;
+            case PORT_D:
+                PORT = RST_CLK_PCLK_PORTD;
+                break;
+            case PORT_E:
+                PORT = RST_CLK_PCLK_PORTE;
+                break;
+            case PORT_F:
+                PORT = RST_CLK_PCLK_PORTF;
+                break;
+        }
+        RST_CLK_PCLKcmd(PORT, DISABLE);
     }
 
 
@@ -63,6 +113,9 @@ namespace Rudiron {
 
 
     void GPIO::configPin(PortPinName pinName, PORT_InitTypeDef &config) {
+        PortName portName = getPortName(pinName);
+        enableCLK(portName);
+
         MDR_PORT_TypeDef *PORT = getPortPointer(pinName);
         uint32_t pin = getPinNumber(pinName);
 

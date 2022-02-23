@@ -26,7 +26,9 @@
 
 #include <inttypes.h>
 
-#include "Stream.h"
+#include "rudiron/uart.h"
+
+using namespace Rudiron;
 
 // Define constants and variables for buffering incoming serial data.  We're
 // using a ring buffer (I think), in which head is the index of the location
@@ -130,23 +132,6 @@ class HardwareSerial : public Stream
     inline void _rx_complete_irq(void);
     void _tx_udr_empty_irq(void);
 };
-
-#if defined(UBRRH) || defined(UBRR0H)
-  extern HardwareSerial Serial;
-  #define HAVE_HWSERIAL0
-#endif
-#if defined(UBRR1H)
-  extern HardwareSerial Serial1;
-  #define HAVE_HWSERIAL1
-#endif
-#if defined(UBRR2H)
-  extern HardwareSerial Serial2;
-  #define HAVE_HWSERIAL2
-#endif
-#if defined(UBRR3H)
-  extern HardwareSerial Serial3;
-  #define HAVE_HWSERIAL3
-#endif
 
 extern void serialEventRun(void) __attribute__((weak));
 
