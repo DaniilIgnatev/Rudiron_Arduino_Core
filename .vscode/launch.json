@@ -14,7 +14,8 @@
             "svdFile": "${workspaceRoot}/MDR32F9Q1.svd",
             "configFiles": [
                 "interface/1986be92_jlink.cfg"
-            ]
+            ],
+            "preLaunchTask": "Build"
         }
     ]
 }

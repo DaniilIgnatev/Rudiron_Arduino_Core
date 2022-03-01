@@ -3,7 +3,6 @@
 
 namespace Rudiron
 {
-
     void CLK::Initialize()
     {
         RST_CLK_DeInit();
@@ -11,11 +10,14 @@ namespace Rudiron
 
 #ifndef HCLK_DISABLE
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
-        while (RST_CLK_HSEstatus() != SUCCESS)
-            ;
-        CLK::runHSE(RST_CLK_CPU_PLLmul2);
+        while (RST_CLK_HSEstatus() != SUCCESS) {};
+        #if defined(Buterbrod) && defined(revision_2)
+        CLK::runHSE(RST_CLK_CPU_PLLmul1);//16mhz * 1
+        #else
+        CLK::runHSE(RST_CLK_CPU_PLLmul2);//8mhz * 2
+        #endif
 #else
-        Clk::runHSI(RST_CLK_CPU_PLLmul2);
+        Clk::runHSI(RST_CLK_CPU_PLLmul2);//8mhz * 2
 #endif
         RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
 
@@ -160,23 +162,5 @@ namespace Rudiron
         SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
         SCB->VTOR = 0x08000000;
         __enable_irq();
-    }
-
-    void CLK::Initialize() {
-        RST_CLK_DeInit();
-        RST_CLK_HSEconfig(RST_CLK_LSE_OFF);
-
-#ifndef HCLK_DISABLE
-        RST_CLK_HSEconfig(RST_CLK_HSE_ON);
-        while (RST_CLK_HSEstatus() != SUCCESS);
-        CLK::runHSE(RST_CLK_CPU_PLLmul2);
-#else
-        Clk::runHSI(RST_CLK_CPU_PLLmul1);
-#endif
-        RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
-        RST_CLK_PCLKcmd((RST_CLK_PCLK_SSP1), ENABLE);
-        RST_CLK_PCLKcmd((ALL_PORTS_CLK), ENABLE);
-
-        IRQ_INIT();
     }
 }
