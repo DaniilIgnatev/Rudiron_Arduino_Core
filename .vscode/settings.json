@@ -2,6 +2,14 @@
     "makefile.extensionOutputFolder": "./.vscode",
     "cmake.configureOnOpen": true,
     "files.associations": {
-        "mdr32f9qx_config.h": "c"
+        "mdr32f9qx_config.h": "c",
+        "mdr_config.h": "c",
+        "mdr_usb_handlers.h": "c",
+        "mdr_rst_clk.h": "c",
+        "mdr_usb_default_handlers.h": "c",
+        "mdr_usb_cdc.h": "c",
+        "mdr_usb_device.h": "c",
+        "mdr_it.h": "c",
+        "mdr32fx.h": "c"
     }
 }

@@ -21,7 +21,7 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #define GPIO_H
 
 
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR32Fx.h"
 #include "MDR_uart.h"
 #include "MDR_port.h"

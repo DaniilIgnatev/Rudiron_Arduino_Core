@@ -21,7 +21,7 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #define SPI_H
 
 
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR32Fx.h"
 #include "MDR_ssp.h"
 #include "MDR_port.h"

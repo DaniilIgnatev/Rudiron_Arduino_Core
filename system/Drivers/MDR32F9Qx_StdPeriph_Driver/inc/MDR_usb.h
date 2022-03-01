@@ -11,7 +11,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_lib.h"
 
 

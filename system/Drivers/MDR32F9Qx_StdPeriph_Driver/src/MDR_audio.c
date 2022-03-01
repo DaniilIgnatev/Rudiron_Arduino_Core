@@ -3,7 +3,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_audio.h"
 
 #define ASSERT_INFO_FILE_ID FILEID__MDR32F9Qx_AUDIO_C

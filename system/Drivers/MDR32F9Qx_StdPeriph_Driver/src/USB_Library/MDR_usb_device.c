@@ -4,7 +4,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_rst_clk.h"
 #include "MDR_usb_handlers.h"
 

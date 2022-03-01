@@ -20,7 +20,7 @@
   */
 
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 
 
 

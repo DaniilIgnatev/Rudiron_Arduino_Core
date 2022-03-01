@@ -23,7 +23,7 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "Print.h"
 #include "MDR32Fx.h"
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_can.h"
 #include "MDR_rst_clk.h"
 #include "MDR_port.h"

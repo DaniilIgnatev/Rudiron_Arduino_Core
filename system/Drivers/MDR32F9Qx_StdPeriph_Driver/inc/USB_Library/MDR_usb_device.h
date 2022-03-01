@@ -11,7 +11,7 @@ extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 
 #ifdef MDR1986VE9x
 /* Includes ------------------------------------------------------------------*/
@@ -24,7 +24,7 @@ extern "C" {
 
 #include "MDR_lib.h"
 #include "MDR_usb.h"
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 
 /** @addtogroup __MDR32F9Qx_StdPeriph_Driver MDR32F9Qx Standard Peripherial Driver
   * @{

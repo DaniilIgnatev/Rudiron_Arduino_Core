@@ -3,7 +3,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_dma.h"
 #include "MDR_eth.h"
 #include "MDR_rst_clk.h"

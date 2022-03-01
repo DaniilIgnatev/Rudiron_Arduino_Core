@@ -21,13 +21,13 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #define ADC_H
 
 
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR32Fx.h"
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"
 #include "MDR_adc.h"
 #include "MDR_dma.h"
-#include "MDR32F9Qx_it.h"
+#include "MDR_config.h"
 #include "gpio.h"
 
 namespace Rudiron {

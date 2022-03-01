@@ -71,15 +71,10 @@ extern "C" {
 #include "MDR32Fx.h"
 
 
+#define MICROS_STEP ((uint8_t)10)
+
+
 //Выбор отладочного интерфейса
-#if defined RUDIRON_BUTERBROD_rev5
-#define USE_SWD_A
-#endif
-
-#if defined RUDIRON_BUTERBROD_rev1 || defined RUDIRON_BUTERBROD_rev2 || defined RUDIRON_BUTERBROD_rev3 || defined RUDIRON_BUTERBROD_rev4
-#define USE_SWD_B
-#endif
-
 #ifdef MILANDR_EVAL_BOARD
     #if MILANDR_EVAL_BOARD == 1
     #define USE_JTAG_A
@@ -87,14 +82,9 @@ extern "C" {
     #if MILANDR_EVAL_BOARD == 2
     #define USE_JTAG_B
     #endif
+    #else
+#define USE_SWD_A
 #endif
-
-
-//Недоступность внешнего генератора
-#if RUDIRON_BUTERBROD_rev1
-    #define HCLK_DISABLE
-#endif
-
 
 
 //Выбор библиотек для микроконтроллера

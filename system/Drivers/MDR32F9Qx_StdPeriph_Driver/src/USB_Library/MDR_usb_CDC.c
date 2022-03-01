@@ -3,7 +3,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_usb_handlers.h"
 
 #define ASSERT_INFO_FILE_ID FILEID__MDR32F9X_USB_CDC_C

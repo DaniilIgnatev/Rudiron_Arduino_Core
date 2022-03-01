@@ -3,7 +3,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR_arinc429r.h"
 
 #define ASSERT_INFO_FILE_ID FILEID__MDR32F9X_ARINC429R_C

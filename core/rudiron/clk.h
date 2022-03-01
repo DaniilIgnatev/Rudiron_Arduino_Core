@@ -18,12 +18,13 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef CLK_H
 #define CLK_H
 
-#include "MDR32F9Qx_config.h"
+#include "MDR_config.h"
 #include "MDR32Fx.h"
 #include "MDR_uart.h"
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"
 #include "MDR_eeprom.h"
+
 
 extern uint32_t _millis;
 extern uint32_t _micros;
@@ -32,27 +33,31 @@ namespace Rudiron {
 
     class CLK {
     private:
-        static void updateLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
-
-        static void runHSE(uint32_t RST_CLK_CPU_PLLmul);
-
-
-        static void runHSI(uint32_t RST_CLK_CPU_PLLmul);
-
-        static void IRQ_INIT();
-
-    public:
-        static void Initialize();
-
-    public:
-        static void Delay_Init(void);
-
 
         static inline RST_CLK_FreqTypeDef getCLKDescriptor() {
             RST_CLK_FreqTypeDef RST_CLK_Clocks;
             RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
             return RST_CLK_Clocks;
         }
+
+
+        static void updateLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
+
+
+        static void runHSE(uint32_t RST_CLK_CPU_PLLmul);
+
+
+        static void runHSI(uint32_t RST_CLK_CPU_PLLmul);
+
+
+        static void init_irq();
+
+    public:
+
+        static void Initialize();
+
+
+        static void init_delay();
 
 
         ///Значение переменной _millis
