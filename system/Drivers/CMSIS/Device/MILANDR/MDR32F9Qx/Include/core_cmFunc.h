@@ -203,7 +203,7 @@ __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 /** \brief  Enable FIQ
 
     This function enables FIQ interrupts by clearing the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    CAN only be executed in Privileged modes.
  */
 #define __enable_fault_irq                __enable_fiq
 
@@ -211,7 +211,7 @@ __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
 /** \brief  Disable FIQ
 
     This function disables FIQ interrupts by setting the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    CAN only be executed in Privileged modes.
  */
 #define __disable_fault_irq               __disable_fiq
 
@@ -324,7 +324,7 @@ __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
 /** \brief  Enable IRQ Interrupts
 
   This function enables IRQ interrupts by clearing the I-bit in the CPSR.
-  Can only be executed in Privileged modes.
+  CAN only be executed in Privileged modes.
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
 {
@@ -335,7 +335,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
 /** \brief  Disable IRQ Interrupts
 
   This function disables IRQ interrupts by setting the I-bit in the CPSR.
-  Can only be executed in Privileged modes.
+  CAN only be executed in Privileged modes.
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
 {
@@ -501,7 +501,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __set_PRIMASK(uint32_t p
 /** \brief  Enable FIQ
 
     This function enables FIQ interrupts by clearing the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    CAN only be executed in Privileged modes.
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
 {
@@ -512,7 +512,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_fault_irq(void)
 /** \brief  Disable FIQ
 
     This function disables FIQ interrupts by setting the F-bit in the CPSR.
-    Can only be executed in Privileged modes.
+    CAN only be executed in Privileged modes.
  */
 __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_fault_irq(void)
 {

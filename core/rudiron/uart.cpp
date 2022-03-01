@@ -110,7 +110,8 @@ namespace Rudiron {
         // return UART_ReceiveData (MDR_UART1);
 
         /* Check RXFF flag*/
-        while (UART_GetFlagStatus(MDR_UART2, UART_FLAG_RXFF) != SET) {
+        if (UART_GetFlagStatus(MDR_UART2, UART_FLAG_RXFF) != SET) {
+            return -1;
         }
 
         /* Recive data*/

@@ -48,7 +48,7 @@ namespace Rudiron {
         uint32_t SystemCoreClock = RST_CLK_Clocks.CPU_CLK_Frequency;
 
         // Set reload register to generate IRQ every microsecond
-        SysTick->LOAD = (uint32_t) ((SystemCoreClock / 1000000) - 1);
+        SysTick->LOAD = (uint32_t) ((SystemCoreClock / 200000) - 1);
 
         // Set priority for SysTick IRQ
         NVIC_SetPriority(SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL);
@@ -62,23 +62,22 @@ namespace Rudiron {
 
 
     void CLK::delay_millis(uint32_t ms) {
-        __IO uint32_t target_counter = _millis + ms;
+        uint32_t target_counter = _millis + ms;
 
         while (_millis != target_counter) {}
     }
 
 
-    void CLK::delay_micros(uint32_t ms) {
-        if (ms >= 1000) {
-            uint32_t target_millis = ms / 1000;
+    void CLK::delay_micros(uint32_t us) {
+        if (us >= 1000) {
+            uint32_t target_millis = us / 1000;
             delay_millis(target_millis);
-            ms = ms % 1000;
+            us = us % 1000;
         }
-        __IO uint32_t delay_counter = ms;
 
-        while (delay_counter) {
+        while (us) {
             if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) {
-                delay_counter--;
+                us--;
             }
         }
     }
@@ -148,7 +147,7 @@ namespace Rudiron {
 #ifndef HCLK_DISABLE
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
         while (RST_CLK_HSEstatus() != SUCCESS);
-        CLK::runHSE(RST_CLK_CPU_PLLmul10);
+        CLK::runHSE(RST_CLK_CPU_PLLmul2);
 #else
         Clk::runHSI(RST_CLK_CPU_PLLmul1);
 #endif

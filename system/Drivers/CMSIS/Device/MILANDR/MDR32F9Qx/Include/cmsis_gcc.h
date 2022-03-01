@@ -213,7 +213,7 @@ __STATIC_FORCEINLINE void __TZ_set_STACKSEAL_S (uint32_t* stackTop) {
 /**
   \brief   Enable IRQ Interrupts
   \details Enables IRQ interrupts by clearing special-purpose register PRIMASK.
-           Can only be executed in Privileged modes.
+           CAN only be executed in Privileged modes.
  */
 __STATIC_FORCEINLINE void __enable_irq(void)
 {
@@ -224,7 +224,7 @@ __STATIC_FORCEINLINE void __enable_irq(void)
 /**
   \brief   Disable IRQ Interrupts
   \details Disables IRQ interrupts by setting special-purpose register PRIMASK.
-           Can only be executed in Privileged modes.
+           CAN only be executed in Privileged modes.
  */
 __STATIC_FORCEINLINE void __disable_irq(void)
 {
@@ -523,7 +523,7 @@ __STATIC_FORCEINLINE void __TZ_set_PRIMASK_NS(uint32_t priMask)
 /**
   \brief   Enable FIQ
   \details Enables FIQ interrupts by clearing special-purpose register FAULTMASK.
-           Can only be executed in Privileged modes.
+           CAN only be executed in Privileged modes.
  */
 __STATIC_FORCEINLINE void __enable_fault_irq(void)
 {
@@ -534,7 +534,7 @@ __STATIC_FORCEINLINE void __enable_fault_irq(void)
 /**
   \brief   Disable FIQ
   \details Disables FIQ interrupts by setting special-purpose register FAULTMASK.
-           Can only be executed in Privileged modes.
+           CAN only be executed in Privileged modes.
  */
 __STATIC_FORCEINLINE void __disable_fault_irq(void)
 {
