@@ -3,12 +3,7 @@
 
 namespace Rudiron {
 
-    Can::Can() {
-
-    }
-
-
-    bool Can::begin() {
+    bool CAN::begin() {
         static PORT_InitTypeDef PortInit;
 
         /* Fill PortInit structure*/
@@ -30,88 +25,113 @@ namespace Rudiron {
         PORT_Init(MDR_PORTA, &PortInit);
 
 
-        CAN_InitTypeDef sCAN;
+
         RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK | RST_CLK_PCLK_CAN1), ENABLE);
         RST_CLK_PCLKcmd(RST_CLK_PCLK_PORTA, ENABLE);
         CAN_BRGInit(MDR_CAN1, CAN_HCLKdiv1);
+
 
         /* CAN register init */
         CAN_DeInit(MDR_CAN1);
 
         /* CAN cell init */
+        CAN_InitTypeDef sCAN;
         CAN_StructInit(&sCAN);
 
-        sCAN.CAN_ROP = ENABLE;
-        sCAN.CAN_SAP = ENABLE;
+        sCAN.CAN_ROP = DISABLE;
+        sCAN.CAN_SAP = DISABLE;
         sCAN.CAN_STM = DISABLE;
         sCAN.CAN_ROM = DISABLE;
-        //сделать расчет частоты на 500кбс
-        sCAN.CAN_PSEG = CAN_PSEG_Mul_2TQ;
-        sCAN.CAN_SEG1 = CAN_SEG1_Mul_5TQ;
-        sCAN.CAN_SEG2 = CAN_SEG2_Mul_5TQ;
+
+        //Normal bit time = sync segment + propagation segment + phase segment1 + phase segment2
+//    sCAN.CAN_PSEG = CAN_PSEG_Mul_2TQ;
+//    sCAN.CAN_SEG1 = CAN_SEG1_Mul_5TQ;
+//    sCAN.CAN_SEG2 = CAN_SEG2_Mul_5TQ;
+//    sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
+//    sCAN.CAN_SB = CAN_SB_3_SAMPLE;
+//    sCAN.CAN_BRP = 4;//
+
+//    sCAN.CAN_PSEG = CAN_PSEG_Mul_1TQ;
+//    sCAN.CAN_SEG1 = CAN_SEG1_Mul_2TQ;
+//    sCAN.CAN_SEG2 = CAN_SEG2_Mul_2TQ;
+//    sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
+//    sCAN.CAN_SB = CAN_SB_3_SAMPLE;
+//    sCAN.CAN_BRP = 47;//f=277777 bit/s (T=3.6us)
+
+        sCAN.CAN_PSEG = CAN_PSEG_Mul_1TQ;
+        sCAN.CAN_SEG1 = CAN_SEG1_Mul_1TQ;
+        sCAN.CAN_SEG2 = CAN_SEG2_Mul_1TQ;
         sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
         sCAN.CAN_SB = CAN_SB_3_SAMPLE;
-        sCAN.CAN_BRP = 1;
+        sCAN.CAN_BRP = 39;//f=500000 bit/s (T=2us)
 
 
         CAN_Init(MDR_CAN1, &sCAN);
-
         CAN_Cmd(MDR_CAN1, ENABLE);
 
-        /* Disable all CAN1 interrupt */
         CAN_ITConfig(MDR_CAN1, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN |
-                               CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, DISABLE);
+                               CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, ENABLE);
+
+        /* Set mask and filter*/
+//    CAN_FilterInitTypeDef fCAN;
+//    fCAN.Mask_ID = 0;
+//    fCAN.Filter_ID = 0;
+//    CAN_FilterInit(MDR_CAN1, rx_buf_number, &fCAN);
 
         /* Enable CAN1 interrupt from receive buffer */
-        CAN_RxITConfig(MDR_CAN1, rx_buf, ENABLE);
+        CAN_RxITConfig(MDR_CAN1, 1 << rx_buf_number, ENABLE);
         /* Enable CAN1 interrupt from transmit buffer */
-        CAN_TxITConfig(MDR_CAN1, tx_buf, ENABLE);
+        CAN_TxITConfig(MDR_CAN1, 1 << tx_buf_number, ENABLE);
 
         /* receive buffer enable */
-        CAN_Receive(MDR_CAN1, rx_buf, DISABLE);
+        CAN_Receive(MDR_CAN1, rx_buf_number, DISABLE);
 
         return true;
     }
 
 
-    void Can::end() {
+    void CAN::end() {
 
     }
 
 
-    void Can::write() {
+    void CAN::write(CAN_DataTypeDef &data) {
         CAN_TxMsgTypeDef TxMsg;
 
         /* transmit */
         TxMsg.IDE = CAN_ID_STD;
         TxMsg.DLC = 0x08;
         TxMsg.PRIOR_0 = DISABLE;
-        TxMsg.ID = 0x7;
-        TxMsg.Data[1] = 0x01234567;
-        TxMsg.Data[0] = 0x89ABCDEF;
+        TxMsg.ID = 0x19ABFFFF;
+        TxMsg.Data[1] = data[1];
+        TxMsg.Data[0] = data[0];
 
-        CAN_Transmit(MDR_CAN1, tx_buf, &TxMsg);
+        CAN_Transmit(MDR_CAN1, tx_buf_number, &TxMsg);
 
         uint32_t i = 0;
-        //i это таймаут
         while (((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_TX_READY) != RESET) && (i != 0xFFF)) {
             i++;
         }
-        CAN_ITClearRxTxPendingBit(MDR_CAN1, tx_buf, CAN_STATUS_TX_READY);
+        CAN_ITClearRxTxPendingBit(MDR_CAN1, tx_buf_number, CAN_STATUS_TX_READY);
     }
 
 
-    void Can::read() {
-        CAN_RxMsgTypeDef RxMsg;
-
-        uint32_t i = 0;
-        //i это таймаут
-        while (((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_RX_READY) == RESET) && (i != 0xFFF)) {
-            i++;
+    bool CAN::read(CAN_RxMsgTypeDef &data, bool wait, uint32_t timeout) {
+        if (wait) {
+            uint32_t i = 0;
+            while (((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_RX_READY) == RESET) && (i != timeout)) {
+                i++;
+            }
+            if (i == timeout) {
+                return false;
+            }
+        } else if ((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_RX_READY) == RESET) {
+            return false;
         }
-        CAN_GetRawReceivedData(MDR_CAN1, rx_buf, &RxMsg);
 
-        CAN_ITClearRxTxPendingBit(MDR_CAN1, rx_buf, CAN_STATUS_RX_READY);
+        CAN_GetRawReceivedData(MDR_CAN1, rx_buf_number, &data);
+        CAN_ITClearRxTxPendingBit(MDR_CAN1, rx_buf_number, CAN_STATUS_RX_READY);
+        return true;
     }
 
 }

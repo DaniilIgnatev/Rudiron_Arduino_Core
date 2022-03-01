@@ -31,13 +31,14 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace Rudiron {
 
-    class Can {
+    class CAN
+    {
     private:
-        uint8_t tx_buf = 0;
-        uint8_t rx_buf = 1;
+        uint8_t tx_buf_number = 0;
+        uint8_t rx_buf_number = 1;
 
     public:
-        Can();
+        CAN();
 
         bool begin();
 
@@ -45,12 +46,11 @@ namespace Rudiron {
         void end();
 
 
-        void write();
+        void write(CAN_DataTypeDef &data);
 
 
-        void read();
+        bool read(CAN_RxMsgTypeDef &data, bool wait = true, uint32_t timeout = 0xFFF);
     };
-
 }
 
 

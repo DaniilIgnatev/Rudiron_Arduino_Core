@@ -70,9 +70,8 @@ namespace Rudiron
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
         uint32_t SystemCoreClock = RST_CLK_Clocks.CPU_CLK_Frequency;
 
-        // Set reload register to generate IRQ every MICROS_STEP microseconds
-        uint32_t load = (uint32_t)((SystemCoreClock / 1000000 * MICROS_STEP) - 1);
-        SysTick->LOAD = load;
+        // Set reload register to generate IRQ every microsecond
+        SysTick->LOAD = (uint32_t) ((SystemCoreClock / 200000) - 1);
 
         // Set priority for SysTick IRQ
         NVIC_SetPriority(SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL);
@@ -88,26 +87,20 @@ namespace Rudiron
     {
         uint32_t target_counter = _millis + ms;
 
-        while (_millis != target_counter)
-        {
-        }
+        while (_millis != target_counter) { }
     }
 
     void CLK::delay_micros(uint32_t us)
     {
-        if (us >= 1000)
-        {
+        if (us >= 1000) {
             uint32_t target_millis = us / 1000;
             delay_millis(target_millis);
             us = us % 1000;
         }
-        __IO uint32_t delay_counter = us;
-
-        while (delay_counter)
-        {
-            if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
-            {
-                delay_counter -= MICROS_STEP;
+		
+        while (us) {
+            if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) {
+                us--;
             }
         }
     }
@@ -167,5 +160,23 @@ namespace Rudiron
         SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
         SCB->VTOR = 0x08000000;
         __enable_irq();
+    }
+
+    void CLK::Initialize() {
+        RST_CLK_DeInit();
+        RST_CLK_HSEconfig(RST_CLK_LSE_OFF);
+
+#ifndef HCLK_DISABLE
+        RST_CLK_HSEconfig(RST_CLK_HSE_ON);
+        while (RST_CLK_HSEstatus() != SUCCESS);
+        CLK::runHSE(RST_CLK_CPU_PLLmul2);
+#else
+        Clk::runHSI(RST_CLK_CPU_PLLmul1);
+#endif
+        RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
+        RST_CLK_PCLKcmd((RST_CLK_PCLK_SSP1), ENABLE);
+        RST_CLK_PCLKcmd((ALL_PORTS_CLK), ENABLE);
+
+        IRQ_INIT();
     }
 }
