@@ -95,13 +95,13 @@ set(CMAKE_C_EXTENSIONS OFF)
 set(SRC_LIST
         ${core_sources}
         ${libraries_sources}
-        ${sketch_sources}
         ${cmsis_include_sources}
         ${cmsis_source_sources}
         ${cmsis_startup_sources}
         ${std_periph_driver_sources}
         ${system_sources}
         ${variants_sources}
+        ${sketch_sources}
         )
 
 add_executable(${EXECUTABLE} ${SRC_LIST})
