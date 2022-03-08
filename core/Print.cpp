@@ -18,6 +18,7 @@
  
  Modified 23 November 2006 by David A. Mellis
  Modified 03 August 2015 by Chuck Todd
+ Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
  */
 
 #include <stdlib.h>
@@ -25,7 +26,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "Print.hpp"
+#include "Print.h"
 
 // Public Methods //////////////////////////////////////////////////////////////
 
@@ -255,7 +256,7 @@ size_t Print::printFloat(double number, uint8_t digits)
 }
 
 
-size_t Print::write(uint8_t* buffer, size_t size)
+size_t Print::write(const uint8_t* buffer, size_t size)
 {
     size_t n = 0;
     while (size--) {

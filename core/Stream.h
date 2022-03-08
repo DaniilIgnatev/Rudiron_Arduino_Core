@@ -17,12 +17,14 @@
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
   parsing functions based on TextFinder library by Michael Margolis
+
+  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
 */
 
 #ifndef Stream_h
 #define Stream_h
 
-#include "Print.hpp"
+#include "Print.h"
 
 
 // compatability macros for testing
