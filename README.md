@@ -1,2 +1,2 @@
 # Arduino_Core_Rudiron
-The adaptation of STM32 Arduino core for Rudiron project based on Milandr 1986be92qi MCU.
+Ведется разработка шаблона Ардуино-совместимого проекта под контроллер "Рудирон Бутерброд" на основе микроконтроллера 1986be92qi от компании Миландр.
