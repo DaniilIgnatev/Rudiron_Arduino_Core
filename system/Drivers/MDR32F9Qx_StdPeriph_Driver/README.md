@@ -1,3 +1,5 @@
+Source: https://github.com/eldarkg/emdr1986x-std-per-lib
+
 # emdr1986x-std-per-lib
 ## Milandr MCU 1986x Standard Peripherals Library
 

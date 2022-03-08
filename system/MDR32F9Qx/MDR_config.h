@@ -1,21 +1,3 @@
-/*
-This file is part of DIBotQBS.
-
-DIBotQBS is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-DIBotQBS is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
-*/
-
-
 /**
   ******************************************************************************
   * @file    MDR32F9Qx_Demo\Project\Demo\MDR32F9Qx_config.h
@@ -55,6 +37,8 @@ along with DIBotQBS.  If not, see <https://www.gnu.org/licenses/>.
  * (EVAL 22.0 B) and evaluation board for MC 1986VE3T.
  *
  * The MDR32F9Qx Standard Peripherals Library is full CMSIS compliant.
+ * 
+ * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
