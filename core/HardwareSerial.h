@@ -42,30 +42,13 @@ using namespace Rudiron;
 // atomicity guards needed for that are not implemented. This will
 // often work, but occasionally a race condition can occur that makes
 // Serial behave erratically. See https://github.com/arduino/Arduino/issues/2405
-#if !defined(SERIAL_TX_BUFFER_SIZE)
-#if ((RAMEND - RAMSTART) < 1023)
-#define SERIAL_TX_BUFFER_SIZE 16
-#else
+
 #define SERIAL_TX_BUFFER_SIZE 64
-#endif
-#endif
-#if !defined(SERIAL_RX_BUFFER_SIZE)
-#if ((RAMEND - RAMSTART) < 1023)
-#define SERIAL_RX_BUFFER_SIZE 16
-#else
 #define SERIAL_RX_BUFFER_SIZE 64
-#endif
-#endif
-#if (SERIAL_TX_BUFFER_SIZE>256)
-typedef uint16_t tx_buffer_index_t;
-#else
+
 typedef uint8_t tx_buffer_index_t;
-#endif
-#if  (SERIAL_RX_BUFFER_SIZE>256)
-typedef uint16_t rx_buffer_index_t;
-#else
 typedef uint8_t rx_buffer_index_t;
-#endif
+
 
 // Define config for Serial.begin(baud, config);
 #define SERIAL_5N1 0x00
@@ -93,7 +76,7 @@ typedef uint8_t rx_buffer_index_t;
 #define SERIAL_7O2 0x3C
 #define SERIAL_8O2 0x3E
 
-class HardwareSerial : public Stream
+class HardwareSerial : public UART
 {
   protected:
 
@@ -115,18 +98,18 @@ class HardwareSerial : public Stream
     inline HardwareSerial();
     void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
     void begin(unsigned long, uint8_t);
-    void end();
-    virtual int available(void);
-    virtual int peek(void);
-    virtual int read(void);
-    virtual int availableForWrite(void);
-    virtual void flush(void);
-    virtual size_t write(uint8_t);
-    inline size_t write(unsigned long n) { return write((uint8_t)n); }
-    inline size_t write(long n) { return write((uint8_t)n); }
-    inline size_t write(unsigned int n) { return write((uint8_t)n); }
-    inline size_t write(int n) { return write((uint8_t)n); }
-    using Print::write; // pull in write(str) and write(buf, size) from Print
+    // void end();
+    // virtual int available(void);
+    // virtual int peek(void);
+    // virtual int read(void);
+    // virtual int availableForWrite(void);
+    // virtual void flush(void);
+    // virtual size_t write(uint8_t);
+    // inline size_t write(unsigned long n) { return write((uint8_t)n); }
+    // inline size_t write(long n) { return write((uint8_t)n); }
+    // inline size_t write(unsigned int n) { return write((uint8_t)n); }
+    // inline size_t write(int n) { return write((uint8_t)n); }
+    // using Print::write; // pull in write(str) and write(buf, size) from Print
     operator bool() { return true; }
 
     // Interrupt handlers - Not intended to be called externally

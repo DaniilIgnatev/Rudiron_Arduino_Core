@@ -144,6 +144,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
 target_compile_definitions(${EXECUTABLE} PRIVATE
         ${board_name}
         ${revision}
+#        HCLK_DISABLE
         )
 
 
