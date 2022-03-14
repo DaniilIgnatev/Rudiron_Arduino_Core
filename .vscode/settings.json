@@ -10,6 +10,7 @@
         "mdr_usb_cdc.h": "c",
         "mdr_usb_device.h": "c",
         "mdr_it.h": "c",
-        "mdr32fx.h": "c"
+        "mdr32fx.h": "c",
+        "typeinfo": "cpp"
     }
 }

@@ -27,31 +27,31 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #endif
 
-#define NUM_DIGITAL_PINS            36
+#define NUM_DIGITAL_PINS            38
 #define NUM_ANALOG_INPUTS           6
 
 /* Default for Arduino connector compatibility */
 /* SPI Definitions */
 #ifndef PIN_SPI_SS
-#define PIN_SPI_SS                10
+#define PIN_SPI_SS                1
 #endif
 #ifndef PIN_SPI_SS1
-#define PIN_SPI_SS1               4
+#define PIN_SPI_SS1               6
 #endif
 #ifndef PIN_SPI_SS2
 #define PIN_SPI_SS2               7
 #endif
 #ifndef PIN_SPI_SS3
-#define PIN_SPI_SS3               8
+#define PIN_SPI_SS3               4
 #endif
 #ifndef PIN_SPI_MOSI
-#define PIN_SPI_MOSI              11
+#define PIN_SPI_MOSI              3
 #endif
 #ifndef PIN_SPI_MISO
-#define PIN_SPI_MISO              12
+#define PIN_SPI_MISO              0
 #endif
 #ifndef PIN_SPI_SCK
-#define PIN_SPI_SCK               13
+#define PIN_SPI_SCK               2
 #endif
 
 static const uint32_t SS   = PIN_SPI_SS;
@@ -64,10 +64,10 @@ static const uint32_t SCK  = PIN_SPI_SCK;
 
 /* I2C Definitions */
 #ifndef PIN_WIRE_SDA
-#define PIN_WIRE_SDA              14
+#define PIN_WIRE_SDA              19
 #endif
 #ifndef PIN_WIRE_SCL
-#define PIN_WIRE_SCL              15
+#define PIN_WIRE_SCL              18
 #endif
 
 static const uint32_t SDA = PIN_WIRE_SDA;
@@ -75,12 +75,12 @@ static const uint32_t SCL = PIN_WIRE_SCL;
 
 #define LED_BUILTIN 4
 
-#define PIN_A0   (54)
-#define PIN_A1   (55)
-#define PIN_A2   (56)
-#define PIN_A3   (57)
-#define PIN_A4   (58)
-#define PIN_A5   (59)
+#define PIN_A0   (21)
+#define PIN_A1   (22)
+#define PIN_A2   (23)
+#define PIN_A3   (24)
+#define PIN_A4   (25)
+#define PIN_A5   (26)
 
 
 

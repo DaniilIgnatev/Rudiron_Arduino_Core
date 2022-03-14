@@ -28,38 +28,49 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_rst_clk.h"
 
 #include "Stream.h"
+#include "rudiron/gpio.h"
 
 namespace Rudiron {
 
     class SPI : public Stream {
     protected:
-        PORT_InitTypeDef PORT_InitStructure;
+
+        PortPinName chipSelectNot;
 
 
-        SSP_InitTypeDef sSSP;
+        SSP_InitTypeDef SPI_InitStructure;
+
+
+        MDR_SSP_TypeDef* MDR_SSP;
+
+
+        uint32_t SSP_Mode;
 
 
         void InitSPIPortMaster();
 
-
-        void InitSPIController(uint32_t SSP_Mode);
-
-
-        uint8_t read_write(uint8_t data);
-
     public:
 
-        explicit SPI() : Stream() {}
+        explicit SPI(MDR_SSP_TypeDef* MDR_SSP, uint16_t SSP_Mode);
 
 
         //Посылается в шину для получения данных (No operation)
         uint8_t NOP = (uint8_t) 0xFF;
 
 
-        bool begin(uint32_t SSP_Mode);
+        bool begin(
+            uint32_t speed = 4000000, uint16_t SSP_SPH = SSP_SPH_1Edge, uint16_t SSP_SPO = SSP_SPO_Low,
+            uint16_t SSP_WordLength = SSP_WordLength8b, uint16_t SSP_FRF = SSP_FRF_SPI_Motorola, uint16_t SSP_HardwareFlowControl = SSP_HardwareFlowControl_SSE
+            );
 
 
         void end();
+
+
+        uint8_t read_write(uint8_t data);
+
+
+        uint16_t read_write16(uint16_t data);
 
 
         virtual int available(void);
@@ -84,8 +95,13 @@ namespace Rudiron {
 
 
         operator bool() { return true; }
-    };
 
+
+        static SPI& getSPI1();
+
+
+        static SPI& getSPI2();
+    };
 }
 
 #endif // SPI_H

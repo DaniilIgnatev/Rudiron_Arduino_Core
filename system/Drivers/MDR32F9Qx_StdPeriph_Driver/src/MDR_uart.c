@@ -119,7 +119,13 @@ BaudRateStatus UART_Init ( MDR_UART_TypeDef* UARTx,
 
 	/* Configure the UART Baud Rate */
 	RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
-	cpuclock = RST_CLK_Clocks.CPU_CLK_Frequency;
+
+#ifdef HCLK_DISABLE
+	cpuclock = RST_CLK_Clocks.CPU_CLK_Frequency * 0.822;//коррекция для работы от внутреннего генератора;
+#else
+    cpuclock = RST_CLK_Clocks.CPU_CLK_Frequency;
+#endif
+
 #if defined (USE_MDR1986VE3) /* For Cortex M1 */
 	if(( UARTx == MDR_UART3 ) || (UARTx == MDR_UART4))
 		tmpreg = MDR_RST_CLK->UART_SSP_CLOCK;

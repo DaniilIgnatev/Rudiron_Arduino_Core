@@ -2,51 +2,46 @@
 
 namespace Rudiron {
 
-    void SPI::InitSPIController(uint32_t SSP_Mode) {
-        //Сброс настроек контроллера SPI1
-        SSP_DeInit(MDR_SSP1);
-        //Установка делителя тактовой частоты SPI1
-        SSP_BRGInit(MDR_SSP1, SSP_HCLKdiv1);
+    SPI::SPI(MDR_SSP_TypeDef* MDR_SSP, uint16_t SSP_Mode): Stream()
+    {
+        this->MDR_SSP = MDR_SSP;
+        this->SSP_Mode = SSP_Mode;
+    }
 
-        /* SSP1 MASTER configuration ------------------------------------------------*/
-        SSP_StructInit(&sSSP);//значения по умолчанию
-        sSSP.SSP_SCR = 0x0;//коэффициент скорости обмена
-        sSSP.SSP_CPSDVSR = 12;//делитель частоты
+
+    bool SPI::begin(
+    uint32_t speed, uint16_t SSP_SPH, uint16_t SSP_SPO,
+    uint16_t SSP_WordLength, uint16_t SSP_FRF, uint16_t SSP_HardwareFlowControl) {
+        //Сброс настроек контроллера SPI1
+        SSP_DeInit(MDR_SSP);
+
+        //Сделать расчет делителей!!!
+        //Установка делителя тактовой частоты SPI1
+        SSP_BRGInit(MDR_SSP, SSP_HCLKdiv1);
+
+        SSP_StructInit(&SPI_InitStructure);//значения по умолчанию
+        SPI_InitStructure.SSP_SCR = 0x0;//коэффициент скорости обмена
+        SPI_InitStructure.SSP_CPSDVSR = 12;//делитель частоты
         //частота SPI = 48 / 12 (1 + 0) = 4Мгц
         //частота SPI = 80 / 12 (1 + 0) = 6.(6)Мгц
 
-        sSSP.SSP_Mode = SSP_Mode;
-        sSSP.SSP_WordLength = SSP_WordLength8b;
-        sSSP.SSP_SPH = SSP_SPH_1Edge;
-        sSSP.SSP_SPO = SSP_SPO_Low;
-        sSSP.SSP_FRF = SSP_FRF_SPI_Motorola;
-        sSSP.SSP_HardwareFlowControl = SSP_HardwareFlowControl_SSE;
-        SSP_Init(MDR_SSP1, &sSSP);
+        SPI_InitStructure.SSP_Mode = SSP_Mode;
+        SPI_InitStructure.SSP_WordLength = SSP_WordLength;
+        SPI_InitStructure.SSP_SPH = SSP_SPH;
+        SPI_InitStructure.SSP_SPO = SSP_SPO;
+        SPI_InitStructure.SSP_FRF = SSP_FRF;
+        SPI_InitStructure.SSP_HardwareFlowControl = SSP_HardwareFlowControl;
+        SSP_Init(MDR_SSP, &SPI_InitStructure);
 
-        /* Enable SSP1 */
-        SSP_Cmd(MDR_SSP1, ENABLE);
-    }
+        if (MDR_SSP == MDR_SSP2){
+            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP2, ENABLE);
+        }
+        else{
+            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP1, ENABLE);
+        }
 
+        SSP_Cmd(MDR_SSP, ENABLE);
 
-    void SPI::InitSPIPortMaster() {
-        //Конфигурация пинов SPI1
-        PORT_InitStructure.PORT_FUNC = PORT_FUNC_ALTER;
-        PORT_InitStructure.PORT_MODE = PORT_MODE_DIGITAL;
-        PORT_InitStructure.PORT_SPEED = PORT_SPEED_FAST;
-
-        PORT_InitStructure.PORT_OE = PORT_OE_IN;
-        PORT_InitStructure.PORT_Pin = PORT_Pin_3;
-        PORT_Init(MDR_PORTF, &PORT_InitStructure);
-
-
-        PORT_InitStructure.PORT_OE = PORT_OE_OUT;
-        PORT_InitStructure.PORT_Pin = PORT_Pin_0 | PORT_Pin_1;
-        PORT_Init(MDR_PORTF, &PORT_InitStructure);
-    }
-
-
-    bool SPI::begin(uint32_t SSP_Mode) {
-        InitSPIController(SSP_Mode);
         if (SSP_Mode == SSP_ModeMaster) {
             InitSPIPortMaster();
         }
@@ -55,8 +50,56 @@ namespace Rudiron {
     }
 
 
-    void SPI::end() {
+    void SPI::InitSPIPortMaster() {
+        PORT_InitTypeDef PORT_InitStructure;
+        PORT_StructInit(&PORT_InitStructure);
+        
+        PORT_InitStructure.PORT_FUNC = PORT_FUNC_ALTER;
+        PORT_InitStructure.PORT_MODE = PORT_MODE_DIGITAL;
+        PORT_InitStructure.PORT_SPEED = PORT_SPEED_MAXFAST;
 
+
+        if (MDR_SSP == MDR_SSP2){
+            //Конфигурация пинов SPI2
+            //RX
+            PORT_InitStructure.PORT_OE = PORT_OE_IN;
+            PORT_InitStructure.PORT_Pin = PORT_Pin_2;
+            GPIO::configPin(PORT_PIN_D2, PORT_InitStructure);
+
+            //CLK, TX
+            PORT_InitStructure.PORT_OE = PORT_OE_OUT;
+            PORT_InitStructure.PORT_Pin = PORT_Pin_5 | PORT_Pin_6;
+            GPIO::configPin(PORT_PIN_D5, PORT_InitStructure);
+            GPIO::configPin(PORT_PIN_D6, PORT_InitStructure);
+        }
+        else{
+            //Конфигурация пинов SPI1
+            //RX
+            PORT_InitStructure.PORT_OE = PORT_OE_IN;
+            PORT_InitStructure.PORT_Pin = PORT_Pin_3;
+            GPIO::configPin(PORT_PIN_F3, PORT_InitStructure);
+
+            //CLK, TX
+            PORT_InitStructure.PORT_OE = PORT_OE_OUT;
+            PORT_InitStructure.PORT_Pin = PORT_Pin_0 | PORT_Pin_1;
+            GPIO::configPin(PORT_PIN_F0, PORT_InitStructure);
+            GPIO::configPin(PORT_PIN_F1, PORT_InitStructure);
+        }
+    }
+
+
+    void SPI::end() {
+        //ждем отправки оставшихся пакетов
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
+        SSP_DeInit(MDR_SSP);
+        SSP_Cmd(MDR_SSP, DISABLE);
+
+        if (MDR_SSP == MDR_SSP2){
+            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP2, DISABLE);
+        }
+        else{
+            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP1, DISABLE);
+        }
     }
 
 
@@ -76,12 +119,12 @@ namespace Rudiron {
 
 
     int SPI::availableForWrite() {
-        return SSP_GetFlagStatus(MDR_SSP1, SSP_FLAG_TFE);
+        return SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE);
     }
 
 
     void SPI::flush() {
-        while (SSP_GetFlagStatus(MDR_SSP1, SSP_FLAG_TFE) == RESET);
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET);
     }
 
 
@@ -93,13 +136,34 @@ namespace Rudiron {
 
     uint8_t SPI::read_write(uint8_t data) {
         //Пока буфер FIFO передатчика не пуст
-        while (SSP_GetFlagStatus(MDR_SSP1, SSP_FLAG_TFE) == RESET) {}
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
         //Отправка данных
-        SSP_SendData(MDR_SSP1, data);
+        SSP_SendData(MDR_SSP, data);
 
         //Пока буфер FIFO приемника пуст
-        while (SSP_GetFlagStatus(MDR_SSP1, SSP_FLAG_RNE) == RESET) {}
-        return (uint8_t) SSP_ReceiveData(MDR_SSP1);
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET) {}
+        return (uint8_t) SSP_ReceiveData(MDR_SSP);
     }
 
+
+    uint16_t SPI::read_write16(uint16_t data) {
+        //Пока буфер FIFO передатчика не пуст
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
+        //Отправка данных
+        SSP_SendData(MDR_SSP, data);
+
+        //Пока буфер FIFO приемника пуст
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET) {}
+        return (uint16_t) SSP_ReceiveData(MDR_SSP);
+    }
+
+    SPI& SPI::getSPI1(){
+        static SPI spi1(MDR_SSP1, SSP_ModeMaster);
+        return spi1;
+    }
+
+    SPI& SPI::getSPI2(){
+        static SPI spi2(MDR_SSP2, SSP_ModeMaster);
+        return spi2;
+    }
 }

@@ -29,7 +29,7 @@ SET(CMAKE_BUILD_TYPE "Debug")
 set(core M3)
 set(cpu_name "MDR32F9Qx")
 set(board_name "Buterbrod")
-set(revision "revision_1")
+set(revision "revision_2")
 
 # Optional: issue a message to be sure it uses the correct toolchain file.
 message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
@@ -144,7 +144,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
 target_compile_definitions(${EXECUTABLE} PRIVATE
         ${board_name}
         ${revision}
-#        HCLK_DISABLE
+#       HCLK_DISABLE
         )
 
 

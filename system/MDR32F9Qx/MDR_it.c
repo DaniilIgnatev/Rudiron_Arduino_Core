@@ -329,7 +329,17 @@ void BACKUP_IRQHandler(void)
 *******************************************************************************/
 void EXT_INT1_IRQHandler(void)
 {
-//    NVIC_ClearPendingIRQ(EXT_INT1_IRQn);
+}
+/*******************************************************************************
+* Function Name  : EXT_INT2_IRQHandler
+* Description    : This function handles EXT_INT2 interrupt request.
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void EXT_INT2_IRQHandler(void)
+{
+    //    NVIC_ClearPendingIRQ(EXT_INT1_IRQn);
 
 //    // Buffer to store a payload of maximum width
 //    uint8_t nRF24_payload[32];
@@ -345,16 +355,6 @@ void EXT_INT1_IRQHandler(void)
 //        nRF24_maskIRQ(0,0,0);
 //        pipe = nRF24_ReadPayload(nRF24_payload, &payload_length);
 //    }
-}
-/*******************************************************************************
-* Function Name  : EXT_INT2_IRQHandler
-* Description    : This function handles EXT_INT2 interrupt request.
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-void EXT_INT2_IRQHandler(void)
-{
 }
 /*******************************************************************************
 * Function Name  : EXT_INT3_IRQHandler

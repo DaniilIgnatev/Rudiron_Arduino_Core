@@ -66,7 +66,7 @@ extern "C" {
     #if MILANDR_EVAL_BOARD == 2
     #define USE_JTAG_B
     #endif
-    #else
+#else
 #define USE_SWD_A
 #endif
 
