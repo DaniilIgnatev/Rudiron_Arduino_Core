@@ -23,7 +23,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 using namespace Rudiron;
 
-#ifdef Buterbrod
+#ifdef Rudiron_Buterbrod
 
 #ifdef revision_2
 const PortPinName Rudiron::pinMap[NUM_DIGITAL_PINS]{

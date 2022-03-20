@@ -288,19 +288,19 @@ nRF24_TXResult nRF24_TransmitPacket(uint8_t *pBuf, uint8_t length);
 
 
 ///Упрощенный интерфейс
-namespace nRF24 {
-    const uint8_t payload_length = 32;
+class nRF24 {
+    static const uint8_t payload_length = 32;
 
-    bool begin(bool receiver, bool irq);
+    static bool begin(bool receiver, bool irq);
 
-    void end();
+    static void end();
 
-    bool available(void);
+    static bool available(void);
 
-    nRF24_RXResult read(uint8_t data[32]);
+    static nRF24_RXResult read(uint8_t data[32]);
 
     //virtual void flush(void);
-    nRF24_TXResult write(uint8_t data[32]);
+    static nRF24_TXResult write(uint8_t data[32]);
 } ;
 
 #ifdef __cplusplus

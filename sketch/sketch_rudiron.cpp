@@ -1,7 +1,7 @@
 #include "Arduino.h"
 #include "rudiron/gpio.h"
 #include "nrf24l01/nrf24.h"
-
+#include "rudiron/timer.h"
 
 bool pressed1 = false;
 
@@ -11,6 +11,8 @@ bool pressed3 = false;
 
 
 uint8_t data[32] = {0};
+
+Timer t1(TimerName::Timer1);
 
 
 void reverse()
@@ -41,40 +43,62 @@ void setup()
     GPIO::configPinOutput(LED_BUILTIN_1);
     GPIO::configPinOutput(LED_BUILTIN_2);
 
-    nRF24::begin(false, false);
+    // nRF24::begin(false, false);
 
     GPIO::configPinInputPullDown(BUTTON_BUILTIN_1);
     GPIO::configPinInputPullDown(BUTTON_BUILTIN_2);
     GPIO::configPinInputPullDown(BUTTON_BUILTIN_3);
 
-    for (int i = 0; i < 3; i++){
-        GPIO::writeLED_1(true);
-        GPIO::writeLED_2(true);
-        CLK::delay_millis(1000);
-        GPIO::writeLED_1(false);
-        GPIO::writeLED_2(false);
-        CLK::delay_millis(1000);
-    }
+    t1.start();
+    t1.PWM_setup();
+    t1.PWM_start(PortPinName::PORT_PIN_A1,50);
+
+    // for (int i = 0; i < 3; i++){
+    //     GPIO::writeLED_1(true);
+    //     GPIO::writeLED_2(true);
+    //     CLK::delay_millis(1000);
+    //     GPIO::writeLED_1(false);
+    //     GPIO::writeLED_2(false);
+    //     CLK::delay_millis(1000);
+    // }
 }
+
+
+
 
 
 void loop()
 {
-    turnLeft(GPIO::readButton_1());
+    // turnLeft(GPIO::readButton_1());
 
-    if (!pressed2 && GPIO::readButton_2())
-    {
-        pressed2 = true;
+    // if (!pressed2 && GPIO::readButton_2())
+    // {
+    //     pressed2 = true;
 
-        reverse();
-    }
-    else
-    {
-        pressed2 = false;
-    }
+    //     reverse();
+    // }
+    // else
+    // {
+    //     pressed2 = false;
+    // }
 
-    turnRight(GPIO::readButton_3());
+    // turnRight(GPIO::readButton_3());
 
-    nRF24::write(data);
-    CLK::delay_millis(100);
+    
+
+    // nRF24::write(data);
+    GPIO::writeLED_1(false);
+    CLK::delay_micros(800);
+    GPIO::writeLED_1(true);
+    CLK::delay_micros(800);
+
+    // bool hse = RST_CLK_HSEstatus() == SUCCESS;
+    // if (hse){
+    //     GPIO::writeLED_1(false);
+    //     GPIO::writeLED_2(true);
+    // }
+    // else{
+    //     GPIO::writeLED_1(true);
+    //     GPIO::writeLED_2(false);
+    // }
 }

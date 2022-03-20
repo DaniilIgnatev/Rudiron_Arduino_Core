@@ -99,6 +99,8 @@ namespace Rudiron
             delay_millis(target_millis);
             us = us % 1000;
         }
+
+        us /= 9;
 		
         while (us) {
             if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) {
@@ -107,7 +109,7 @@ namespace Rudiron
         }
     }
 
-    ///Выбор внешнего источника тактирования и коэффициента умножения частоты, 8Мгц
+    ///Выбор внешнего источника тактирования и коэффициента умножения частоты
     void CLK::runHSE(uint32_t RST_CLK_CPU_PLLmul)
     {
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);

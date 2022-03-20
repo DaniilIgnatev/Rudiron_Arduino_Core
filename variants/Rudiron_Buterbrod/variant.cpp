@@ -33,13 +33,15 @@ void setupUSB() {
 
 }
 
+//HardwareSerial Serial;
+//
+//HardwareSerial Seria1;
+
 //добавить обработку прерываний rx
 //Serial1._rx_complete_irq();
 
 //добавить обработку прерываний tx
 //Serial1._tx_udr_empty_irq();
-
-//HardwareSerial Serial1;
 
 // Function that can be weakly referenced by serialEventRun to prevent
 // pulling in this file if it's not otherwise used.

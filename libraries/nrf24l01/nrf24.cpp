@@ -873,6 +873,8 @@ nRF24_TXResult nRF24_TransmitPacket(uint8_t *pBuf, uint8_t length) {
 }
 
 
+const uint8_t payload_length = 32;
+
 
 bool nRF24::begin(bool receiver, bool irq)
 {

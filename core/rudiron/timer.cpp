@@ -59,7 +59,7 @@ namespace Rudiron {
         RST_CLK_FreqTypeDef RST_CLK_Clocks;
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
 
-        uint32_t fullARR = 10000000 / frequency;
+        uint32_t fullARR = 20000000 / frequency;
         prescaler = fullARR / 0xffff;
         ARR = fullARR - (prescaler * 0xffff);
 

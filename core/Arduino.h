@@ -31,6 +31,7 @@
 #include "rudiron/clk.h"
 
 #include "binary.h"
+#include "variant.h"
 
 #ifdef __cplusplus
 extern "C"{
