@@ -289,6 +289,8 @@ nRF24_TXResult nRF24_TransmitPacket(uint8_t *pBuf, uint8_t length);
 
 ///Упрощенный интерфейс
 class nRF24 {
+    public:
+    
     static const uint8_t payload_length = 32;
 
     static bool begin(bool receiver, bool irq);

@@ -103,31 +103,31 @@ namespace Rudiron {
 
 #ifdef LED_BUILTIN_1
         static inline void writeLED_1(bool value) {
-            GPIO::writePin(LED_BUILTIN_1, value);
+            GPIO::writePin(pinMap[LED_BUILTIN_1], value);
         }
 #endif
 
 #ifdef LED_BUILTIN_2
         static inline void writeLED_2(bool value) {
-            GPIO::writePin(LED_BUILTIN_2, value);
+            GPIO::writePin(pinMap[LED_BUILTIN_2], value);
         }
 #endif
 
 #ifdef BUTTON_BUILTIN_1
         static inline bool readButton_1() {
-            return GPIO::readPin(BUTTON_BUILTIN_1);
+            return GPIO::readPin(pinMap[BUTTON_BUILTIN_1]);
         }
 #endif
 
 #ifdef BUTTON_BUILTIN_2
         static inline bool readButton_2() {
-            return GPIO::readPin(BUTTON_BUILTIN_2);
+            return GPIO::readPin(pinMap[BUTTON_BUILTIN_2]);
         }
 #endif
 
 #ifdef BUTTON_BUILTIN_3
         static inline bool readButton_3() {
-            return GPIO::readPin(BUTTON_BUILTIN_3);
+            return GPIO::readPin(pinMap[BUTTON_BUILTIN_3]);
         }
 #endif
 

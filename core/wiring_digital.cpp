@@ -26,20 +26,43 @@
 #define ARDUINO_MAIN
 #include "wiring_private.h"
 #include "pins_arduino.h"
+#include "rudiron/gpio.h"
+
+
+using namespace Rudiron;
 
 
 void pinMode(uint8_t pin, uint8_t mode)
 {
+  PortPinName pinName = Rudiron::pinMap[pin];
 
+  switch (mode)
+  {
+  case INPUT:
+    Rudiron::GPIO::configPinInput(pinName);
+    break;
+  case INPUT_PULLUP:
+    Rudiron::GPIO::configPinInputPullUp(pinName);
+    break;
+  case INPUT_PULLDOWN:
+    Rudiron::GPIO::configPinInputPullDown(pinName);
+    break;
+  case OUTPUT:
+    Rudiron::GPIO::configPinOutput(pinName);
+    break;
+  default:
+    break;
+  }
 }
-
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {
-
+  PortPinName pinName = Rudiron::pinMap[pin];
+  GPIO::writePin(pinName, (bool)val);
 }
 
 int digitalRead(uint8_t pin)
 {
-    return 0;
+  PortPinName pinName = Rudiron::pinMap[pin];
+  return GPIO::readPin(pinName);
 }

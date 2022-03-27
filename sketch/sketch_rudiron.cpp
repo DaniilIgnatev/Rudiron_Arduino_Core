@@ -3,16 +3,15 @@
 #include "nrf24l01/nrf24.h"
 #include "rudiron/timer.h"
 
+
+
 bool pressed1 = false;
 
 bool pressed2 = false;
 
 bool pressed3 = false;
 
-
 uint8_t data[32] = {0};
-
-Timer t1(TimerName::Timer1);
 
 
 void reverse()
@@ -23,82 +22,57 @@ void reverse()
 
 void turnLeft(bool stop)
 {
-    GPIO::writeLED_1(stop);
+    digitalWrite(LED_BUILTIN_1, stop);
     data[1] = stop;
-    if (stop){
-        int a = 5;
-    }
 }
 
 
 void turnRight(bool stop)
 {
-    GPIO::writeLED_2(stop);
+    digitalWrite(LED_BUILTIN_2, stop);
     data[2] = stop;
 }
 
 
 void setup()
 {
-    GPIO::configPinOutput(LED_BUILTIN_1);
-    GPIO::configPinOutput(LED_BUILTIN_2);
+    pinMode(LED_BUILTIN_1, OUTPUT);
+    pinMode(LED_BUILTIN_2, OUTPUT);
 
-    // nRF24::begin(false, false);
+    nRF24::begin(false, false);
 
-    GPIO::configPinInputPullDown(BUTTON_BUILTIN_1);
-    GPIO::configPinInputPullDown(BUTTON_BUILTIN_2);
-    GPIO::configPinInputPullDown(BUTTON_BUILTIN_3);
+    pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
+    pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
+    pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
 
-    t1.start();
-    t1.PWM_setup();
-    t1.PWM_start(PortPinName::PORT_PIN_A1,50);
-
-    // for (int i = 0; i < 3; i++){
-    //     GPIO::writeLED_1(true);
-    //     GPIO::writeLED_2(true);
-    //     CLK::delay_millis(1000);
-    //     GPIO::writeLED_1(false);
-    //     GPIO::writeLED_2(false);
-    //     CLK::delay_millis(1000);
-    // }
+    for (int i = 0; i < 3; i++){
+        digitalWrite(LED_BUILTIN_1, true);
+        digitalWrite(LED_BUILTIN_2, true);
+        delay(100);
+        digitalWrite(LED_BUILTIN_1, false);
+        digitalWrite(LED_BUILTIN_2, false);
+        delay(100);
+    }
 }
-
-
-
 
 
 void loop()
 {
-    // turnLeft(GPIO::readButton_1());
+    turnLeft(digitalRead(BUTTON_BUILTIN_1));
 
-    // if (!pressed2 && GPIO::readButton_2())
-    // {
-    //     pressed2 = true;
+    if (!pressed2 && digitalRead(BUTTON_BUILTIN_2))
+    {
+        pressed2 = true;
 
-    //     reverse();
-    // }
-    // else
-    // {
-    //     pressed2 = false;
-    // }
+        reverse();
+    }
+    else
+    {
+        pressed2 = false;
+    }
 
-    // turnRight(GPIO::readButton_3());
-
+    turnRight(digitalRead(BUTTON_BUILTIN_3));
     
-
-    // nRF24::write(data);
-    GPIO::writeLED_1(false);
-    CLK::delay_micros(800);
-    GPIO::writeLED_1(true);
-    CLK::delay_micros(800);
-
-    // bool hse = RST_CLK_HSEstatus() == SUCCESS;
-    // if (hse){
-    //     GPIO::writeLED_1(false);
-    //     GPIO::writeLED_2(true);
-    // }
-    // else{
-    //     GPIO::writeLED_1(true);
-    //     GPIO::writeLED_2(false);
-    // }
+    nRF24::write(data);
+    delay(50);
 }
