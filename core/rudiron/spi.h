@@ -37,12 +37,11 @@ namespace Rudiron {
 
         PortPinName chipSelectNot;
 
-
         SSP_InitTypeDef SPI_InitStructure;
-
 
         MDR_SSP_TypeDef* MDR_SSP;
 
+        uint32_t RST_CLK_PCLK_SSP;
 
         uint32_t SSP_Mode;
 
@@ -51,7 +50,7 @@ namespace Rudiron {
 
     public:
 
-        explicit SPI(MDR_SSP_TypeDef* MDR_SSP, uint16_t SSP_Mode);
+        explicit SPI(MDR_SSP_TypeDef* MDR_SSP, uint32_t RST_CLK_PCLK_SSP, uint16_t SSP_Mode);
 
 
         //Посылается в шину для получения данных (No operation)

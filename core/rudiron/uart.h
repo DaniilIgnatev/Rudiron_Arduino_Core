@@ -27,13 +27,27 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"
 
+#include "rudiron/gpio.h"
 #include "Stream.h"
 
 namespace Rudiron {
 
     class UART : public Stream {
+    private:
+        MDR_UART_TypeDef* MDR_UART;
+
+        uint32_t RST_CLK_PCLK_UART;
+
+        PortPinName RX_PIN;
+
+        PortPinName TX_PIN;
+
+        PORT_InitTypeDef RX_PortInit;
+
+        PORT_InitTypeDef TX_PortInit;
+
     public:
-        explicit UART() : Stream() {}
+        explicit UART(MDR_UART_TypeDef* MDR_UART, uint32_t RST_CLK_PCLK_UART, PortPinName RX_PIN, PortPinName TX_PIN);
 
 
         bool begin(uint32_t baudRate);

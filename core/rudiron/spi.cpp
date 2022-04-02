@@ -2,9 +2,10 @@
 
 namespace Rudiron {
 
-    SPI::SPI(MDR_SSP_TypeDef* MDR_SSP, uint16_t SSP_Mode): Stream()
+    SPI::SPI(MDR_SSP_TypeDef* MDR_SSP, uint32_t RST_CLK_PCLK_SSP, uint16_t SSP_Mode): Stream()
     {
         this->MDR_SSP = MDR_SSP;
+        this->RST_CLK_PCLK_SSP = RST_CLK_PCLK_SSP;
         this->SSP_Mode = SSP_Mode;
     }
 
@@ -33,12 +34,7 @@ namespace Rudiron {
         SPI_InitStructure.SSP_HardwareFlowControl = SSP_HardwareFlowControl;
         SSP_Init(MDR_SSP, &SPI_InitStructure);
 
-        if (MDR_SSP == MDR_SSP2){
-            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP2, ENABLE);
-        }
-        else{
-            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP1, ENABLE);
-        }
+        RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP, ENABLE);
 
         SSP_Cmd(MDR_SSP, ENABLE);
 
@@ -93,13 +89,7 @@ namespace Rudiron {
         while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
         SSP_DeInit(MDR_SSP);
         SSP_Cmd(MDR_SSP, DISABLE);
-
-        if (MDR_SSP == MDR_SSP2){
-            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP2, DISABLE);
-        }
-        else{
-            RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP1, DISABLE);
-        }
+        RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP, DISABLE);
     }
 
 
@@ -158,12 +148,12 @@ namespace Rudiron {
     }
 
     SPI& SPI::getSPI1(){
-        static SPI spi1(MDR_SSP1, SSP_ModeMaster);
+        static SPI spi1(MDR_SSP1, RST_CLK_PCLK_SSP1, SSP_ModeMaster);
         return spi1;
     }
 
     SPI& SPI::getSPI2(){
-        static SPI spi2(MDR_SSP2, SSP_ModeMaster);
+        static SPI spi2(MDR_SSP2, RST_CLK_PCLK_SSP2, SSP_ModeMaster);
         return spi2;
     }
 }
