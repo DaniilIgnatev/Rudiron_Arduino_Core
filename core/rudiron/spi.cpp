@@ -148,12 +148,12 @@ namespace Rudiron {
     }
 
     SPI& SPI::getSPI1(){
-        static SPI spi1(MDR_SSP1, RST_CLK_PCLK_SSP1, SSP_ModeMaster);
-        return spi1;
+        static SPI spi(MDR_SSP1, RST_CLK_PCLK_SSP1, SSP_ModeMaster);
+        return spi;
     }
 
     SPI& SPI::getSPI2(){
-        static SPI spi2(MDR_SSP2, RST_CLK_PCLK_SSP2, SSP_ModeMaster);
-        return spi2;
+        static SPI spi(MDR_SSP2, RST_CLK_PCLK_SSP2, SSP_ModeMaster);
+        return spi;
     }
 }

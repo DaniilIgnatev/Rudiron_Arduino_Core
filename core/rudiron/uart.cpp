@@ -3,28 +3,22 @@
 
 namespace Rudiron {
 
-    UART::UART(MDR_UART_TypeDef* MDR_UART, uint32_t RST_CLK_PCLK_UART, PortPinName RX_PIN, PortPinName TX_PIN): Stream(){
+    UART::UART(MDR_UART_TypeDef* MDR_UART, uint32_t RST_CLK_PCLK_UART, PortPinName RX_PIN, PORT_InitTypeDef RX_PortInit, PortPinName TX_PIN, PORT_InitTypeDef TX_PortInit): Stream(){
         this->MDR_UART = MDR_UART;
         this->RST_CLK_PCLK_UART = RST_CLK_PCLK_UART;
         this->RX_PIN = RX_PIN;
+        this->RX_PortInit = RX_PortInit;
         this->TX_PIN = TX_PIN;
+        this->TX_PortInit = TX_PortInit;
     }
 
 
     bool UART::begin(uint32_t baudRate) {
-        
+        /* Enables the CPU_CLK clock*/
+        RST_CLK_PCLKcmd(RST_CLK_PCLK_UART, ENABLE);
 
-        // /* Enables the CPU_CLK clock on UART1,UART2 */
-        // RST_CLK_PCLKcmd(RST_CLK_PCLK_UART1, ENABLE);
-
-        // /* Set the HCLK division factor = 2 for UART1,UART2*/
-        // UART_BRGInit(MDR_UART1, UART_HCLKdiv1);
-
-        /* Enables the CPU_CLK clock on UART1,UART2 */
-        RST_CLK_PCLKcmd(RST_CLK_PCLK_UART2, ENABLE);
-
-        /* Set the HCLK division factor = 2 for UART1,UART2*/
-        UART_BRGInit(MDR_UART2, UART_HCLKdiv1);
+        /* Set the HCLK division factor*/
+        UART_BRGInit(MDR_UART, UART_HCLKdiv1);
 
         /* Initialize UART_InitStructure */
         UART_InitTypeDef UART_InitStructure;
@@ -35,16 +29,12 @@ namespace Rudiron {
         UART_InitStructure.UART_FIFOMode = UART_FIFO_OFF;
         UART_InitStructure.UART_HardwareFlowControl = UART_HardwareFlowControl_RXE | UART_HardwareFlowControl_TXE;
 
-        /* Configure UART1 parameters*/
-        // bool status = UART_Init (MDR_UART1,&UART_InitStructure);
-
-        bool status = UART_Init(MDR_UART2, &UART_InitStructure);
+        /* Configure UART parameters*/
+        bool status = UART_Init(MDR_UART, &UART_InitStructure);
 
         if (status) {
-            /* Enables UART1 peripheral */
-            // UART_Cmd(MDR_UART1,ENABLE);
-
-            UART_Cmd(MDR_UART2, ENABLE);
+            /* Enables UART peripheral */
+            UART_Cmd(MDR_UART, ENABLE);
         }
 
         return status;
@@ -52,19 +42,14 @@ namespace Rudiron {
 
 
     void UART::end() {
-        UART_Cmd(MDR_UART1, DISABLE);
-        RST_CLK_PCLKcmd(RST_CLK_PCLK_UART1, DISABLE);
-
-        PORT_InitTypeDef PortInit;
-        PortInit.PORT_Pin = PORT_Pin_5 | PORT_Pin_6;
-        PORT_Init(MDR_PORTB, &PortInit);
+        UART_Cmd(MDR_UART, DISABLE);
+        RST_CLK_PCLKcmd(RST_CLK_PCLK_UART, DISABLE);
     }
 
 
     int UART::available() {
         /* Check RXFF flag*/
-        // return UART_GetFlagStatus (MDR_UART1, UART_FLAG_RXFF);
-        return UART_GetFlagStatus(MDR_UART2, UART_FLAG_RXFF);
+        return UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF);
     }
 
 
@@ -75,57 +60,31 @@ namespace Rudiron {
 
     int UART::read() {
         /* Check RXFF flag*/
-        // while (UART_GetFlagStatus (MDR_UART1, UART_FLAG_RXFF)!= SET)
-        // {
-        // }
-
-        // /* Recive data*/
-        // return UART_ReceiveData (MDR_UART1);
-
-        /* Check RXFF flag*/
-        if (UART_GetFlagStatus(MDR_UART2, UART_FLAG_RXFF) != SET) {
+        if (UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF) != SET) {
             return -1;
         }
 
         /* Recive data*/
-        return UART_ReceiveData(MDR_UART2);
+        return UART_ReceiveData(MDR_UART);
     }
 
 
     int UART::availableForWrite() {
-        // return UART_GetFlagStatus (MDR_UART1, UART_FLAG_TXFE);
-
-        return UART_GetFlagStatus(MDR_UART2, UART_FLAG_TXFE);
+        return UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE);
     }
 
 
     void UART::flush() {
-        // while (UART_GetFlagStatus (MDR_UART1, UART_FLAG_TXFE)!= SET)
-        // {
-        // }
-
-        while (UART_GetFlagStatus(MDR_UART2, UART_FLAG_TXFE) != SET) {
-        }
+        while (UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE) != SET) {}
     }
 
 
     size_t UART::write(uint8_t byte) {
-        // /* Check TXFE flag*/
-        // while (UART_GetFlagStatus (MDR_UART1, UART_FLAG_TXFE)!= SET)
-        // {
-        // }
-
-        // /* Send Data from UART1 */
-        // UART_SendData (MDR_UART1,(uint16_t)byte);
-
-        // return true;
-
         /* Check TXFE flag*/
-        while (UART_GetFlagStatus(MDR_UART2, UART_FLAG_TXFE) != SET) {
-        }
+        while (UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE) != SET) {}
 
-        /* Send Data from UART2 */
-        UART_SendData(MDR_UART2, (uint16_t) byte);
+        /* Send Data */
+        UART_SendData(MDR_UART, (uint16_t) byte);
 
         return true;
     };

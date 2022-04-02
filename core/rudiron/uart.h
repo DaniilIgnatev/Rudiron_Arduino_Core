@@ -47,7 +47,7 @@ namespace Rudiron {
         PORT_InitTypeDef TX_PortInit;
 
     public:
-        explicit UART(MDR_UART_TypeDef* MDR_UART, uint32_t RST_CLK_PCLK_UART, PortPinName RX_PIN, PortPinName TX_PIN);
+        explicit UART(MDR_UART_TypeDef* MDR_UART, uint32_t RST_CLK_PCLK_UART, PortPinName RX_PIN, PORT_InitTypeDef RX_PortInit, PortPinName TX_PIN, PORT_InitTypeDef TX_PortInit);
 
 
         bool begin(uint32_t baudRate);
@@ -78,6 +78,8 @@ namespace Rudiron {
 
 
         operator bool() { return true; }
+
+        static UART& getUART1();
     };
 
 }
