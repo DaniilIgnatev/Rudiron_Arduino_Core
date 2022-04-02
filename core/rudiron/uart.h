@@ -79,7 +79,11 @@ namespace Rudiron {
 
         operator bool() { return true; }
 
+
         static UART& getUART1();
+
+
+        static UART& getUART2();
     };
 
 }

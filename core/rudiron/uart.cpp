@@ -90,26 +90,58 @@ namespace Rudiron {
     };
 
 
-    
-        // /* Fill PortInit structure*/
-        // PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
-        // PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
-        // PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
-        // PortInit.PORT_PD = PORT_PD_DRIVER;
-        // PortInit.PORT_GFEN = PORT_GFEN_OFF;
-        // PortInit.PORT_FUNC = PORT_FUNC_ALTER;
-        // PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
-        // PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+    UART& UART::getUART1(){
+        PORT_InitTypeDef RX_PortInit;
+        RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        RX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        RX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        RX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        RX_PortInit.PORT_FUNC = PORT_FUNC_OVERRID;
+        RX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        RX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        RX_PortInit.PORT_OE = PORT_OE_IN;
 
-        // /* Configure PORTD pins 1 (UART2_TX) as output */
-        // PortInit.PORT_OE = PORT_OE_OUT;
-        // PortInit.PORT_Pin = PORT_Pin_1;
-        // PORT_Init(MDR_PORTD, &PortInit);
+        PORT_InitTypeDef TX_PortInit;
+        TX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        TX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        TX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        TX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        TX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        TX_PortInit.PORT_FUNC = PORT_FUNC_OVERRID;
+        TX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        // /* Configure PORTD pins 0 (UART1_RX) as input */
-        // PortInit.PORT_OE = PORT_OE_IN;
-        // PortInit.PORT_Pin = PORT_Pin_0;
-        // PORT_Init(MDR_PORTD, &PortInit);
-    
+        static UART uart(MDR_UART1, RST_CLK_PCLK_UART1, PORT_PIN_A6, RX_PortInit, PORT_PIN_A7, TX_PortInit);
+        return uart;
+    }
 
+
+    UART& UART::getUART2(){
+        PORT_InitTypeDef RX_PortInit;
+        RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        RX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        RX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        RX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        RX_PortInit.PORT_FUNC = PORT_FUNC_ALTER;
+        RX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        RX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        RX_PortInit.PORT_OE = PORT_OE_IN;
+
+        PORT_InitTypeDef TX_PortInit;
+        TX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        TX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        TX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        TX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        TX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        TX_PortInit.PORT_FUNC = PORT_FUNC_ALTER;
+        TX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        TX_PortInit.PORT_OE = PORT_OE_OUT;
+
+        static UART uart(MDR_UART2, RST_CLK_PCLK_UART2, PORT_PIN_D0, RX_PortInit, PORT_PIN_D1, TX_PortInit);
+        return uart;
+    }
 }
