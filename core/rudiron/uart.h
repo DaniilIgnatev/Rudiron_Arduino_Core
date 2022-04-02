@@ -85,7 +85,6 @@ namespace Rudiron {
 
         static UART& getUART2();
     };
-
 }
 
 #endif // UART_H

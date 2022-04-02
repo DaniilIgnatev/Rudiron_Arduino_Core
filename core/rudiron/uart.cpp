@@ -14,6 +14,10 @@ namespace Rudiron {
 
 
     bool UART::begin(uint32_t baudRate) {
+
+        GPIO::configPin(RX_PIN, RX_PortInit);
+        GPIO::configPin(TX_PIN, TX_PortInit);
+
         /* Enables the CPU_CLK clock*/
         RST_CLK_PCLKcmd(RST_CLK_PCLK_UART, ENABLE);
 

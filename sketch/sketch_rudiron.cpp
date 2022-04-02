@@ -14,6 +14,9 @@ bool pressed3 = false;
 uint8_t data[32] = {0};
 
 
+UART uart2 = UART::getUART2();
+
+
 void reverse()
 {
     data[0] = !data[0];
@@ -53,11 +56,17 @@ void setup()
         digitalWrite(LED_BUILTIN_2, false);
         delay(100);
     }
+
+
+    uart2.begin(9600);
+
+    uart2.println("Hello world");
 }
 
 
 void loop()
 {
+    
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
 
     if (!pressed2 && digitalRead(BUTTON_BUILTIN_2))
