@@ -23,6 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "MDR_it.h"
+#include "MDR_uart.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -41,6 +42,7 @@
 void NMI_Handler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : HardFault_Handler
 * Description    : This function handles Hard Fault exception.
@@ -55,6 +57,7 @@ void HardFault_Handler(void)
     {
     }
 }
+
 /*******************************************************************************
 * Function Name  : MemManage_Handler
 * Description    : This function handles Memory Manage exception.
@@ -69,6 +72,7 @@ void MemManage_Handler(void)
     {
     }
 }
+
 /*******************************************************************************
 * Function Name  : BusFault_Handler
 * Description    : This function handles Bus Fault exception.
@@ -83,6 +87,7 @@ void BusFault_Handler(void)
     {
     }
 }
+
 /*******************************************************************************
 * Function Name  : UsageFault_Handler
 * Description    : This function handles Usage Fault exception.
@@ -97,6 +102,7 @@ void UsageFault_Handler(void)
     {
     }
 }
+
 /*******************************************************************************
 * Function Name  : SVC_Handler
 * Description    : This function handles SVCall exception.
@@ -107,6 +113,7 @@ void UsageFault_Handler(void)
 void SVC_Handler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : DebugMon_Handler
 * Description    : This function handles Debug Monitor exception.
@@ -117,6 +124,7 @@ void SVC_Handler(void)
 void DebugMon_Handler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : PendSV_Handler
 * Description    : This function handles Debug PendSV exception.
@@ -146,6 +154,7 @@ void SysTick_Handler(void)
         _millis++;
     }
 }
+
 /*******************************************************************************
 * Function Name  : CAN1_IRQHandler
 * Description    : This function handles CAN1 global interrupt request.
@@ -156,6 +165,7 @@ void SysTick_Handler(void)
 void CAN1_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : CAN2_IRQHandler
 * Description    : This function handles CAN2 global interrupt request.
@@ -177,6 +187,7 @@ void CAN2_IRQHandler(void)
 void DMA_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : UART1_IRQHandler
 * Description    : This function handles UART1 global interrupt request.
@@ -186,8 +197,17 @@ void DMA_IRQHandler(void)
 *******************************************************************************/
 void UART1_IRQHandler(void)
 {
+    if (UART_GetFlagStatus(MDR_UART1, UART_FLAG_RXFF) != SET) {
+        return;
+    }
 
+    _uart1_rx_buffer[_uart1_rx_buffer_head] = (unsigned char)MDR_UART1->DR;
+    _uart1_rx_buffer_head++;
+    if (_uart1_rx_buffer_head == SERIAL_RX_BUFFER_SIZE){
+        _uart1_rx_buffer_head = 0;
+    }
 }
+
 /*******************************************************************************
 * Function Name  : UART2_IRQHandler
 * Description    : This function handles UART2 global interrupt request.
@@ -197,8 +217,16 @@ void UART1_IRQHandler(void)
 *******************************************************************************/
 void UART2_IRQHandler(void)
 {
-}
+    if (UART_GetFlagStatus(MDR_UART2, UART_FLAG_RXFF) != SET) {
+        return;
+    }
 
+    _uart2_rx_buffer[_uart2_rx_buffer_head] = (unsigned char)MDR_UART2->DR;
+    _uart2_rx_buffer_head++;
+    if (_uart2_rx_buffer_head == SERIAL_RX_BUFFER_SIZE){
+        _uart2_rx_buffer_head = 0;
+    }
+}
 
 /*******************************************************************************
 * Function Name  : SSP1_IRQHandler
@@ -210,6 +238,7 @@ void UART2_IRQHandler(void)
 void SSP1_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : I2C_IRQHandler
 * Description    : This function handles I2C global interrupt request.
@@ -220,6 +249,7 @@ void SSP1_IRQHandler(void)
 void I2C_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : POWER_IRQHandler
 * Description    : This function handles POWER global interrupt request.
@@ -230,6 +260,7 @@ void I2C_IRQHandler(void)
 void POWER_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : WWDG_IRQHandler
 * Description    : This function handles WWDG global interrupt request.
@@ -251,6 +282,7 @@ void WWDG_IRQHandler(void)
 void Timer1_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : Timer2_IRQHandler
 * Description    : This function handles Timer2 global interrupt request.
@@ -261,6 +293,7 @@ void Timer1_IRQHandler(void)
 void Timer2_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : Timer3_IRQHandler
 * Description    : This function handles Timer3 global interrupt request.
@@ -271,6 +304,7 @@ void Timer2_IRQHandler(void)
 void Timer3_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : ADC_IRQHandler
 * Description    : This function handles ADC global interrupt request.
@@ -281,6 +315,7 @@ void Timer3_IRQHandler(void)
 void ADC_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : COMPARATOR_IRQHandler
 * Description    : This function handles COMPARATOR global interrupt request.
@@ -291,6 +326,7 @@ void ADC_IRQHandler(void)
 void COMPARATOR_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : SSP2_IRQHandler
 * Description    : This function handles SSP2 global interrupt request.
@@ -301,6 +337,7 @@ void COMPARATOR_IRQHandler(void)
 void SSP2_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : BACKUP_IRQHandler
 * Description    : This function handles BACKUP global interrupt request.
@@ -320,6 +357,7 @@ void BACKUP_IRQHandler(void)
     }
     MDR_BKP -> RTC_CS |= 0x06;
 }
+
 /*******************************************************************************
 * Function Name  : EXT_INT1_IRQHandler
 * Description    : This function handles EXT_INT1 interrupt request.
@@ -330,6 +368,7 @@ void BACKUP_IRQHandler(void)
 void EXT_INT1_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : EXT_INT2_IRQHandler
 * Description    : This function handles EXT_INT2 interrupt request.
@@ -356,6 +395,7 @@ void EXT_INT2_IRQHandler(void)
 //        pipe = nRF24_ReadPayload(nRF24_payload, &payload_length);
 //    }
 }
+
 /*******************************************************************************
 * Function Name  : EXT_INT3_IRQHandler
 * Description    : This function handles EXT_INT3 global interrupt request.
@@ -367,6 +407,7 @@ void EXT_INT2_IRQHandler(void)
 void EXT_INT3_IRQHandler(void)
 {
 }
+
 /*******************************************************************************
 * Function Name  : EXT_INT4_IRQHandler
 * Description    : This function handles EXT_INT4 interrupt request.

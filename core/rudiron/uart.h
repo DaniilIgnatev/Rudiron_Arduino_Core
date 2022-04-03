@@ -46,8 +46,27 @@ namespace Rudiron {
 
         PORT_InitTypeDef TX_PortInit;
 
+        IRQn_Type UART_IRQn;
+
+        tx_buffer_index_t *_rx_buffer_head;
+
+        tx_buffer_index_t *_rx_buffer_tail;
+
+        int *_rx_buffer;
+
     public:
-        explicit UART(MDR_UART_TypeDef* MDR_UART, uint32_t RST_CLK_PCLK_UART, PortPinName RX_PIN, PORT_InitTypeDef RX_PortInit, PortPinName TX_PIN, PORT_InitTypeDef TX_PortInit);
+        explicit UART(
+            MDR_UART_TypeDef* MDR_UART,
+            uint32_t RST_CLK_PCLK_UART,
+            PortPinName RX_PIN,
+            PORT_InitTypeDef RX_PortInit,
+            PortPinName TX_PIN,
+            PORT_InitTypeDef TX_PortInit,
+            IRQn_Type UART_IRQn = IRQn_Type::SysTick_IRQn,
+            tx_buffer_index_t *_rx_buffer_head = nullptr,
+            tx_buffer_index_t *_rx_buffer_tail = nullptr,
+            int *_rx_buffer = nullptr
+            );
 
 
         bool begin(uint32_t baudRate);

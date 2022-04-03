@@ -46,6 +46,7 @@ enum LookaheadMode{
     SKIP_WHITESPACE // Only tabs, spaces, line feeds & carriage returns are skipped.
 };
 
+#define EndOfStream -1
 #define NO_IGNORE_CHAR  '\x01' // a char not found in a valid ASCII numeric field
 
 class Stream : public Print

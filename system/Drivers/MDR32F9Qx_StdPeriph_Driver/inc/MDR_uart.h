@@ -329,6 +329,30 @@ void UART_BRGInit(MDR_UART_TypeDef* UARTx, uint32_t UART_BRG);
 
 /** @} */ /* End of group MDR32F9Qx_StdPeriph_Driver */
 
+#define SERIAL_TX_BUFFER_SIZE 64
+#define SERIAL_RX_BUFFER_SIZE 64
+
+typedef uint8_t tx_buffer_index_t;
+typedef uint8_t rx_buffer_index_t;
+
+
+extern tx_buffer_index_t _uart1_rx_buffer_head;
+extern tx_buffer_index_t _uart1_rx_buffer_tail;
+// extern tx_buffer_index_t _uart1_tx_buffer_head;
+// extern tx_buffer_index_t _uart1_tx_buffer_tail;
+
+extern int _uart1_rx_buffer[SERIAL_RX_BUFFER_SIZE];
+// extern unsigned char _uart1_tx_buffer[SERIAL_TX_BUFFER_SIZE];
+
+
+extern tx_buffer_index_t _uart2_rx_buffer_head;
+extern tx_buffer_index_t _uart2_rx_buffer_tail;
+// extern tx_buffer_index_t _uart2_tx_buffer_head;
+// extern tx_buffer_index_t _uart2_tx_buffer_tail;
+
+extern int _uart2_rx_buffer[SERIAL_RX_BUFFER_SIZE];
+// extern unsigned char _uart2_tx_buffer[SERIAL_TX_BUFFER_SIZE];
+
 #ifdef __cplusplus
 } // extern "C" block end
 #endif
