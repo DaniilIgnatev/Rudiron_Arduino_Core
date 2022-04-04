@@ -112,7 +112,7 @@ namespace Rudiron {
                 _rx_buffer[*_rx_buffer_tail] = EndOfStream;
                 
                 //_rx_buffer_tail = (rx_buffer_index_t)(_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_SIZE;
-                *_rx_buffer_tail++;
+                (*_rx_buffer_tail)++;
                 if (*_rx_buffer_tail == SERIAL_RX_BUFFER_SIZE){
                     *_rx_buffer_tail = 0;
                 }
@@ -174,7 +174,7 @@ namespace Rudiron {
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static UART uart(MDR_UART1, RST_CLK_PCLK_UART1, PORT_PIN_A6, RX_PortInit, PORT_PIN_A7, TX_PortInit, UART1_IRQn);
+        static UART uart(MDR_UART1, RST_CLK_PCLK_UART1, PORT_PIN_A6, RX_PortInit, PORT_PIN_A7, TX_PortInit, UART1_IRQn, &_uart1_rx_buffer_head, &_uart1_rx_buffer_tail, _uart1_rx_buffer);
         return uart;
     }
 
@@ -202,7 +202,7 @@ namespace Rudiron {
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static UART uart(MDR_UART2, RST_CLK_PCLK_UART2, PORT_PIN_D0, RX_PortInit, PORT_PIN_D1, TX_PortInit, UART2_IRQn);
+        static UART uart(MDR_UART2, RST_CLK_PCLK_UART2, PORT_PIN_D0, RX_PortInit, PORT_PIN_D1, TX_PortInit, UART2_IRQn, &_uart2_rx_buffer_head, &_uart2_rx_buffer_tail, _uart2_rx_buffer);
         return uart;
     }
 }

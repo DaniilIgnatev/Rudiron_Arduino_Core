@@ -203,6 +203,7 @@ void UART1_IRQHandler(void)
 
     _uart1_rx_buffer[_uart1_rx_buffer_head] = (unsigned char)MDR_UART1->DR;
     _uart1_rx_buffer_head++;
+    
     if (_uart1_rx_buffer_head == SERIAL_RX_BUFFER_SIZE){
         _uart1_rx_buffer_head = 0;
     }
@@ -223,6 +224,7 @@ void UART2_IRQHandler(void)
 
     _uart2_rx_buffer[_uart2_rx_buffer_head] = (unsigned char)MDR_UART2->DR;
     _uart2_rx_buffer_head++;
+
     if (_uart2_rx_buffer_head == SERIAL_RX_BUFFER_SIZE){
         _uart2_rx_buffer_head = 0;
     }

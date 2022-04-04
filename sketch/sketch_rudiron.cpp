@@ -1,7 +1,6 @@
 #include "Arduino.h"
 #include "rudiron/gpio.h"
-#include "nrf24l01/nrf24.h"
-#include "rudiron/timer.h"
+//#include "nrf24l01/nrf24.h"
 
 
 
@@ -42,7 +41,7 @@ void setup()
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
-    nRF24::begin(false, false);
+//    nRF24::begin(false, false);
 
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
@@ -58,7 +57,7 @@ void setup()
     }
 
 
-    uart2.begin(9600);
+    uart2.begin(115200);
 
     uart2.println("Hello world");
 }
@@ -66,7 +65,6 @@ void setup()
 
 void loop()
 {
-    
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
 
     if (!pressed2 && digitalRead(BUTTON_BUILTIN_2))
@@ -82,6 +80,12 @@ void loop()
 
     turnRight(digitalRead(BUTTON_BUILTIN_3));
     
-    nRF24::write(data);
-    delay(50);
+//    nRF24::write(data);
+
+    if (uart2.available()){
+        String s = uart2.readString();
+        uart2.println(s);
+    }
+
+    delay(5);
 }
