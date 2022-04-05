@@ -69,7 +69,12 @@ namespace Rudiron {
             );
 
 
-        bool begin(uint32_t baudRate);
+        bool begin(
+                uint32_t baudRate = 9600,
+                uint16_t UART_WordLength = UART_WordLength8b,
+                uint16_t UART_Parity = UART_Parity_No,
+                uint16_t UART_StopBits = UART_StopBits1
+                );
 
 
         void end();
@@ -99,10 +104,10 @@ namespace Rudiron {
         operator bool() { return true; }
 
 
-        static UART& getUART1();
+        static UART* getUART1();
 
 
-        static UART& getUART2();
+        static UART* getUART2();
     };
 }
 

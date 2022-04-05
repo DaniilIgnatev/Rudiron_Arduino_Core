@@ -39,9 +39,6 @@
 #define PSTR(str) (str)
 #endif
 
-#ifndef F
-#define F(x) x
-#endif
 
 class __FlashStringHelper;
 #define F(string_literal) (reinterpret_cast<const __FlashStringHelper *>(PSTR(string_literal)))

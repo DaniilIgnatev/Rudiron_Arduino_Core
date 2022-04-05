@@ -30,7 +30,12 @@ namespace Rudiron {
     }
 
 
-    bool UART::begin(uint32_t baudRate) {
+    bool UART::begin(
+            uint32_t baudRate,
+            uint16_t UART_WordLength,
+            uint16_t UART_Parity,
+            uint16_t UART_StopBits
+            ){
 
         GPIO::configPin(RX_PIN, RX_PortInit);
         GPIO::configPin(TX_PIN, TX_PortInit);
@@ -54,9 +59,9 @@ namespace Rudiron {
         /* Initialize UART_InitStructure */
         UART_InitTypeDef UART_InitStructure;
         UART_InitStructure.UART_BitRate = baudRate;
-        UART_InitStructure.UART_WordLength = UART_WordLength8b;
-        UART_InitStructure.UART_StopBits = UART_StopBits1;
-        UART_InitStructure.UART_Parity = UART_Parity_No;
+        UART_InitStructure.UART_WordLength = UART_WordLength;
+        UART_InitStructure.UART_StopBits = UART_StopBits;
+        UART_InitStructure.UART_Parity = UART_Parity;
         UART_InitStructure.UART_FIFOMode = UART_FIFO_OFF;
         UART_InitStructure.UART_HardwareFlowControl = UART_HardwareFlowControl_RXE | UART_HardwareFlowControl_TXE;
 
@@ -151,7 +156,7 @@ namespace Rudiron {
     };
 
 
-    UART& UART::getUART1(){
+    UART* UART::getUART1(){
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
         RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
@@ -175,11 +180,11 @@ namespace Rudiron {
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
         static UART uart(MDR_UART1, RST_CLK_PCLK_UART1, PORT_PIN_A6, RX_PortInit, PORT_PIN_A7, TX_PortInit, UART1_IRQn, &_uart1_rx_buffer_head, &_uart1_rx_buffer_tail, _uart1_rx_buffer);
-        return uart;
+        return &uart;
     }
 
 
-    UART& UART::getUART2(){
+    UART* UART::getUART2(){
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
         RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
@@ -203,6 +208,6 @@ namespace Rudiron {
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
         static UART uart(MDR_UART2, RST_CLK_PCLK_UART2, PORT_PIN_D0, RX_PortInit, PORT_PIN_D1, TX_PortInit, UART2_IRQn, &_uart2_rx_buffer_head, &_uart2_rx_buffer_tail, _uart2_rx_buffer);
-        return uart;
+        return &uart;
     }
 }

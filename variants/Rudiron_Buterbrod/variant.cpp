@@ -33,18 +33,17 @@ void setupUSB() {
 
 }
 
-//HardwareSerial Serial;
-//
-//HardwareSerial Seria1;
+HardwareSerial Serial(UART::getUART2());
 
-//добавить обработку прерываний rx
-//Serial1._rx_complete_irq();
+HardwareSerial Serial1(UART::getUART1());
 
-//добавить обработку прерываний tx
-//Serial1._tx_udr_empty_irq();
 
 // Function that can be weakly referenced by serialEventRun to prevent
 // pulling in this file if it's not otherwise used.
-//bool Serial1_available() {
-//    return Serial1.available();
-//}
+bool Serial0_available() {
+    return Serial.available();
+}
+
+bool Serial1_available() {
+    return Serial1.available();
+}

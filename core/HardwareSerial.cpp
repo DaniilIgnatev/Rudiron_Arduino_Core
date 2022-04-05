@@ -15,7 +15,7 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-  
+
   Modified 23 November 2006 by David A. Mellis
   Modified 28 September 2010 by Mark Sproul
   Modified 14 August 2012 by Alarus
@@ -32,7 +32,7 @@
 #include "HardwareSerial.h"
 #include "HardwareSerial_private.h"
 
-// this next line disables the entire HardwareSerial.cpp, 
+// this next line disables the entire HardwareSerial.cpp,
 // this is so I can support Attiny series and any other chip without a uart
 #if defined(HAVE_HWSERIAL0) || defined(HAVE_HWSERIAL1) || defined(HAVE_HWSERIAL2) || defined(HAVE_HWSERIAL3)
 
@@ -42,39 +42,138 @@
 // but we can refer to it weakly so we don't pull in the entire
 // HardwareSerial instance if the user doesn't also refer to it.
 #if defined(HAVE_HWSERIAL0)
- void serialEvent() __attribute__((weak));
- bool Serial0_available() __attribute__((weak));
+void serialEvent() __attribute__((weak));
+bool Serial0_available() __attribute__((weak));
 #endif
 
 #if defined(HAVE_HWSERIAL1)
- void serialEvent1() __attribute__((weak));
- bool Serial1_available() __attribute__((weak));
+void serialEvent1() __attribute__((weak));
+bool Serial1_available() __attribute__((weak));
 #endif
 
 #if defined(HAVE_HWSERIAL2)
- void serialEvent2() __attribute__((weak));
- bool Serial2_available() __attribute__((weak));
+void serialEvent2() __attribute__((weak));
+bool Serial2_available() __attribute__((weak));
 #endif
 
 #if defined(HAVE_HWSERIAL3)
- void serialEvent3() __attribute__((weak));
- bool Serial3_available() __attribute__((weak));
+void serialEvent3() __attribute__((weak));
+bool Serial3_available() __attribute__((weak));
 #endif
 
 void serialEventRun(void)
 {
 #if defined(HAVE_HWSERIAL0)
- if (Serial0_available && serialEvent && Serial0_available()) serialEvent();
+    if (Serial0_available && serialEvent && Serial0_available())
+        serialEvent();
 #endif
 #if defined(HAVE_HWSERIAL1)
- if (Serial1_available && serialEvent1 && Serial1_available()) serialEvent1();
+    if (Serial1_available && serialEvent1 && Serial1_available())
+        serialEvent1();
 #endif
 #if defined(HAVE_HWSERIAL2)
- if (Serial2_available && serialEvent2 && Serial2_available()) serialEvent2();
+    if (Serial2_available && serialEvent2 && Serial2_available())
+        serialEvent2();
 #endif
 #if defined(HAVE_HWSERIAL3)
- if (Serial3_available && serialEvent3 && Serial3_available()) serialEvent3();
+    if (Serial3_available && serialEvent3 && Serial3_available())
+        serialEvent3();
 #endif
+}
+
+void HardwareSerial::begin(unsigned long baud, uint8_t config)
+{
+    uint16_t UART_WordLength;
+    uint16_t UART_Parity;
+    uint16_t UART_StopBits;
+
+    if (config < SERIAL_5N2)
+    {
+        UART_WordLength = SERIAL_5N1;
+        UART_Parity = UART_Parity_No;
+        UART_StopBits = UART_StopBits1;
+    }
+    else
+    {
+        if (config < SERIAL_5E1)
+        {
+            UART_WordLength = SERIAL_5N2;
+            UART_Parity = UART_Parity_No;
+            UART_StopBits = UART_StopBits2;
+        }
+        else
+        {
+            if (config < SERIAL_5E2)
+            {
+                UART_WordLength = SERIAL_5E1;
+                UART_Parity = UART_Parity_Even;
+                UART_StopBits = UART_StopBits1;
+            }
+            else
+            {
+                if (config < SERIAL_5O1)
+                {
+                    UART_WordLength = SERIAL_5E2;
+                    UART_Parity = UART_Parity_Even;
+                    UART_StopBits = UART_StopBits2;
+                }
+                else
+                {
+                    if (config < SERIAL_5O2)
+                    {
+                        UART_WordLength = SERIAL_5O1;
+                        UART_Parity = UART_Parity_Odd;
+                        UART_StopBits = UART_StopBits1;
+                    }
+                    else
+                    {
+                        UART_WordLength = SERIAL_5O2;
+                        UART_Parity = UART_Parity_Odd;
+                        UART_StopBits = UART_StopBits2;
+                    }
+                }
+            }
+        }
+    }
+
+    UART_WordLength = ((config - UART_WordLength)) << 4;
+
+    uart->begin(baud, UART_WordLength, UART_Parity, UART_StopBits);
+}
+
+void HardwareSerial::end()
+{
+    uart->end();
+}
+
+int HardwareSerial::available(void)
+{
+    return uart->available();
+}
+
+int HardwareSerial::peek(void)
+{
+    return uart->peek();
+}
+
+int HardwareSerial::read(void)
+{
+    return uart->read();
+}
+
+int HardwareSerial::availableForWrite(void)
+{
+    return uart->availableForWrite();
+}
+
+void HardwareSerial::flush(void)
+{
+    uart->flush();
+}
+
+size_t HardwareSerial::write(uint8_t byte)
+{
+    return uart->write(byte);
 }
 
 #endif // whole file

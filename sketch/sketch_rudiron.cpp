@@ -1,6 +1,6 @@
 #include "Arduino.h"
 #include "rudiron/gpio.h"
-//#include "nrf24l01/nrf24.h"
+#include "nrf24l01/nrf24.h"
 
 
 
@@ -11,9 +11,6 @@ bool pressed2 = false;
 bool pressed3 = false;
 
 uint8_t data[32] = {0};
-
-
-UART uart2 = UART::getUART2();
 
 
 void reverse()
@@ -41,7 +38,7 @@ void setup()
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
-//    nRF24::begin(false, false);
+    nRF24::begin(false, false);
 
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
@@ -57,9 +54,8 @@ void setup()
     }
 
 
-    uart2.begin(115200);
-
-    uart2.println("Hello world");
+    Serial.begin(115200);
+    Serial.println("РУДИРОН Бутерброд!");
 }
 
 
@@ -80,11 +76,11 @@ void loop()
 
     turnRight(digitalRead(BUTTON_BUILTIN_3));
     
-//    nRF24::write(data);
+    nRF24::write(data);
 
-    if (uart2.available()){
-        String s = uart2.readString();
-        uart2.println(s);
+    if (Serial.available()){
+        String s = Serial.readString();
+        Serial.println(s);
     }
 
     delay(5);
