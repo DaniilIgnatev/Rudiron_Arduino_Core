@@ -15,11 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 #ifndef ADC_H
 #define ADC_H
-
 
 #include "MDR_config.h"
 #include "MDR32Fx.h"
@@ -30,16 +27,11 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_config.h"
 #include "gpio.h"
 
-namespace Rudiron {
 
-    typedef enum {
-        ADC1,
-        ADC2
-    } ADCName;
-
-
-//Не удалять недоступные каналы!!!
-    typedef enum {
+namespace Rudiron
+{
+    typedef enum
+    {
         ADC_Channel0,
         ADC_Channel1,
         ADC_Channel2,
@@ -51,7 +43,8 @@ namespace Rudiron {
     } ADCChannelName;
 
 
-    struct ADCResult {
+    struct ADCResult
+    {
         bool valid = false;
         bool override = false;
         uint16_t value = 0;
@@ -61,39 +54,25 @@ namespace Rudiron {
 
     class ADC
     {
-    private:
-
     protected:
-
-        ADCName name;
-
-
         uint32_t channelMask = 0;
-
 
         ADCResult readValues[7];
 
-
         GPIO port = GPIO();
-
 
         void initPinADC(PortPinName pinName);
 
     public:
-        ADC(ADCName name);
-
+        ADC();
 
         void configureDefault();
 
-
         bool configurePin(PortPinName pinName, bool enable);
-
 
         void start();
 
-
         void stop();
-
 
         ADCResult readPin(PortPinName pinName);
     };

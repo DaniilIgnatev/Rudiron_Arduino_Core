@@ -1,10 +1,10 @@
-#include "timerutility.h"
+#include "rudiron/timerutility.h"
 
 
 namespace Rudiron {
 
-    TimerChannel_PortPin TimerUtility::pinChannel(PortPinName pinName) {
-        TimerChannel_PortPin res;
+    TimerChannel_Descriptor TimerUtility::getTimerChannel(PortPinName pinName) {
+        TimerChannel_Descriptor res;
         res.pinName = pinName;
         res.has = true;
 
@@ -80,15 +80,14 @@ namespace Rudiron {
                 break;
         }
 
-        res.timer = channelToTimerName(res.channelName);
+        res.timer = getTimerName(res.channelName);
         res.channelNum = channelToNumber(res.channelName);
 
         return res;
     }
 
 
-    PORT_InitTypeDef
-    TimerUtility::getChannelInit(PortPinName pinName, PORT_InitTypeDef PWMInit_MAIN, PORT_InitTypeDef PWMInit_ALTER,
+    PORT_InitTypeDef TimerUtility::getChannelInit(PortPinName pinName, PORT_InitTypeDef PWMInit_MAIN, PORT_InitTypeDef PWMInit_ALTER,
                                  PORT_InitTypeDef PWMInit_OVERRID) {
         switch (pinName) {
             case PORT_PIN_A1:
@@ -140,28 +139,4 @@ namespace Rudiron {
                 return PWMInit_MAIN;
         }
     }
-
-
-    int TimerUtility::channelToNumber(TimerChannelName channelName) {
-        if (channelName >= Timer3_Channel1) {
-            return (int) (channelName - Timer3_Channel1);
-        } else if (channelName >= Timer2_Channel1) {
-            return (int) (channelName - Timer2_Channel1);
-        } else {
-            return (int) (channelName - Timer1_Channel1);
-        }
-    }
-
-
-    TimerName TimerUtility::channelToTimerName(TimerChannelName channelName) {
-        if (channelName >= Timer3_Channel1) {
-            return Timer3;
-        }
-        if (channelName >= Timer2_Channel1) {
-            return Timer2;
-        }
-
-        return Timer1;
-    }
-
 }

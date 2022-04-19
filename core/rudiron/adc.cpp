@@ -23,9 +23,9 @@ namespace Rudiron {
     }
 
 
-    ADC::ADC(ADCName name)
+    ADC::ADC()
     {
-        this->name = name;
+        
     }
 
 
@@ -39,13 +39,9 @@ namespace Rudiron {
         ADC_StructInit(&sADC);
         ADC_Init (&sADC);
 
-        /* ADC1 EOCIF and AWOIFEN interupts */
-        if (this->name == ADC1){
-            ADC1_ITConfig((ADCx_IT_END_OF_CONVERSION  | ADCx_IT_OUT_OF_RANGE), DISABLE);
-        }
-        else{
-            ADC2_ITConfig((ADCx_IT_END_OF_CONVERSION  | ADCx_IT_OUT_OF_RANGE), DISABLE);
-        }
+        /* EOCIF and AWOIFEN interupts */
+        ADC1_ITConfig((ADCx_IT_END_OF_CONVERSION  | ADCx_IT_OUT_OF_RANGE), DISABLE);
+        ADC2_ITConfig((ADCx_IT_END_OF_CONVERSION  | ADCx_IT_OUT_OF_RANGE), DISABLE);
     }
 
 
@@ -80,13 +76,8 @@ namespace Rudiron {
         sADCx.ADC_Prescaler        = ADC_CLK_div_2048;
         sADCx.ADC_DelayGo          = 7;
 
-        if (this->name == ADC1){
-            ADC1_Init (&sADCx);
-        }
-        else{
-            ADC2_Init (&sADCx);
-        }
-
+        ADC1_Init (&sADCx);
+        ADC2_Init (&sADCx);
 
         return true;
     }
@@ -140,6 +131,4 @@ namespace Rudiron {
 
         return result;
     }
-
-
 }

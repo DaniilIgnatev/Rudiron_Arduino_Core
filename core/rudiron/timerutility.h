@@ -15,26 +15,24 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 #ifndef TIMERUTILITY_H
 #define TIMERUTILITY_H
-
 
 #include "MDR_timer.h"
 #include "gpio.h"
 
-namespace Rudiron {
-
-    typedef enum {
+namespace Rudiron
+{
+    typedef enum
+    {
         None,
         Timer1,
         Timer2,
         Timer3
-    } __attribute__ ((__packed__)) TimerName;
+    } __attribute__((__packed__)) TimerName;
 
-
-    typedef enum {
+    typedef enum
+    {
         Timer1_Channel1,
         Timer1_Channel2,
         Timer1_Channel3,
@@ -47,10 +45,10 @@ namespace Rudiron {
         Timer3_Channel2,
         Timer3_Channel3,
         Timer3_Channel4
-    } __attribute__ ((__packed__)) TimerChannelName;
+    } __attribute__((__packed__)) TimerChannelName;
 
-
-    struct TimerChannel_PortPin {
+    struct TimerChannel_Descriptor
+    {
         bool has = false;
 
         PortPinName pinName = PORT_PIN_NONE;
@@ -62,22 +60,44 @@ namespace Rudiron {
         uint16_t channelNum = 0;
     };
 
-
-    class TimerUtility {
-
+    class TimerUtility
+    {
     private:
-        static int channelToNumber(TimerChannelName channelName);
+        static int channelToNumber(TimerChannelName channelName)
+        {
+            if (channelName >= Timer3_Channel1)
+            {
+                return (int)(channelName - Timer3_Channel1);
+            }
+            else if (channelName >= Timer2_Channel1)
+            {
+                return (int)(channelName - Timer2_Channel1);
+            }
+            else
+            {
+                return (int)(channelName - Timer1_Channel1);
+            }
+        }
 
     public:
-        static TimerName channelToTimerName(TimerChannelName channelName);
+        static TimerName getTimerName(TimerChannelName channelName)
+        {
+            if (channelName >= Timer3_Channel1)
+            {
+                return Timer3;
+            }
+            if (channelName >= Timer2_Channel1)
+            {
+                return Timer2;
+            }
 
+            return Timer1;
+        }
 
-        static TimerChannel_PortPin pinChannel(PortPinName pinName);
+        static TimerChannel_Descriptor getTimerChannel(PortPinName pinName);
 
-
-        static PORT_InitTypeDef
-        getChannelInit(PortPinName pinName, PORT_InitTypeDef PWMInit_MAIN, PORT_InitTypeDef PWMInit_ALTER,
-                       PORT_InitTypeDef PWMInit_OVERRID);
+        static PORT_InitTypeDef getChannelInit(PortPinName pinName, PORT_InitTypeDef PWMInit_MAIN, PORT_InitTypeDef PWMInit_ALTER,
+                                               PORT_InitTypeDef PWMInit_OVERRID);
     };
 
 }

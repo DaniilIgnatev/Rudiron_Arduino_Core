@@ -4,14 +4,14 @@
 namespace Rudiron {
 
     bool Timer::hasTimerForPin(PortPinName pinName) {
-        TimerChannel_PortPin descriptor = TimerUtility::pinChannel(pinName);
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         return descriptor.has;
     }
 
 
 ///Настоятельно рекомендуется проверять методом hasTimerForPin наличие таймера для пина
     TimerName Timer::getTimerNameForPin(PortPinName pinName) {
-        TimerChannel_PortPin descriptor = TimerUtility::pinChannel(pinName);
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has) {
             return None;
         } else {
@@ -122,7 +122,7 @@ namespace Rudiron {
 
 
     void Timer::PWM_activateChannel(PortPinName pinName, uint8_t percentage, bool withNegative) {
-        TimerChannel_PortPin descriptor = TimerUtility::pinChannel(pinName);
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has) {
             return;
         }
@@ -171,7 +171,7 @@ namespace Rudiron {
 
 
     void Timer::PWM_stop(PortPinName pinName) {
-        TimerChannel_PortPin descriptor = TimerUtility::pinChannel(pinName);
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has) {
             return;
         }
