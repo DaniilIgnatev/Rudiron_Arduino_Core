@@ -83,6 +83,9 @@ namespace Rudiron {
         void PWM_stop(PortPinName pinName);
 
 
+        static Timer* getTimerForPinName(PortPinName name);
+
+
         static Timer* getTimer1();
 
 

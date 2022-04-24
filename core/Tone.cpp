@@ -44,10 +44,29 @@ Version Modified By Date     Comments
 // frequency (in hertz) and duration (in milliseconds).
 void tone(uint8_t _pin, unsigned int frequency, unsigned long duration)
 {
-  PortPinName portPin = GPIO::pinMap[_pin];
-  
+  PortPinName pinName = GPIO::pinMap[_pin];
+  Timer *timer = Timer::getTimerForPinName(pinName);
+
+  if (timer != nullptr)
+  {
+    timer->start();
+    timer->PWM_setup(frequency);
+    timer->PWM_start(pinName, 50);
+  }
+
+  if (duration)
+  {
+    delay(duration);
+  }
 }
 
 void noTone(uint8_t _pin)
 {
+  PortPinName pinName = GPIO::pinMap[_pin];
+  Timer *timer = Timer::getTimerForPinName(pinName);
+
+  if (timer != nullptr)
+  {
+    timer->PWM_stop(pinName);
+  }
 }

@@ -1,44 +1,48 @@
 #include "timer.h"
 #include "clk.h"
 
+namespace Rudiron
+{
 
-namespace Rudiron {
-
-    bool Timer::hasTimerForPin(PortPinName pinName) {
+    bool Timer::hasTimerForPin(PortPinName pinName)
+    {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         return descriptor.has;
     }
 
-
-///Настоятельно рекомендуется проверять методом hasTimerForPin наличие таймера для пина
-    TimerName Timer::getTimerNameForPin(PortPinName pinName) {
+    ///Настоятельно рекомендуется проверять методом hasTimerForPin наличие таймера для пина
+    TimerName Timer::getTimerNameForPin(PortPinName pinName)
+    {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
-        if (!descriptor.has) {
+        if (!descriptor.has)
+        {
             return None;
-        } else {
+        }
+        else
+        {
             return descriptor.timer;
         }
     }
 
-
-    void Timer::start() {
+    void Timer::start()
+    {
         RST_CLK_PCLKcmd(RST_CLK_PCLK, ENABLE);
     }
 
-
-    void Timer::stop() {
+    void Timer::stop()
+    {
         RST_CLK_PCLKcmd(RST_CLK_PCLK, DISABLE);
     }
 
-
-    Timer::Timer(TimerName name, MDR_TIMER_TypeDef* MDR_TIMER, uint32_t RST_CLK_PCLK) {
+    Timer::Timer(TimerName name, MDR_TIMER_TypeDef *MDR_TIMER, uint32_t RST_CLK_PCLK)
+    {
         this->name = name;
         this->MDR_TIMER = MDR_TIMER;
         this->RST_CLK_PCLK = RST_CLK_PCLK;
     }
 
-
-    void Timer::PWM_setup(uint16_t frequency) {
+    void Timer::PWM_setup(uint16_t frequency)
+    {
         TIMER_DeInit(MDR_TIMER);
 
         RST_CLK_FreqTypeDef RST_CLK_Clocks;
@@ -67,21 +71,21 @@ namespace Rudiron {
         TIMER_CntInit(MDR_TIMER, &sTIM_CntInit);
     }
 
-
-    void Timer::PWM_start(PortPinName pinName, uint8_t percentage) {
+    void Timer::PWM_start(PortPinName pinName, uint8_t percentage)
+    {
         PWM_initPin(pinName);
         PWM_activateChannel(pinName, percentage, false);
     }
 
-
-    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t percentage) {
+    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t percentage)
+    {
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
         PWM_activateChannel(pinName, percentage, true);
     }
 
-
-    void Timer::PWM_initPin(PortPinName pinName) {
+    void Timer::PWM_initPin(PortPinName pinName)
+    {
         PORT_InitTypeDef PWMInit_MAIN = PWM_getInitTypeDef(pinName, PORT_FUNC_MAIN);
         PORT_InitTypeDef PWMInit_ALTER = PWM_getInitTypeDef(pinName, PORT_FUNC_ALTER);
         PORT_InitTypeDef PWMInit_OVERRID = PWM_getInitTypeDef(pinName, PORT_FUNC_OVERRID);
@@ -92,8 +96,8 @@ namespace Rudiron {
         GPIO::configPin(pinName, initTypeDef);
     }
 
-
-    PORT_InitTypeDef Timer::PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDef func) {
+    PORT_InitTypeDef Timer::PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDef func)
+    {
         PORT_InitTypeDef PORT_InitStructure;
         PORT_StructInit(&PORT_InitStructure);
 
@@ -107,10 +111,11 @@ namespace Rudiron {
         return PORT_InitStructure;
     }
 
-
-    void Timer::PWM_activateChannel(PortPinName pinName, uint8_t percentage, bool withNegative) {
+    void Timer::PWM_activateChannel(PortPinName pinName, uint8_t percentage, bool withNegative)
+    {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
-        if (!descriptor.has) {
+        if (!descriptor.has)
+        {
             return;
         }
 
@@ -124,11 +129,9 @@ namespace Rudiron {
         sTIM_ChnInit.TIMER_CH_Number = TIMER_CHANNEL;
         TIMER_ChnInit(this->MDR_TIMER, &sTIM_ChnInit);
 
-
         //Степень заполнения
         uint16_t CCR = percentage * this->ARR / 100;
         TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, CCR);
-
 
         //Выход канала
         TIMER_ChnOutInitTypeDef sTIM_ChnOutInit;
@@ -138,9 +141,12 @@ namespace Rudiron {
         sTIM_ChnOutInit.TIMER_CH_DirOut_Source = TIMER_CH_OutSrc_REF;
         sTIM_ChnOutInit.TIMER_CH_DirOut_Mode = TIMER_CH_OutMode_Output;
 
-        if (withNegative) {
+        if (withNegative)
+        {
             sTIM_ChnOutInit.TIMER_CH_DirOut_Polarity = TIMER_CHOPolarity_NonInverted;
-        } else {
+        }
+        else
+        {
             sTIM_ChnOutInit.TIMER_CH_NegOut_Polarity = TIMER_CHOPolarity_Inverted;
         }
 
@@ -156,10 +162,11 @@ namespace Rudiron {
         TIMER_Cmd(this->MDR_TIMER, ENABLE);
     }
 
-
-    void Timer::PWM_stop(PortPinName pinName) {
+    void Timer::PWM_stop(PortPinName pinName)
+    {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
-        if (!descriptor.has) {
+        if (!descriptor.has)
+        {
             return;
         }
 
@@ -171,7 +178,6 @@ namespace Rudiron {
         sTIM_ChnInit.TIMER_CH_Number = TIMER_CHANNEL;
         TIMER_ChnInit(this->MDR_TIMER, &sTIM_ChnInit);
 
-
         //Выход канала
         TIMER_ChnOutInitTypeDef sTIM_ChnOutInit;
         TIMER_ChnOutStructInit(&sTIM_ChnOutInit);
@@ -180,18 +186,37 @@ namespace Rudiron {
         TIMER_ChnOutInit(this->MDR_TIMER, &sTIM_ChnOutInit);
     }
 
+    Timer* Timer::getTimerForPinName(PortPinName pinName)
+    {
+        auto descriptor = TimerUtility::getTimerChannel(pinName);
 
-    Timer* Timer::getTimer1(){
+        switch (descriptor.timer)
+        {
+        case TimerName::Timer1:
+            return Timer::getTimer1();
+        case TimerName::Timer2:
+            return Timer::getTimer2();
+        case TimerName::Timer3:
+            return Timer::getTimer3();
+        default:
+            return nullptr;
+        }
+    }
+
+    Timer *Timer::getTimer1()
+    {
         static Timer timer = Timer(TimerName::Timer1, MDR_TIMER1, RST_CLK_PCLK_TIMER1);
         return &timer;
     }
 
-    Timer* Timer::getTimer2(){
+    Timer *Timer::getTimer2()
+    {
         static Timer timer = Timer(TimerName::Timer2, MDR_TIMER2, RST_CLK_PCLK_TIMER2);
         return &timer;
     }
 
-    Timer* Timer::getTimer3(){
+    Timer *Timer::getTimer3()
+    {
         static Timer timer = Timer(TimerName::Timer3, MDR_TIMER3, RST_CLK_PCLK_TIMER3);
         return &timer;
     }
