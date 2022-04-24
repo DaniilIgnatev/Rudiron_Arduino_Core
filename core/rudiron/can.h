@@ -21,24 +21,46 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define CAN_H
 
 
-#include "Print.h"
+#include "Stream.h"
 #include "MDR32Fx.h"
 #include "MDR_config.h"
 #include "MDR_can.h"
 #include "MDR_rst_clk.h"
-#include "MDR_port.h"
+#include "gpio.h"
 
 
 namespace Rudiron {
 
-    class CAN
+    class CAN : public Stream
     {
     private:
+
         uint8_t tx_buf_number = 0;
+
         uint8_t rx_buf_number = 1;
 
+        MDR_CAN_TypeDef* MDR_CAN;
+
+        uint32_t RST_CLK_PCLK_CAN;
+
+        PortPinName RX_PIN;
+
+        PortPinName TX_PIN;
+
+        PORT_InitTypeDef RX_PortInit;
+
+        PORT_InitTypeDef TX_PortInit;
+
     public:
-        CAN();
+
+        explicit CAN(
+            MDR_CAN_TypeDef* MDR_CAN,
+            uint32_t RST_CLK_PCLK_CAN,
+            PortPinName RX_PIN,
+            PORT_InitTypeDef RX_PortInit,
+            PortPinName TX_PIN,
+            PORT_InitTypeDef TX_PortInit
+            );
 
         bool begin();
 
@@ -50,6 +72,25 @@ namespace Rudiron {
 
 
         bool read(CAN_RxMsgTypeDef &data, bool wait = true, uint32_t timeout = 0xFFF);
+
+
+        virtual int available(void);
+
+
+        virtual int peek(void);
+
+
+        virtual int read(void);
+
+
+        virtual size_t write(uint8_t byte);
+
+
+        using Print::write;
+
+
+        operator bool() { return true; }
+
     };
 }
 

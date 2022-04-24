@@ -3,8 +3,25 @@
 
 namespace Rudiron {
 
+    CAN::CAN(
+            MDR_CAN_TypeDef* MDR_CAN,
+            uint32_t RST_CLK_PCLK_CAN,
+            PortPinName RX_PIN,
+            PORT_InitTypeDef RX_PortInit,
+            PortPinName TX_PIN,
+            PORT_InitTypeDef TX_PortInit
+    ){
+        this->MDR_CAN = MDR_CAN;
+        this->RST_CLK_PCLK_CAN = RST_CLK_PCLK_CAN;
+        this->RX_PIN = RX_PIN;
+        this->RX_PortInit = RX_PortInit;
+        this->TX_PIN = TX_PIN;
+        this->TX_PortInit = TX_PortInit;
+    }
+
+    //ПЕРЕДЕЛАТЬ!
     bool CAN::begin() {
-        static PORT_InitTypeDef PortInit;
+        PORT_InitTypeDef PortInit;
 
         /* Fill PortInit structure*/
         PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
@@ -25,19 +42,15 @@ namespace Rudiron {
         PORT_Init(MDR_PORTA, &PortInit);
 
 
-
-        RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK | RST_CLK_PCLK_CAN1), ENABLE);
-        RST_CLK_PCLKcmd(RST_CLK_PCLK_PORTA, ENABLE);
-        CAN_BRGInit(MDR_CAN1, CAN_HCLKdiv1);
-
+        RST_CLK_PCLKcmd((this->RST_CLK_PCLK_CAN), ENABLE);
+        CAN_BRGInit(MDR_CAN, CAN_HCLKdiv1);
 
         /* CAN register init */
-        CAN_DeInit(MDR_CAN1);
+        CAN_DeInit(MDR_CAN);
 
         /* CAN cell init */
         CAN_InitTypeDef sCAN;
         CAN_StructInit(&sCAN);
-
         sCAN.CAN_ROP = DISABLE;
         sCAN.CAN_SAP = DISABLE;
         sCAN.CAN_STM = DISABLE;
@@ -64,12 +77,11 @@ namespace Rudiron {
         sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
         sCAN.CAN_SB = CAN_SB_3_SAMPLE;
         sCAN.CAN_BRP = 39;//f=500000 bit/s (T=2us)
+        CAN_Init(MDR_CAN, &sCAN);
 
+        CAN_Cmd(MDR_CAN, ENABLE);
 
-        CAN_Init(MDR_CAN1, &sCAN);
-        CAN_Cmd(MDR_CAN1, ENABLE);
-
-        CAN_ITConfig(MDR_CAN1, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN |
+        CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN |
                                CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, ENABLE);
 
         /* Set mask and filter*/
@@ -78,13 +90,11 @@ namespace Rudiron {
 //    fCAN.Filter_ID = 0;
 //    CAN_FilterInit(MDR_CAN1, rx_buf_number, &fCAN);
 
-        /* Enable CAN1 interrupt from receive buffer */
-        CAN_RxITConfig(MDR_CAN1, 1 << rx_buf_number, ENABLE);
-        /* Enable CAN1 interrupt from transmit buffer */
-        CAN_TxITConfig(MDR_CAN1, 1 << tx_buf_number, ENABLE);
+        CAN_RxITConfig(MDR_CAN, 1 << rx_buf_number, ENABLE);
+        CAN_TxITConfig(MDR_CAN, 1 << tx_buf_number, ENABLE);
 
         /* receive buffer enable */
-        CAN_Receive(MDR_CAN1, rx_buf_number, DISABLE);
+        CAN_Receive(MDR_CAN, rx_buf_number, DISABLE);
 
         return true;
     }
@@ -106,32 +116,31 @@ namespace Rudiron {
         TxMsg.Data[1] = data[1];
         TxMsg.Data[0] = data[0];
 
-        CAN_Transmit(MDR_CAN1, tx_buf_number, &TxMsg);
+        CAN_Transmit(MDR_CAN, tx_buf_number, &TxMsg);
 
         uint32_t i = 0;
-        while (((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_TX_READY) != RESET) && (i != 0xFFF)) {
+        while (((CAN_GetStatus(MDR_CAN) & CAN_STATUS_TX_READY) != RESET) && (i != 0xFFF)) {
             i++;
         }
-        CAN_ITClearRxTxPendingBit(MDR_CAN1, tx_buf_number, CAN_STATUS_TX_READY);
+        CAN_ITClearRxTxPendingBit(MDR_CAN, tx_buf_number, CAN_STATUS_TX_READY);
     }
 
 
     bool CAN::read(CAN_RxMsgTypeDef &data, bool wait, uint32_t timeout) {
         if (wait) {
             uint32_t i = 0;
-            while (((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_RX_READY) == RESET) && (i != timeout)) {
+            while (((CAN_GetStatus(MDR_CAN) & CAN_STATUS_RX_READY) == RESET) && (i != timeout)) {
                 i++;
             }
             if (i == timeout) {
                 return false;
             }
-        } else if ((CAN_GetStatus(MDR_CAN1) & CAN_STATUS_RX_READY) == RESET) {
+        } else if ((CAN_GetStatus(MDR_CAN) & CAN_STATUS_RX_READY) == RESET) {
             return false;
         }
 
-        CAN_GetRawReceivedData(MDR_CAN1, rx_buf_number, &data);
-        CAN_ITClearRxTxPendingBit(MDR_CAN1, rx_buf_number, CAN_STATUS_RX_READY);
+        CAN_GetRawReceivedData(MDR_CAN, rx_buf_number, &data);
+        CAN_ITClearRxTxPendingBit(MDR_CAN, rx_buf_number, CAN_STATUS_RX_READY);
         return true;
     }
-
 }
