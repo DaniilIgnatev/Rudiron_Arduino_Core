@@ -34,21 +34,20 @@ Version Modified By Date     Comments
 0010    jipp        15/04/13 added additional define check #2923
 *************************************************/
 
-//Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
-
+// Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
 
 #include "Arduino.h"
 #include "pins_arduino.h"
-
+#include "rudiron/gpio.h"
+#include "rudiron/timer.h"
 
 // frequency (in hertz) and duration (in milliseconds).
 void tone(uint8_t _pin, unsigned int frequency, unsigned long duration)
 {
-
+  PortPinName portPin = GPIO::pinMap[_pin];
+  
 }
-
 
 void noTone(uint8_t _pin)
 {
-
 }

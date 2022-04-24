@@ -93,13 +93,14 @@ namespace Rudiron {
     } __attribute__ ((__packed__)) PortPinName;
 
 
-    extern const PortPinName pinMap[NUM_DIGITAL_PINS];
-
-    extern const PortPinName pinADCMap[NUM_ANALOG_INPUTS];
-
-
     class GPIO {
     public:
+
+        static const PortPinName pinMap[NUM_DIGITAL_PINS];
+
+
+        static const PortPinName pinADCMap[NUM_ANALOG_INPUTS];
+
 
 #ifdef LED_BUILTIN_1
         static inline void writeLED_1(bool value) {
