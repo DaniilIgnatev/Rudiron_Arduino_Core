@@ -1,18 +1,19 @@
 #include "spi.h"
 
-namespace Rudiron {
+namespace Rudiron
+{
 
-    SPI::SPI(MDR_SSP_TypeDef* MDR_SSP, uint32_t RST_CLK_PCLK_SSP, uint16_t SSP_Mode): Stream()
+    SPI::SPI(MDR_SSP_TypeDef *MDR_SSP, uint32_t RST_CLK_PCLK_SSP, uint16_t SSP_Mode) : Stream()
     {
         this->MDR_SSP = MDR_SSP;
         this->RST_CLK_PCLK_SSP = RST_CLK_PCLK_SSP;
         this->SSP_Mode = SSP_Mode;
     }
 
-
     bool SPI::begin(
-    uint32_t speed, uint16_t SSP_SPH, uint16_t SSP_SPO,
-    uint16_t SSP_WordLength, uint16_t SSP_FRF, uint16_t SSP_HardwareFlowControl) {
+        uint32_t speed, uint16_t SSP_SPH, uint16_t SSP_SPO,
+        uint16_t SSP_WordLength, uint16_t SSP_FRF, uint16_t SSP_HardwareFlowControl)
+    {
         //Сброс настроек контроллера SPI1
         SSP_DeInit(MDR_SSP);
 
@@ -20,9 +21,9 @@ namespace Rudiron {
         //Установка делителя тактовой частоты SPI1
         SSP_BRGInit(MDR_SSP, SSP_HCLKdiv1);
 
-        SSP_StructInit(&SPI_InitStructure);//значения по умолчанию
-        SPI_InitStructure.SSP_SCR = 0x0;//коэффициент скорости обмена
-        SPI_InitStructure.SSP_CPSDVSR = 12;//делитель частоты
+        SSP_StructInit(&SPI_InitStructure); //значения по умолчанию
+        SPI_InitStructure.SSP_SCR = 0x0;    //коэффициент скорости обмена
+        SPI_InitStructure.SSP_CPSDVSR = 12; //делитель частоты
         //частота SPI = 48 / 12 (1 + 0) = 4Мгц
         //частота SPI = 80 / 12 (1 + 0) = 6.(6)Мгц
 
@@ -38,44 +39,46 @@ namespace Rudiron {
 
         SSP_Cmd(MDR_SSP, ENABLE);
 
-        if (SSP_Mode == SSP_ModeMaster) {
+        if (SSP_Mode == SSP_ModeMaster)
+        {
             InitSPIPortMaster();
         }
 
         return true;
     }
 
-
-    void SPI::InitSPIPortMaster() {
+    void SPI::InitSPIPortMaster()
+    {
         PORT_InitTypeDef PORT_InitStructure;
         PORT_StructInit(&PORT_InitStructure);
-        
+
         PORT_InitStructure.PORT_FUNC = PORT_FUNC_ALTER;
         PORT_InitStructure.PORT_MODE = PORT_MODE_DIGITAL;
         PORT_InitStructure.PORT_SPEED = PORT_SPEED_MAXFAST;
 
-
-        if (MDR_SSP == MDR_SSP2){
+        if (MDR_SSP == MDR_SSP2)
+        {
             //Конфигурация пинов SPI2
-            //RX
+            // RX
             PORT_InitStructure.PORT_OE = PORT_OE_IN;
             PORT_InitStructure.PORT_Pin = PORT_Pin_2;
             GPIO::configPin(PORT_PIN_D2, PORT_InitStructure);
 
-            //CLK, TX
+            // CLK, TX
             PORT_InitStructure.PORT_OE = PORT_OE_OUT;
             PORT_InitStructure.PORT_Pin = PORT_Pin_5 | PORT_Pin_6;
             GPIO::configPin(PORT_PIN_D5, PORT_InitStructure);
             GPIO::configPin(PORT_PIN_D6, PORT_InitStructure);
         }
-        else{
+        else
+        {
             //Конфигурация пинов SPI1
-            //RX
+            // RX
             PORT_InitStructure.PORT_OE = PORT_OE_IN;
             PORT_InitStructure.PORT_Pin = PORT_Pin_3;
             GPIO::configPin(PORT_PIN_F3, PORT_InitStructure);
 
-            //CLK, TX
+            // CLK, TX
             PORT_InitStructure.PORT_OE = PORT_OE_OUT;
             PORT_InitStructure.PORT_Pin = PORT_Pin_0 | PORT_Pin_1;
             GPIO::configPin(PORT_PIN_F0, PORT_InitStructure);
@@ -83,76 +86,89 @@ namespace Rudiron {
         }
     }
 
-
-    void SPI::end() {
+    void SPI::end()
+    {
         //ждем отправки оставшихся пакетов
-        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
+        {
+        }
         SSP_DeInit(MDR_SSP);
         SSP_Cmd(MDR_SSP, DISABLE);
         RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP, DISABLE);
     }
 
-
-    int SPI::available() {
+    int SPI::available()
+    {
         return true;
     }
 
-
-    int SPI::peek() {
+    int SPI::peek()
+    {
         return read();
     }
 
-
-    int SPI::read() {
+    int SPI::read()
+    {
         return read_write(this->NOP);
     }
 
-
-    int SPI::availableForWrite() {
+    int SPI::availableForWrite()
+    {
         return SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE);
     }
 
-
-    void SPI::flush() {
-        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET);
+    void SPI::flush()
+    {
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
+            ;
     }
 
-
-    size_t SPI::write(uint8_t byte) {
+    size_t SPI::write(uint8_t byte)
+    {
         read_write(byte);
         return true;
     }
 
-
-    uint8_t SPI::read_write(uint8_t data) {
+    uint8_t SPI::read_write(uint8_t data)
+    {
         //Пока буфер FIFO передатчика не пуст
-        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
+        {
+        }
         //Отправка данных
         SSP_SendData(MDR_SSP, data);
 
         //Пока буфер FIFO приемника пуст
-        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET) {}
-        return (uint8_t) SSP_ReceiveData(MDR_SSP);
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET)
+        {
+        }
+        return (uint8_t)SSP_ReceiveData(MDR_SSP);
     }
 
-
-    uint16_t SPI::read_write16(uint16_t data) {
+    uint16_t SPI::read_write16(uint16_t data)
+    {
         //Пока буфер FIFO передатчика не пуст
-        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET) {}
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
+        {
+        }
         //Отправка данных
         SSP_SendData(MDR_SSP, data);
 
         //Пока буфер FIFO приемника пуст
-        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET) {}
-        return (uint16_t) SSP_ReceiveData(MDR_SSP);
+        while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET)
+        {
+        }
+        return (uint16_t)SSP_ReceiveData(MDR_SSP);
     }
 
-    SPI& SPI::getSPI1(){
+    SPI &SPI::getSPI1()
+    {
         static SPI spi(MDR_SSP1, RST_CLK_PCLK_SSP1, SSP_ModeMaster);
         return spi;
     }
 
-    SPI& SPI::getSPI2(){
+    SPI &SPI::getSPI2()
+    {
         static SPI spi(MDR_SSP2, RST_CLK_PCLK_SSP2, SSP_ModeMaster);
         return spi;
     }

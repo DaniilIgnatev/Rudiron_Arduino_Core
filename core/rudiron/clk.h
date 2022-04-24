@@ -56,6 +56,12 @@ namespace Rudiron {
 
     public:
 
+        static inline uint32_t getCPUFrequency(){
+            RST_CLK_FreqTypeDef clock_descriptor = getCLKDescriptor();
+            return clock_descriptor.CPU_CLK_Frequency;
+        }
+
+
         static void Initialize();
 
 

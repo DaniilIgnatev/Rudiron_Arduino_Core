@@ -59,7 +59,7 @@ void setup()
     Serial.println("РУДИРОН Бутерброд!");
 
     Timer::getTimer1()->start();
-    Timer::getTimer1()->PWM_setup();
+    Timer::getTimer1()->PWM_setup(500);
     Timer::getTimer1()->PWM_start(PORT_PIN_A1, 50);
 }
 

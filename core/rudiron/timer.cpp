@@ -1,4 +1,5 @@
 #include "timer.h"
+#include "clk.h"
 
 
 namespace Rudiron {
@@ -43,7 +44,9 @@ namespace Rudiron {
         RST_CLK_FreqTypeDef RST_CLK_Clocks;
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
 
-        uint32_t fullARR = 20000000 / frequency;
+        uint32_t cpu_frequency = Rudiron::CLK::getCPUFrequency();
+
+        uint32_t fullARR = cpu_frequency / 8 / frequency;
         prescaler = fullARR / 0xffff;
         ARR = fullARR - (prescaler * 0xffff);
 

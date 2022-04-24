@@ -26,13 +26,8 @@ namespace Rudiron
 
     void CLK::updateLatency(bool external, uint32_t RST_CLK_CPU_PLLmul)
     {
-        auto clocks = getCLKDescriptor();
-        uint32_t def_freq = clocks.RTCHSI_Frequency;
-
-        if (external)
-        {
-            def_freq = clocks.RTCHSE_Frequency;
-        }
+        RST_CLK_FreqTypeDef clock_descriptor = getCLKDescriptor();
+        uint32_t def_freq = external ? clock_descriptor.RTCHSE_Frequency : clock_descriptor.RTCHSI_Frequency;
 
         uint32_t result_freq = def_freq * (RST_CLK_CPU_PLLmul + 1);
         uint8_t latency_tics = result_freq / 25000000;
