@@ -11,7 +11,7 @@ namespace Rudiron
 #ifndef HCLK_DISABLE
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
         while (RST_CLK_HSEstatus() != SUCCESS) {};
-        #if defined(Buterbrod) && defined(revision_2)
+        #if defined(Rudiron_Buterbrod) && defined(revision_2)
         CLK::runHSE(RST_CLK_CPU_PLLmul1);//16mhz * 1
         #else
         CLK::runHSE(RST_CLK_CPU_PLLmul2);//8mhz * 2
@@ -113,30 +113,22 @@ namespace Rudiron
     void CLK::runHSE(uint32_t RST_CLK_CPU_PLLmul)
     {
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
-        if (RST_CLK_HSEstatus() == SUCCESS) /* Good HSE clock */
+        if (RST_CLK_HSEstatus() == SUCCESS)
         {
-            /* Select HSE clock as CPU_PLL input clock source */
-            /* Set PLL multiplier to 7                        */
             RST_CLK_CPU_PLLconfig(RST_CLK_CPU_PLLsrcHSEdiv1, RST_CLK_CPU_PLLmul);
-            /* Enable CPU_PLL */
             RST_CLK_CPU_PLLcmd(ENABLE);
-            if (RST_CLK_CPU_PLLstatus() == SUCCESS) /* Good CPU PLL */
+            if (RST_CLK_CPU_PLLstatus() == SUCCESS)
             {
                 updateLatency(true, RST_CLK_CPU_PLLmul);
-                /* Set CPU_C3_prescaler to 2 */
                 RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
-                /* Set CPU_C2_SEL to CPU_PLL output instead of CPU_C1 clock */
                 RST_CLK_CPU_PLLuse(ENABLE);
-                /* Select CPU_C3 clock on the CPU clock MUX */
                 RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);
-
-                /* LED1 blinking with 7*HSE/2 clock as input clock source */
             }
         }
         init_delay();
     }
 
-    ///Выбор внутреннего источника тактирования и коэффициента умножения частоты, 8Мгц
+    ///Выбор внутреннего источника тактирования и коэффициента умножения частоты
     void CLK::runHSI(uint32_t RST_CLK_CPU_PLLmul)
     {
         RST_CLK_HSIcmd(ENABLE);

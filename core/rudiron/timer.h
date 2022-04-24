@@ -38,7 +38,7 @@ namespace Rudiron {
         TimerName name;
 
 
-        MDR_TIMER_TypeDef *MDR_TIMER_BASE;
+        MDR_TIMER_TypeDef *MDR_TIMER;
 
 
         uint32_t RST_CLK_PCLK;
@@ -50,7 +50,7 @@ namespace Rudiron {
         uint16_t ARR;
 
     public:
-        explicit Timer(TimerName name);
+        explicit Timer(TimerName name, MDR_TIMER_TypeDef* MDR_TIMER, uint32_t RST_CLK_PCLK);
 
 
         void start();
@@ -82,8 +82,15 @@ namespace Rudiron {
 
         void PWM_stop(PortPinName pinName);
 
-    };
 
+        static Timer* getTimer1();
+
+
+        static Timer* getTimer2();
+
+
+        static Timer* getTimer3();
+    };
 }
 
 #endif // TIMER_H

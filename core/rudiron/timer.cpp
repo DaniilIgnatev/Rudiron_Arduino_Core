@@ -30,31 +30,15 @@ namespace Rudiron {
     }
 
 
-    Timer::Timer(TimerName name) {
+    Timer::Timer(TimerName name, MDR_TIMER_TypeDef* MDR_TIMER, uint32_t RST_CLK_PCLK) {
         this->name = name;
-
-        switch (name) {
-            case TimerName::Timer1:
-                this->MDR_TIMER_BASE = MDR_TIMER1;
-                this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER1;
-                break;
-            case TimerName::Timer2:
-                this->MDR_TIMER_BASE = MDR_TIMER2;
-                this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER2;
-                break;
-            case TimerName::Timer3:
-                this->MDR_TIMER_BASE = MDR_TIMER3;
-                this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER3;
-                break;
-            default:
-                //ошибка
-                break;
-        }
+        this->MDR_TIMER = MDR_TIMER;
+        this->RST_CLK_PCLK = RST_CLK_PCLK;
     }
 
 
     void Timer::PWM_setup(uint16_t frequency) {
-        TIMER_DeInit(MDR_TIMER_BASE);
+        TIMER_DeInit(MDR_TIMER);
 
         RST_CLK_FreqTypeDef RST_CLK_Clocks;
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
@@ -77,7 +61,7 @@ namespace Rudiron {
         sTIM_CntInit.TIMER_ETR_Polarity = TIMER_ETRPolarity_NonInverted;
         sTIM_CntInit.TIMER_BRK_Polarity = TIMER_BRKPolarity_NonInverted;
 
-        TIMER_CntInit(MDR_TIMER_BASE, &sTIM_CntInit);
+        TIMER_CntInit(MDR_TIMER, &sTIM_CntInit);
     }
 
 
@@ -135,12 +119,12 @@ namespace Rudiron {
         sTIM_ChnInit.TIMER_CH_Mode = TIMER_CH_MODE_PWM;
         sTIM_ChnInit.TIMER_CH_REF_Format = TIMER_CH_REF_Format6;
         sTIM_ChnInit.TIMER_CH_Number = TIMER_CHANNEL;
-        TIMER_ChnInit(this->MDR_TIMER_BASE, &sTIM_ChnInit);
+        TIMER_ChnInit(this->MDR_TIMER, &sTIM_ChnInit);
 
 
         //Степень заполнения
         uint16_t CCR = percentage * this->ARR / 100;
-        TIMER_SetChnCompare(this->MDR_TIMER_BASE, TIMER_CHANNEL, CCR);
+        TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, CCR);
 
 
         //Выход канала
@@ -161,12 +145,12 @@ namespace Rudiron {
         sTIM_ChnOutInit.TIMER_CH_NegOut_Mode = TIMER_CH_OutMode_Output;
 
         sTIM_ChnOutInit.TIMER_CH_Number = TIMER_CHANNEL;
-        TIMER_ChnOutInit(this->MDR_TIMER_BASE, &sTIM_ChnOutInit);
+        TIMER_ChnOutInit(this->MDR_TIMER, &sTIM_ChnOutInit);
 
         /* Enable TIMER1 clock */
-        TIMER_BRGInit(this->MDR_TIMER_BASE, TIMER_HCLKdiv8);
+        TIMER_BRGInit(this->MDR_TIMER, TIMER_HCLKdiv8);
         /* Enable TIMER */
-        TIMER_Cmd(this->MDR_TIMER_BASE, ENABLE);
+        TIMER_Cmd(this->MDR_TIMER, ENABLE);
     }
 
 
@@ -182,7 +166,7 @@ namespace Rudiron {
         TIMER_ChnInitTypeDef sTIM_ChnInit;
         TIMER_ChnStructInit(&sTIM_ChnInit);
         sTIM_ChnInit.TIMER_CH_Number = TIMER_CHANNEL;
-        TIMER_ChnInit(this->MDR_TIMER_BASE, &sTIM_ChnInit);
+        TIMER_ChnInit(this->MDR_TIMER, &sTIM_ChnInit);
 
 
         //Выход канала
@@ -190,7 +174,22 @@ namespace Rudiron {
         TIMER_ChnOutStructInit(&sTIM_ChnOutInit);
 
         sTIM_ChnOutInit.TIMER_CH_Number = TIMER_CHANNEL;
-        TIMER_ChnOutInit(this->MDR_TIMER_BASE, &sTIM_ChnOutInit);
+        TIMER_ChnOutInit(this->MDR_TIMER, &sTIM_ChnOutInit);
     }
 
+
+    Timer* Timer::getTimer1(){
+        static Timer timer = Timer(TimerName::Timer1, MDR_TIMER1, RST_CLK_PCLK_TIMER1);
+        return &timer;
+    }
+
+    Timer* Timer::getTimer2(){
+        static Timer timer = Timer(TimerName::Timer2, MDR_TIMER2, RST_CLK_PCLK_TIMER2);
+        return &timer;
+    }
+
+    Timer* Timer::getTimer3(){
+        static Timer timer = Timer(TimerName::Timer3, MDR_TIMER3, RST_CLK_PCLK_TIMER3);
+        return &timer;
+    }
 }
