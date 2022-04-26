@@ -1,8 +1,6 @@
 #include "nRF24_example.h"
 
 
-uint32_t i,j,k;
-
 // Pipe number
 nRF24_RXResult pipe;
 
@@ -114,10 +112,10 @@ void nRF24_DEMO_TX_SINGLE_ESB(){
 
     // The main loop
     payload_length = 32;
-    j = 0;
+    uint32_t j = 0;
     while (1) {
         // Prepare data packet
-        for (i = 0; i < payload_length; i++) {
+        for (uint32_t i = 0; i < payload_length; i++) {
             nRF24_payload[i] = j++;
             if (j > 0x000000FF) j = 0;
         }
@@ -471,11 +469,11 @@ void nRF24_DEMO_TX_SINGLE(){
 
 
     // The main loop
-    j = 0;
+    uint32_t j = 0;
     payload_length = 5;
     while (1) {
         // Prepare data packet
-        for (i = 0; i < payload_length; i++) {
+        for (uint32_t i = 0; i < payload_length; i++) {
             nRF24_payload[i] = j++;
             if (j > 0x000000FF) j = 0;
         }
@@ -554,7 +552,7 @@ void nRF24_DEMO_TX_MULTI(){
     static const uint8_t nRF24_ADDR2[] = { 0xE7, 0x1C, 0xE6 };
 
     // The main loop
-    j = 0; pipe = (nRF24_RXResult)0;
+    uint32_t j = 0; pipe = (nRF24_RXResult)0;
     while (1) {
         // Logic address
 //        UART_SendStr("ADDR#");
@@ -582,7 +580,7 @@ void nRF24_DEMO_TX_MULTI(){
         }
 
         // Prepare data packet
-        for (i = 0; i < payload_length; i++) {
+        for (uint32_t i = 0; i < payload_length; i++) {
             nRF24_payload[i] = j++;
             if (j > 0x000000FF) j = 0;
         }

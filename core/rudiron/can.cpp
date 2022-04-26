@@ -63,7 +63,7 @@ namespace Rudiron
         CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN | CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, ENABLE);
         CAN_Cmd(MDR_CAN, ENABLE);
 
-        //configure buffer read
+        // configure buffer read
         CAN_FilterInitTypeDef fCAN;
         fCAN.Mask_ID = 0;
         fCAN.Filter_ID = 0;
@@ -72,7 +72,7 @@ namespace Rudiron
         CAN_RxITConfig(MDR_CAN, 1 << 1, ENABLE);
         CAN_Receive(MDR_CAN, 1, DISABLE);
 
-        //configure buffer write
+        // configure buffer write
         CAN_TxITConfig(MDR_CAN, 1 << 0, ENABLE);
 
         return true;
@@ -84,11 +84,10 @@ namespace Rudiron
         CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN | CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, DISABLE);
     }
 
-
-    void CAN::setActiveID(uint32_t ID){
+    void CAN::setActiveID(uint32_t ID)
+    {
         this->active_ID = ID;
     }
-
 
     void CAN::write(CAN_TxMsgTypeDef &TxMsg)
     {
@@ -108,5 +107,56 @@ namespace Rudiron
             i++;
         }
         CAN_ITClearRxTxPendingBit(MDR_CAN, 0, CAN_STATUS_TX_READY);
+    }
+
+    int CAN::available(void)
+    {
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
+            if (_can_rx_buffer[i].ID == this->active_ID){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    int CAN::peek(void)
+    {
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
+            if (_can_rx_buffer[i].ID == this->active_ID){
+                for (uint8_t j = 0; j < 8; j++){
+                    if ((1 << j) & _can_rx_buffer[i].Mask != 0){
+                        return _can_rx_buffer[i].Data[j];
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    int CAN::read(void)
+    {
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
+            if (_can_rx_buffer[i].ID == this->active_ID){
+                for (uint8_t j = 0; j < 8; j++){
+                    if ((1 << j) & _can_rx_buffer[i].Mask != 0){
+                        _can_rx_buffer[i].Mask &= ~(1 << j);
+
+                        if (_can_rx_buffer[i].Mask == 0){
+                            _can_rx_buffer->ID = 0;
+                        }
+
+                        return _can_rx_buffer[i].Data[j];
+                    }
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    size_t CAN::write(uint8_t byte)
+    {
     }
 }
