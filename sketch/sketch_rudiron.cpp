@@ -3,6 +3,8 @@
 #include "nrf24l01/nrf24.h"
 #include "rudiron/timer.h"
 
+#include "rudiron/can.h"
+
 
 
 bool pressed1 = false;

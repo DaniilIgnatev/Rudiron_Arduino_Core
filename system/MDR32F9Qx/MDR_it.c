@@ -24,6 +24,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "MDR_it.h"
 #include "MDR_uart.h"
+#include "MDR_can.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -155,6 +156,8 @@ void SysTick_Handler(void)
     }
 }
 
+CAN_RxMsgTypeDef can_rx;
+
 /*******************************************************************************
 * Function Name  : CAN1_IRQHandler
 * Description    : This function handles CAN1 global interrupt request.
@@ -164,6 +167,73 @@ void SysTick_Handler(void)
 *******************************************************************************/
 void CAN1_IRQHandler(void)
 {
+    CAN_GetRawReceivedData(MDR_CAN1, 1, &can_rx);
+
+    uint8_t *bytes_to_write_pointer = (uint8_t*)&(can_rx.Data);
+    uint8_t bytes_to_write_index = 0;
+
+    uint8_t last_used_buffer_for_id = -1;
+    uint8_t last_free_buffer = -1;
+
+    //сканирование буферов
+    for (uint8_t i = CAN_RX_BUFFER_SIZE - 1; i > 0; i--){
+        if (_can_rx_buffer[i].ID == can_rx.Rx_Header.ID){
+            last_used_buffer_for_id = i;
+            break;
+        }
+        else
+        if (_can_rx_buffer[i].ID == 0){
+            last_free_buffer = i;
+        }
+    }
+
+
+    if (last_used_buffer_for_id != -1){
+        uint8_t last_free_byte = -1;
+        //поиск последнего свободного байта в использованном буфере
+        for (uint8_t i = 7; i > 0; i--){
+            if ((1 << i) & _can_rx_buffer[last_used_buffer_for_id].Mask){
+                break;
+            }
+            else{
+                last_free_byte = i;
+            }
+        }
+
+        //запись в использованный буфер
+        for (uint8_t i = last_free_byte; i < 8; i++){
+            _can_rx_buffer[last_used_buffer_for_id].Data[i] = bytes_to_write_pointer[bytes_to_write_index];
+            _can_rx_buffer[last_used_buffer_for_id].Mask |= (1 << i);
+            bytes_to_write_index++;
+
+            //есть ли еще байты на запись
+            if (bytes_to_write_index == can_rx.Rx_Header.DLC){
+                break;
+            }
+        }
+    }
+
+
+    if (last_free_buffer != -1 && (bytes_to_write_index != can_rx.Rx_Header.DLC)){
+        //подготовка буфера
+        _can_rx_buffer[last_free_buffer].ID = can_rx.Rx_Header.ID;
+        _can_rx_buffer[last_free_buffer].Mask = 0;
+
+        //запись оставшихся байт в свободный буфер
+        uint8_t i = 0;
+        do
+        {
+            _can_rx_buffer[last_free_buffer].Data[i] = bytes_to_write_pointer[bytes_to_write_index];
+            _can_rx_buffer[last_free_buffer].Mask |= (1 << i);
+
+            i++;
+            bytes_to_write_index++;
+        }
+        while (bytes_to_write_index != can_rx.Rx_Header.DLC);
+    }
+        
+    
+    CAN_ITClearRxTxPendingBit(MDR_CAN1, 1, CAN_STATUS_RX_READY);
 }
 
 /*******************************************************************************

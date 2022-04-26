@@ -29,15 +29,15 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "gpio.h"
 
 
+#define CANTEST 1
+
 namespace Rudiron {
 
     class CAN : public Stream
     {
     private:
 
-        uint8_t tx_buf_number = 0;
-
-        uint8_t rx_buf_number = 1;
+        uint32_t active_ID = 0;
 
         MDR_CAN_TypeDef* MDR_CAN;
 
@@ -62,16 +62,17 @@ namespace Rudiron {
             PORT_InitTypeDef TX_PortInit
             );
 
-        bool begin();
+
+        bool begin(uint32_t baudRate = 500000);
 
 
         void end();
 
 
-        void write(CAN_DataTypeDef &data);
+        void setActiveID(uint32_t ID);
 
 
-        bool read(CAN_RxMsgTypeDef &data, bool wait = true, uint32_t timeout = 0xFFF);
+        void write(CAN_TxMsgTypeDef &TxMsg);
 
 
         virtual int available(void);

@@ -18,6 +18,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "variant.h"
+#include "rudiron/can.h"
 
 // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }
@@ -25,7 +26,13 @@ int atexit(void (* /*func*/ )()) { return 0; }
 
 void initVariant() {
 
+    CAN_RX_Package emptyPackage;
+    emptyPackage.ID = 0;
+    emptyPackage.Mask = 0;
 
+    for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
+      _can_rx_buffer[i] = emptyPackage;
+    }
 }
 
 void setupUSB() {
