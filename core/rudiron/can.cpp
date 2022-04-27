@@ -84,21 +84,36 @@ namespace Rudiron
         CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN | CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, DISABLE);
     }
 
-    void CAN::setActiveID(uint32_t ID)
+    bool CAN::setActiveID(uint32_t standart_part, uint32_t extended_part)
     {
-        this->active_ID = ID;
+        uint32_t t_st_ID = standart_part & 0b00000000000000000000011111111111;
+        //7 старших бит не должны быть все единичными битами
+        if (((t_st_ID & 0b00000000000000000000011111110000) ^ 0b00000000000000000000011111110000) == 0){
+            return false;
+        }
+
+        activeID_extended = (bool)extended_part;
+        uint32_t t_ext_ID = extended_part & 0b000000000000000000000111111111111111111;
+        this->activeID = (t_st_ID << 18) | t_ext_ID;
+
+        return true;
+    }
+
+    bool CAN::setActiveID(uint32_t extendedID){
+        uint32_t t_ext_ID = extendedID & 0b00011111111111111111111111111111;
+
+        //7 старших бит не должны быть все единичными битами
+        if (((t_ext_ID & 0b00011111110000000000000000000000) ^ 0b00011111110000000000000000000000) == 0){
+            return false;
+        }
+
+        activeID_extended = true;
+        this->activeID = extendedID;
+        return true;
     }
 
     void CAN::write(CAN_TxMsgTypeDef &TxMsg)
     {
-        /* transmit */
-        // TxMsg.IDE = CAN_ID_STD;
-        // TxMsg.DLC = 0x08;
-        // TxMsg.PRIOR_0 = DISABLE;
-        // TxMsg.ID = 0x19ABFFFF;
-        // TxMsg.Data[1] = data[1];
-        // TxMsg.Data[0] = data[0];
-
         CAN_Transmit(MDR_CAN, 0, &TxMsg);
 
         uint32_t i = 0;
@@ -112,7 +127,7 @@ namespace Rudiron
     int CAN::available(void)
     {
         for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
-            if (_can_rx_buffer[i].ID == this->active_ID){
+            if (_can_rx_buffer[i].ID == this->activeID){
                 return true;
             }
         }
@@ -123,7 +138,7 @@ namespace Rudiron
     int CAN::peek(void)
     {
         for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
-            if (_can_rx_buffer[i].ID == this->active_ID){
+            if (_can_rx_buffer[i].ID == this->activeID){
                 for (uint8_t j = 0; j < 8; j++){
                     if ((1 << j) & _can_rx_buffer[i].Mask != 0){
                         return _can_rx_buffer[i].Data[j];
@@ -138,7 +153,7 @@ namespace Rudiron
     int CAN::read(void)
     {
         for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
-            if (_can_rx_buffer[i].ID == this->active_ID){
+            if (_can_rx_buffer[i].ID == this->activeID){
                 for (uint8_t j = 0; j < 8; j++){
                     if ((1 << j) & _can_rx_buffer[i].Mask != 0){
                         _can_rx_buffer[i].Mask &= ~(1 << j);
@@ -158,5 +173,67 @@ namespace Rudiron
 
     size_t CAN::write(uint8_t byte)
     {
+        CAN_TxMsgTypeDef message;
+        message.IDE = activeID_extended ? CAN_ID_EXT : CAN_ID_STD;
+        message.DLC = 0x01;
+        message.PRIOR_0 = DISABLE;
+        message.ID = activeID;
+        message.Data[1] = 0;
+        message.Data[0] = byte;
+        write(message);
+    }
+
+    CAN* CAN::getCAN1(){
+        PORT_InitTypeDef RX_PortInit;
+        RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        RX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        RX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        RX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        RX_PortInit.PORT_FUNC = PORT_FUNC_ALTER;
+        RX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        RX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        RX_PortInit.PORT_OE = PORT_OE_IN;
+
+        PORT_InitTypeDef TX_PortInit;
+        TX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        TX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        TX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        TX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        TX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        TX_PortInit.PORT_FUNC = PORT_FUNC_ALTER;
+        TX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        TX_PortInit.PORT_OE = PORT_OE_OUT;
+
+        static CAN can(MDR_CAN1, RST_CLK_PCLK_CAN1, PORT_PIN_A7, RX_PortInit, PORT_PIN_A6, TX_PortInit);
+        return &can;
+    }
+
+    CAN* CAN::getCAN2(){
+        PORT_InitTypeDef RX_PortInit;
+        RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        RX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        RX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        RX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        RX_PortInit.PORT_FUNC = PORT_FUNC_ALTER;
+        RX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        RX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        RX_PortInit.PORT_OE = PORT_OE_IN;
+
+        PORT_InitTypeDef TX_PortInit;
+        TX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
+        TX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
+        TX_PortInit.PORT_PD_SHM = PORT_PD_SHM_OFF;
+        TX_PortInit.PORT_PD = PORT_PD_DRIVER;
+        TX_PortInit.PORT_GFEN = PORT_GFEN_OFF;
+        TX_PortInit.PORT_FUNC = PORT_FUNC_ALTER;
+        TX_PortInit.PORT_SPEED = PORT_SPEED_MAXFAST;
+        TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
+        TX_PortInit.PORT_OE = PORT_OE_OUT;
+
+        static CAN can(MDR_CAN2, RST_CLK_PCLK_CAN2, PORT_PIN_E6, RX_PortInit, PORT_PIN_E7, TX_PortInit);
+        return &can;
     }
 }

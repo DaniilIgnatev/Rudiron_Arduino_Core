@@ -37,7 +37,9 @@ namespace Rudiron {
     {
     private:
 
-        uint32_t active_ID = 0;
+        bool activeID_extended = false;
+
+        uint32_t activeID = 0;
 
         MDR_CAN_TypeDef* MDR_CAN;
 
@@ -68,8 +70,11 @@ namespace Rudiron {
 
         void end();
 
+        ///Переключение ID для чтения и для записи. Позволяет установить стандартный ID (11 бит) с возможностью расширения (до 28 бит). Тип пакета определяется автоматически. Возвращается статус изменения активного ID
+        bool setActiveID(uint32_t standart, uint32_t extended);
 
-        void setActiveID(uint32_t ID);
+        ///Переключение ID для чтения и для записи. Позволяет установить расширенный идентификатор пакета
+        bool setActiveID(uint32_t extendedID);
 
 
         void write(CAN_TxMsgTypeDef &TxMsg);
@@ -91,6 +96,10 @@ namespace Rudiron {
 
 
         operator bool() { return true; }
+
+        static CAN* getCAN1();
+
+        static CAN* getCAN2();
 
     };
 }

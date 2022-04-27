@@ -12,6 +12,8 @@
         "mdr_it.h": "c",
         "mdr32fx.h": "c",
         "typeinfo": "cpp",
-        "mdr_bkp.h": "c"
-    }
+        "mdr_bkp.h": "c",
+        "limits": "cpp"
+    },
+    "cortex-debug.variableUseNaturalFormat": true
 }

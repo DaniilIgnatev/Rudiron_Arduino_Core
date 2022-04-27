@@ -13,26 +13,26 @@ bool pressed2 = false;
 
 bool pressed3 = false;
 
-uint8_t data[32] = {0};
+uint8_t nrf_buffer[32] = {0};
 
 
 void reverse()
 {
-    data[0] = !data[0];
+    nrf_buffer[0] = !nrf_buffer[0];
 }
 
 
 void turnLeft(bool stop)
 {
     digitalWrite(LED_BUILTIN_1, stop);
-    data[1] = stop;
+    nrf_buffer[1] = stop;
 }
 
 
 void turnRight(bool stop)
 {
     digitalWrite(LED_BUILTIN_2, stop);
-    data[2] = stop;
+    nrf_buffer[2] = stop;
 }
 
 
@@ -56,6 +56,8 @@ void setup()
         delay(100);
     }
 
+    CAN::getCAN1()->begin();
+    CAN::getCAN1()->setActiveID(1337);
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
@@ -66,7 +68,7 @@ void loop()
 {
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
 
-    if (!pressed2 && digitalRead(BUTTON_BUILTIN_2))
+    if (!pressed2 && !digitalRead(BUTTON_BUILTIN_2))
     {
         pressed2 = true;
 
@@ -79,12 +81,13 @@ void loop()
 
     turnRight(digitalRead(BUTTON_BUILTIN_3));
     
-    nRF24::write(data);
+    nRF24::write(nrf_buffer);
 
     if (Serial.available()){
         String s = Serial.readString();
         Serial.println(s);
     }
 
-    delay(5);
+    CAN::getCAN1()->write(5);
+    delay(1000);
 }
