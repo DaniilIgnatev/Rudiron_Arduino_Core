@@ -163,7 +163,7 @@ namespace Rudiron
                         _can_rx_buffer[i].Mask &= ~(1 << j);
 
                         if (_can_rx_buffer[i].Mask == 0){
-                            _can_rx_buffer->ID = 0;
+                            _can_rx_buffer[i].ID = 0;
                         }
 
                         uint8_t result = _can_rx_buffer[i].Data[j];

@@ -6,13 +6,6 @@
 #include "rudiron/can.h"
 
 
-
-bool pressed1 = false;
-
-bool pressed2 = false;
-
-bool pressed3 = false;
-
 uint8_t nrf_buffer[32] = {0};
 
 
@@ -57,7 +50,6 @@ void setup()
     }
 
     CAN::getCAN1()->begin();
-    CAN::getCAN1()->setActiveID(1337);
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
@@ -65,11 +57,32 @@ void setup()
     CAN::getCAN1()->write(5);
 }
 
-int can_rx_buffer = -2;
+
+int can_rx_buffer = -1;
+
+bool pressed1 = false;
+
+bool pressed2 = false;
+
+bool pressed3 = false;
 
 void loop()
 {
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
+
+    if (digitalRead(BUTTON_BUILTIN_1))
+    {
+        if (!pressed1){
+            pressed1 = true;
+
+            CAN::getCAN1()->setActiveID(1);
+            CAN::getCAN1()->write(10);
+        }
+    }
+    else
+    {
+        pressed1 = false;
+    }
 
     if (digitalRead(BUTTON_BUILTIN_2))
     {
@@ -83,6 +96,20 @@ void loop()
     else
     {
         pressed2 = false;
+    }
+
+    if (digitalRead(BUTTON_BUILTIN_3))
+    {
+        if (!pressed3){
+            pressed3 = true;
+
+            CAN::getCAN1()->setActiveID(2);
+            CAN::getCAN1()->write(20);
+        }
+    }
+    else
+    {
+        pressed3 = false;
     }
 
     turnRight(digitalRead(BUTTON_BUILTIN_3));
