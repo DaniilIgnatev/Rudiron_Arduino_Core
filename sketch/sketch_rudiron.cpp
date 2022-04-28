@@ -41,7 +41,7 @@ void setup()
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
-    nRF24::begin(false, false);
+    // nRF24::begin(false, false);
 
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
@@ -61,18 +61,24 @@ void setup()
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
+
+    CAN::getCAN1()->write(5);
 }
 
+int can_rx_buffer = -2;
 
 void loop()
 {
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
 
-    if (!pressed2 && !digitalRead(BUTTON_BUILTIN_2))
+    if (digitalRead(BUTTON_BUILTIN_2))
     {
-        pressed2 = true;
+        if (!pressed2){
+            pressed2 = true;
 
-        reverse();
+            reverse();
+            can_rx_buffer = CAN::getCAN1()->read();
+        }
     }
     else
     {
@@ -81,13 +87,12 @@ void loop()
 
     turnRight(digitalRead(BUTTON_BUILTIN_3));
     
-    nRF24::write(nrf_buffer);
+    // nRF24::write(nrf_buffer);
 
     if (Serial.available()){
         String s = Serial.readString();
         Serial.println(s);
     }
 
-    CAN::getCAN1()->write(5);
-    delay(1000);
+    delay(100);
 }

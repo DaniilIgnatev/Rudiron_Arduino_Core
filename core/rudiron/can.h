@@ -45,6 +45,8 @@ namespace Rudiron {
 
         uint32_t RST_CLK_PCLK_CAN;
 
+        IRQn CAN_IRQn;
+
         PortPinName RX_PIN;
 
         PortPinName TX_PIN;
@@ -58,6 +60,7 @@ namespace Rudiron {
         explicit CAN(
             MDR_CAN_TypeDef* MDR_CAN,
             uint32_t RST_CLK_PCLK_CAN,
+            IRQn CAN_IRQn,
             PortPinName RX_PIN,
             PORT_InitTypeDef RX_PortInit,
             PortPinName TX_PIN,

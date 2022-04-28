@@ -6,6 +6,7 @@ namespace Rudiron
     CAN::CAN(
         MDR_CAN_TypeDef *MDR_CAN,
         uint32_t RST_CLK_PCLK_CAN,
+        IRQn CAN_IRQn,
         PortPinName RX_PIN,
         PORT_InitTypeDef RX_PortInit,
         PortPinName TX_PIN,
@@ -13,6 +14,7 @@ namespace Rudiron
     {
         this->MDR_CAN = MDR_CAN;
         this->RST_CLK_PCLK_CAN = RST_CLK_PCLK_CAN;
+        this->CAN_IRQn = CAN_IRQn;
         this->RX_PIN = RX_PIN;
         this->RX_PortInit = RX_PortInit;
         this->TX_PIN = TX_PIN;
@@ -60,7 +62,9 @@ namespace Rudiron
         sCAN.CAN_BRP = 39; // f=500000 bit/s (T=2us)
         CAN_Init(MDR_CAN, &sCAN);
 
-        CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_TXINTEN | CAN_IT_ERRINTEN | CAN_IT_ERROVERINTEN, ENABLE);
+        NVIC_EnableIRQ(CAN_IRQn);
+
+        CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_ERROVERINTEN, ENABLE);
         CAN_Cmd(MDR_CAN, ENABLE);
 
         // configure buffer read
@@ -155,14 +159,16 @@ namespace Rudiron
         for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
             if (_can_rx_buffer[i].ID == this->activeID){
                 for (uint8_t j = 0; j < 8; j++){
-                    if ((1 << j) & _can_rx_buffer[i].Mask != 0){
+                    if (((1 << j) & _can_rx_buffer[i].Mask) != 0){
                         _can_rx_buffer[i].Mask &= ~(1 << j);
 
                         if (_can_rx_buffer[i].Mask == 0){
                             _can_rx_buffer->ID = 0;
                         }
 
-                        return _can_rx_buffer[i].Data[j];
+                        uint8_t result = _can_rx_buffer[i].Data[j];
+                        _can_rx_buffer[i].Data[j] = 0;
+                        return result;
                     }
                 }
             }
@@ -206,7 +212,7 @@ namespace Rudiron
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static CAN can(MDR_CAN1, RST_CLK_PCLK_CAN1, PORT_PIN_A7, RX_PortInit, PORT_PIN_A6, TX_PortInit);
+        static CAN can(MDR_CAN1, RST_CLK_PCLK_CAN1, IRQn::CAN1_IRQn, PORT_PIN_A7, RX_PortInit, PORT_PIN_A6, TX_PortInit);
         return &can;
     }
 
@@ -233,7 +239,7 @@ namespace Rudiron
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static CAN can(MDR_CAN2, RST_CLK_PCLK_CAN2, PORT_PIN_E6, RX_PortInit, PORT_PIN_E7, TX_PortInit);
+        static CAN can(MDR_CAN2, RST_CLK_PCLK_CAN2, IRQn::CAN2_IRQn, PORT_PIN_E6, RX_PortInit, PORT_PIN_E7, TX_PortInit);
         return &can;
     }
 }

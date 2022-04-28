@@ -158,14 +158,6 @@ void SysTick_Handler(void)
 
 CAN_RxMsgTypeDef can_rx;
 
-uint8_t *bytes_to_write_pointer;
-uint8_t bytes_to_write_index;
-
-uint8_t last_used_buffer_for_id;
-uint8_t last_free_buffer;
-
-uint8_t i;
-
 /*******************************************************************************
 * Function Name  : CAN1_IRQHandler
 * Description    : This function handles CAN1 global interrupt request.
@@ -177,14 +169,14 @@ void CAN1_IRQHandler(void)
 {
     CAN_GetRawReceivedData(MDR_CAN1, 1, &can_rx);
 
-    *bytes_to_write_pointer = (uint8_t*)&(can_rx.Data);
-    bytes_to_write_index = 0;
+    uint8_t* bytes_to_write_pointer = (uint8_t*)&(can_rx.Data);
+    int bytes_to_write_index = 0;
 
-    last_used_buffer_for_id = -1;
-    last_free_buffer = -1;
+    int last_used_buffer_for_id = -1;
+    int last_free_buffer = -1;
 
     //сканирование буферов
-    for (i = CAN_RX_BUFFER_SIZE - 1; i > 0; i--){
+    for (int i = CAN_RX_BUFFER_SIZE - 1; i >= 0; i--){
         if (_can_rx_buffer[i].ID == can_rx.Rx_Header.ID){
             last_used_buffer_for_id = i;
             break;
@@ -196,11 +188,11 @@ void CAN1_IRQHandler(void)
     }
 
 
-    if (last_used_buffer_for_id != -1){
-        uint8_t last_free_byte = -1;
+    if (last_used_buffer_for_id != -1 && ((_can_rx_buffer[last_used_buffer_for_id].Mask & (1 << 7)) == 0)){
+        int last_free_byte = -1;
         //поиск последнего свободного байта в использованном буфере
-        for (i = 7; i > 0; i--){
-            if ((1 << i) & _can_rx_buffer[last_used_buffer_for_id].Mask){
+        for (int i = 7; i > 0; i--){
+            if (((1 << i) & (_can_rx_buffer[last_used_buffer_for_id].Mask)) != 0){
                 break;
             }
             else{
@@ -209,7 +201,7 @@ void CAN1_IRQHandler(void)
         }
 
         //запись в использованный буфер
-        for (i = last_free_byte; i < 8; i++){
+        for (int i = last_free_byte; i < 8; i++){
             _can_rx_buffer[last_used_buffer_for_id].Data[i] = bytes_to_write_pointer[bytes_to_write_index];
             _can_rx_buffer[last_used_buffer_for_id].Mask |= (1 << i);
             bytes_to_write_index++;
@@ -222,13 +214,13 @@ void CAN1_IRQHandler(void)
     }
 
 
-    if (last_free_buffer != -1 && (bytes_to_write_index != can_rx.Rx_Header.DLC)){
-        //подготовка буфера
+    if ((last_free_buffer != -1) && (bytes_to_write_index != can_rx.Rx_Header.DLC)){
+        //подготовка нового буфера
         _can_rx_buffer[last_free_buffer].ID = can_rx.Rx_Header.ID;
         _can_rx_buffer[last_free_buffer].Mask = 0;
 
         //запись оставшихся байт в свободный буфер
-        i = 0;
+        int i = 0;
         do
         {
             _can_rx_buffer[last_free_buffer].Data[i] = bytes_to_write_pointer[bytes_to_write_index];
@@ -241,6 +233,7 @@ void CAN1_IRQHandler(void)
     }
         
     
+    CAN_ITClearRxTxPendingBit(MDR_CAN1, 1, CAN_STATUS_ERROR_OVER);
     CAN_ITClearRxTxPendingBit(MDR_CAN1, 1, CAN_STATUS_RX_READY);
 }
 
