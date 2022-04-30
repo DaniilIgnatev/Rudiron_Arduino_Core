@@ -53,12 +53,8 @@ void setup()
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
-
-    CAN::getCAN1()->write(5);
 }
 
-
-int can_rx_buffer = -1;
 
 bool pressed1 = false;
 
@@ -68,6 +64,8 @@ bool pressed3 = false;
 
 void loop()
 {
+    String can_rx_buffer;
+
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
 
     if (digitalRead(BUTTON_BUILTIN_1))
@@ -76,7 +74,7 @@ void loop()
             pressed1 = true;
 
             CAN::getCAN1()->setActiveID(1);
-            CAN::getCAN1()->write(10);
+            CAN::getCAN1()->print("Привет!");
         }
     }
     else
@@ -90,7 +88,8 @@ void loop()
             pressed2 = true;
 
             reverse();
-            can_rx_buffer = CAN::getCAN1()->read();
+            can_rx_buffer = CAN::getCAN1()->readString();
+            Serial.print(can_rx_buffer);
         }
     }
     else
@@ -104,7 +103,7 @@ void loop()
             pressed3 = true;
 
             CAN::getCAN1()->setActiveID(2);
-            CAN::getCAN1()->write(20);
+            CAN::getCAN1()->println("Рудирон!");
         }
     }
     else

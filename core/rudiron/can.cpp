@@ -1,4 +1,5 @@
 #include "can.h"
+#include "clk.h"
 
 namespace Rudiron
 {
@@ -59,7 +60,7 @@ namespace Rudiron
         sCAN.CAN_SEG2 = CAN_SEG2_Mul_1TQ;
         sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
         sCAN.CAN_SB = CAN_SB_3_SAMPLE;
-        sCAN.CAN_BRP = 39; // f=500000 bit/s (T=2us)
+        sCAN.CAN_BRP = 39; // f=100кбит/с (t=10us)
         CAN_Init(MDR_CAN, &sCAN);
 
         NVIC_EnableIRQ(CAN_IRQn);
@@ -91,8 +92,9 @@ namespace Rudiron
     bool CAN::setActiveID(uint32_t standart_part, uint32_t extended_part)
     {
         uint32_t t_st_ID = standart_part & 0b00000000000000000000011111111111;
-        //7 старших бит не должны быть все единичными битами
-        if (((t_st_ID & 0b00000000000000000000011111110000) ^ 0b00000000000000000000011111110000) == 0){
+        // 7 старших бит не должны быть все единичными битами
+        if (((t_st_ID & 0b00000000000000000000011111110000) ^ 0b00000000000000000000011111110000) == 0)
+        {
             return false;
         }
 
@@ -103,11 +105,13 @@ namespace Rudiron
         return true;
     }
 
-    bool CAN::setActiveID(uint32_t extendedID){
+    bool CAN::setActiveID(uint32_t extendedID)
+    {
         uint32_t t_ext_ID = extendedID & 0b00011111111111111111111111111111;
 
-        //7 старших бит не должны быть все единичными битами
-        if (((t_ext_ID & 0b00011111110000000000000000000000) ^ 0b00011111110000000000000000000000) == 0){
+        // 7 старших бит не должны быть все единичными битами
+        if (((t_ext_ID & 0b00011111110000000000000000000000) ^ 0b00011111110000000000000000000000) == 0)
+        {
             return false;
         }
 
@@ -116,35 +120,29 @@ namespace Rudiron
         return true;
     }
 
-    void CAN::write(CAN_TxMsgTypeDef &TxMsg)
-    {
-        CAN_Transmit(MDR_CAN, 0, &TxMsg);
-
-        uint32_t i = 0;
-        while (((CAN_GetStatus(MDR_CAN) & CAN_STATUS_TX_READY) != RESET) && (i != 0xFFF))
-        {
-            i++;
-        }
-        CAN_ITClearRxTxPendingBit(MDR_CAN, 0, CAN_STATUS_TX_READY);
-    }
-
     int CAN::available(void)
     {
-        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
-            if (_can_rx_buffer[i].ID == this->activeID){
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++)
+        {
+            if (_can_rx_buffer[i].ID == this->activeID)
+            {
                 return true;
             }
         }
-        
+
         return false;
     }
 
     int CAN::peek(void)
     {
-        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
-            if (_can_rx_buffer[i].ID == this->activeID){
-                for (uint8_t j = 0; j < 8; j++){
-                    if ((1 << j) & _can_rx_buffer[i].Mask != 0){
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++)
+        {
+            if (_can_rx_buffer[i].ID == this->activeID)
+            {
+                for (uint8_t j = 0; j < 8; j++)
+                {
+                    if ((1 << j) & _can_rx_buffer[i].Mask != 0)
+                    {
                         return _can_rx_buffer[i].Data[j];
                     }
                 }
@@ -156,13 +154,18 @@ namespace Rudiron
 
     int CAN::read(void)
     {
-        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
-            if (_can_rx_buffer[i].ID == this->activeID){
-                for (uint8_t j = 0; j < 8; j++){
-                    if (((1 << j) & _can_rx_buffer[i].Mask) != 0){
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++)
+        {
+            if (_can_rx_buffer[i].ID == this->activeID)
+            {
+                for (uint8_t j = 0; j < 8; j++)
+                {
+                    if (((1 << j) & _can_rx_buffer[i].Mask) != 0)
+                    {
                         _can_rx_buffer[i].Mask &= ~(1 << j);
 
-                        if (_can_rx_buffer[i].Mask == 0){
+                        if (_can_rx_buffer[i].Mask == 0)
+                        {
                             _can_rx_buffer[i].ID = 0;
                         }
 
@@ -177,19 +180,58 @@ namespace Rudiron
         return -1;
     }
 
-    size_t CAN::write(uint8_t byte)
-    {
+    size_t CAN::transmit(const uint8_t *buffer, size_t size){
         CAN_TxMsgTypeDef message;
         message.IDE = activeID_extended ? CAN_ID_EXT : CAN_ID_STD;
-        message.DLC = 0x01;
+        message.DLC = size;
         message.PRIOR_0 = DISABLE;
         message.ID = activeID;
+        message.Data[0] = 0;
         message.Data[1] = 0;
-        message.Data[0] = byte;
-        write(message);
+
+        for (uint8_t i = 0; i < size; i++)
+        {
+            *(((uint8_t*)&message.Data) + i) = buffer[i];
+        }
+        
+        CAN_Transmit(MDR_CAN, 0, &message);
+        CLK::delay_micros(2000);
+
+        return size;
     }
 
-    CAN* CAN::getCAN1(){
+    size_t CAN::write(uint8_t byte)
+    {
+        transmit(&byte, 1);
+
+        return 1;
+    }
+
+    size_t CAN::write(const uint8_t *buffer, size_t size)
+    {
+        size_t sent_counter = 0;
+        
+        uint8_t dividend = size / 8;
+        uint8_t remainder = size % 8;
+
+        size_t buffer_offset = 0;
+
+        if (dividend){
+            for (uint8_t i = 0; i < dividend; i++)
+            {
+                buffer_offset = i * 8;
+                sent_counter += transmit(buffer + buffer_offset, 8);
+            }
+            buffer_offset += 8;
+        }
+
+        sent_counter += transmit(buffer + buffer_offset, remainder);
+
+        return sent_counter;
+    }
+
+    CAN *CAN::getCAN1()
+    {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
         RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
@@ -216,7 +258,8 @@ namespace Rudiron
         return &can;
     }
 
-    CAN* CAN::getCAN2(){
+    CAN *CAN::getCAN2()
+    {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
         RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
