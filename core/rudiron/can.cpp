@@ -181,7 +181,7 @@ namespace Rudiron
         }
         
         CAN_Transmit(MDR_CAN, 0, &message);
-        CLK::delay_micros(2000);
+        CLK::delay_micros(250);
 
         return size;
     }
@@ -189,7 +189,6 @@ namespace Rudiron
     size_t CAN::write(uint8_t byte)
     {
         transmit(&byte, 1);
-
         return 1;
     }
 

@@ -50,6 +50,7 @@ void setup()
     }
 
     CAN::getCAN1()->begin();
+    CAN::getCAN1()->setActiveID(2);
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
@@ -74,7 +75,7 @@ void loop()
             pressed1 = true;
 
             CAN::getCAN1()->setActiveID(1);
-            CAN::getCAN1()->print("Привет!");
+            CAN::getCAN1()->println("Привет!");
         }
     }
     else
@@ -103,7 +104,7 @@ void loop()
             pressed3 = true;
 
             CAN::getCAN1()->setActiveID(2);
-            CAN::getCAN1()->println("Рудирон!");
+            CAN::getCAN1()->println("1РУДИРОН Бутерброд!2РУДИРОН Бутерброд!3РУДИРОН Бутерброд!4РУДИРОН Бутерброд!5РУДИРОН Бутерброд!6РУДИРОН Бутерброд!7РУДИРОН Бутерброд!8РУДИРОН Бутерброд!");
         }
     }
     else
