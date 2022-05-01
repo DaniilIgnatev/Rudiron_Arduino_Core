@@ -9,7 +9,7 @@
 
 namespace Rudiron
 {
-    CLK_Speed _CLK_Speed = ::low;
+    CLK_Speed _CLK_Speed = CLK_Speed::low;
 
     void CLK::initialise()
     {
@@ -21,16 +21,16 @@ namespace Rudiron
         while (RST_CLK_HSEstatus() != SUCCESS)
         {
         };
-        CLK::runHSE(DEFAULT_RST_CLK_CPU_PLLmul);
+        CLK::runHSE(getCPU_Multiplier());
 #else
-        CLK::runHSI(DEFAULT_RST_CLK_CPU_PLLmul);
+        CLK::runHSI(getCPU_Multiplier());
 #endif
 
         RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
         init_irq();
     }
 
-    void CLK::setSpeed(CLK_Speed newValue)
+    void CLK::setCPUSpeed(CLK_Speed newValue)
     {
         _CLK_Speed = newValue;
         
@@ -47,26 +47,6 @@ namespace Rudiron
         SCB->VTOR = 0x08000000;
         __enable_irq();
     }
-
-    /*
-    #define RST_CLK_CPU_PLLmul1                     ((uint32_t)0x00000000)
-    #define RST_CLK_CPU_PLLmul2                     ((uint32_t)0x00000001)
-    #define RST_CLK_CPU_PLLmul3                     ((uint32_t)0x00000002)
-    #define RST_CLK_CPU_PLLmul4                     ((uint32_t)0x00000003)
-    #define RST_CLK_CPU_PLLmul5                     ((uint32_t)0x00000004)
-    #define RST_CLK_CPU_PLLmul6                     ((uint32_t)0x00000005)
-    #define RST_CLK_CPU_PLLmul7                     ((uint32_t)0x00000006)
-    #define RST_CLK_CPU_PLLmul8                     ((uint32_t)0x00000007)
-
-    #define CAN_HCLKdiv1 ((uint32_t)0x00000000)
-    #define CAN_HCLKdiv2 ((uint32_t)0x00000001)
-    #define CAN_HCLKdiv4 ((uint32_t)0x00000002)
-    #define CAN_HCLKdiv8 ((uint32_t)0x00000003)
-    #define CAN_HCLKdiv16 ((uint32_t)0x00000004)
-    #define CAN_HCLKdiv32 ((uint32_t)0x00000005)
-    #define CAN_HCLKdiv64 ((uint32_t)0x00000006)
-    #define CAN_HCLKdiv128 ((uint32_t)0x00000007)
-    */
 
     uint32_t CLK::getCPU_Multiplier()
     {
@@ -94,7 +74,7 @@ namespace Rudiron
         }
     }
 
-    void CLK::updateLatency(bool external, uint32_t RST_CLK_CPU_PLLmul)
+    void CLK::updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul)
     {
         RST_CLK_FreqTypeDef clock_descriptor = getCLKDescriptor();
         uint32_t def_freq = external ? clock_descriptor.RTCHSE_Frequency : clock_descriptor.RTCHSI_Frequency;
@@ -141,7 +121,7 @@ namespace Rudiron
             RST_CLK_CPU_PLLcmd(ENABLE);
             if (RST_CLK_CPU_PLLstatus() == SUCCESS)
             {
-                updateLatency(true, RST_CLK_CPU_PLLmul);
+                updateEEPROMLatency(true, RST_CLK_CPU_PLLmul);
                 RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
                 RST_CLK_CPU_PLLuse(ENABLE);
                 RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);
@@ -159,7 +139,7 @@ namespace Rudiron
 
         if (RST_CLK_HSIstatus() == SUCCESS)
         {
-            updateLatency(false, RST_CLK_CPU_PLLmul);
+            updateEEPROMLatency(false, RST_CLK_CPU_PLLmul);
             RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
             RST_CLK_CPU_PLLuse(ENABLE);
             RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);

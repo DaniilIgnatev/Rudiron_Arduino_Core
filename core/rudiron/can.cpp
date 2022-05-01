@@ -28,7 +28,7 @@ namespace Rudiron
         GPIO::configPin(TX_PIN, TX_PortInit);
 
         RST_CLK_PCLKcmd(this->RST_CLK_PCLK_CAN, ENABLE);
-        CAN_BRGInit(MDR_CAN, CAN_HCLKdiv1);
+        CAN_BRGInit(MDR_CAN, CLK::getHCLKdiv());
 
         //Задание скорости передачи и момента семплирования
         CAN_DeInit(MDR_CAN);
