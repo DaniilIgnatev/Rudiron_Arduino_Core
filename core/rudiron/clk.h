@@ -42,6 +42,7 @@ namespace Rudiron
     class CLK
     {
     private:
+        ///Получить дескриптор тактирования
         static inline RST_CLK_FreqTypeDef getCLKDescriptor()
         {
             RST_CLK_FreqTypeDef RST_CLK_Clocks;
@@ -49,17 +50,23 @@ namespace Rudiron
             return RST_CLK_Clocks;
         }
 
+        ///Инициализация векторов прерываний
         static void init_irq();
 
-        static void updateLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
+        ///Установление задержки памяти
+        static void updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
 
+        ///Запуск на частоте внешнего генератора
         static void runHSE(uint32_t RST_CLK_CPU_PLLmul);
 
+        ///Запуск на частоте внутреннего генератора
         static void runHSI(uint32_t RST_CLK_CPU_PLLmul);
 
+        ///Инициализация системного таймера
         static void init_delay();
 
     public:
+        ///Сброс настроек тактирования к значениям по умолчанию
         static void initialise();
 
         ///Копия значения _CLK_Speed
@@ -68,15 +75,19 @@ namespace Rudiron
             return _CLK_Speed;
         }
 
-        static void setSpeed(CLK_Speed newValue = CLK_Speed::low);
+        ///Установка частоты микропроцессора
+        static void setCPUSpeed(CLK_Speed newValue = CLK_Speed::low);
 
+        ///Частота микропроцессора в герцах
         static inline uint32_t getCPUFrequency()
         {
             return getCLKDescriptor().CPU_CLK_Frequency;
         }
 
+        ///Коэффициент умножения тактовой частоты микропроцессора
         static inline uint32_t getCPU_Multiplier();
 
+        ///Коэффициент деления тактирования блоков микроконтроллера
         static uint32_t getHCLKdiv();
 
         ///Копия значения _millis
@@ -91,8 +102,10 @@ namespace Rudiron
             return _micros;
         }
 
+        ///Выставление задержки в миллисекундах
         static void delay_millis(uint32_t ms);
 
+        ///Выставление задержки в микросекундах
         static void delay_micros(uint32_t us);
     };
 }
