@@ -188,7 +188,7 @@ typedef bool boolean;
 typedef uint8_t byte;
 
 inline void init(void){
-    Rudiron::CLK::Initialize();
+    Rudiron::CLK::initialise();
 }
 
 void initVariant() __attribute__((weak));

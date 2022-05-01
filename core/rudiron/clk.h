@@ -15,8 +15,6 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 #ifndef CLK_H
 #define CLK_H
 
@@ -27,61 +25,73 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_rst_clk.h"
 #include "MDR_eeprom.h"
 
-
 extern uint32_t _millis;
 extern uint32_t _micros;
 
-namespace Rudiron {
+namespace Rudiron
+{
+    enum CLK_Speed
+    {
+        low,
+        medium,
+        high
+    };
 
-    class CLK {
+    extern CLK_Speed _CLK_Speed;
+
+    class CLK
+    {
     private:
-
-        static inline RST_CLK_FreqTypeDef getCLKDescriptor() {
+        static inline RST_CLK_FreqTypeDef getCLKDescriptor()
+        {
             RST_CLK_FreqTypeDef RST_CLK_Clocks;
             RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
             return RST_CLK_Clocks;
         }
 
+        static void init_irq();
 
         static void updateLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
 
-
         static void runHSE(uint32_t RST_CLK_CPU_PLLmul);
-
 
         static void runHSI(uint32_t RST_CLK_CPU_PLLmul);
 
-
-        static void init_irq();
-
-    public:
-
-        static inline uint32_t getCPUFrequency(){
-            RST_CLK_FreqTypeDef clock_descriptor = getCLKDescriptor();
-            return clock_descriptor.CPU_CLK_Frequency;
-        }
-
-
-        static void Initialize();
-
-
         static void init_delay();
 
+    public:
+        static void initialise();
 
-        ///Значение переменной _millis
-        static inline uint32_t millis(void) {
+        ///Копия значения _CLK_Speed
+        static inline CLK_Speed getSpeed()
+        {
+            return _CLK_Speed;
+        }
+
+        static void setSpeed(CLK_Speed newValue = CLK_Speed::low);
+
+        static inline uint32_t getCPUFrequency()
+        {
+            return getCLKDescriptor().CPU_CLK_Frequency;
+        }
+
+        static inline uint32_t getCPU_Multiplier();
+
+        static uint32_t getHCLKdiv();
+
+        ///Копия значения _millis
+        static inline uint32_t millis(void)
+        {
             return _millis;
         }
 
-
-        ///Значение переменной _micros
-        static inline uint32_t micros(void) {
+        ///Копия значения _micros
+        static inline uint32_t micros(void)
+        {
             return _micros;
         }
 
-
         static void delay_millis(uint32_t ms);
-
 
         static void delay_micros(uint32_t us);
     };

@@ -41,26 +41,12 @@ namespace Rudiron
         sCAN.CAN_ROM = DISABLE;
 
         // Normal bit time = sync segment + propagation segment + phase segment1 + phase segment2
-        //    sCAN.CAN_PSEG = CAN_PSEG_Mul_2TQ;
-        //    sCAN.CAN_SEG1 = CAN_SEG1_Mul_5TQ;
-        //    sCAN.CAN_SEG2 = CAN_SEG2_Mul_5TQ;
-        //    sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
-        //    sCAN.CAN_SB = CAN_SB_3_SAMPLE;
-        //    sCAN.CAN_BRP = 4;//
-
-        //    sCAN.CAN_PSEG = CAN_PSEG_Mul_1TQ;
-        //    sCAN.CAN_SEG1 = CAN_SEG1_Mul_2TQ;
-        //    sCAN.CAN_SEG2 = CAN_SEG2_Mul_2TQ;
-        //    sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
-        //    sCAN.CAN_SB = CAN_SB_3_SAMPLE;
-        //    sCAN.CAN_BRP = 47;//f=277777 bit/s (T=3.6us)
-
         sCAN.CAN_PSEG = CAN_PSEG_Mul_1TQ;
         sCAN.CAN_SEG1 = CAN_SEG1_Mul_1TQ;
         sCAN.CAN_SEG2 = CAN_SEG2_Mul_1TQ;
         sCAN.CAN_SJW = CAN_SJW_Mul_4TQ;
         sCAN.CAN_SB = CAN_SB_3_SAMPLE;
-        sCAN.CAN_BRP = 39; // f=100кбит/с (t=10us)
+        sCAN.CAN_BRP = 7; // f=500кбит/с (t=10us)
         CAN_Init(MDR_CAN, &sCAN);
 
         NVIC_EnableIRQ(CAN_IRQn);
