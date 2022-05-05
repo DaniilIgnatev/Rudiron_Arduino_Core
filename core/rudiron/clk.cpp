@@ -33,12 +33,7 @@ namespace Rudiron
     void CLK::setCPUSpeed(CLK_Speed newValue)
     {
         _CLK_Speed = newValue;
-        
-#ifndef HCLK_DISABLE
-        CLK::runHSE(getCPU_Multiplier());
-#else
-        CLK::runHSI(getCPU_Multiplier());
-#endif
+        CLK::initialise();
     }
 
     void CLK::init_irq()

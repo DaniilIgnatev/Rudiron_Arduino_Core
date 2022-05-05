@@ -1,4 +1,5 @@
 #include "uart.h"
+#include "clk.h"
 
 
 #define IRQ_ENABLED UART_IRQn != IRQn::SysTick_IRQn
@@ -44,7 +45,7 @@ namespace Rudiron {
         RST_CLK_PCLKcmd(RST_CLK_PCLK_UART, ENABLE);
 
         /* Set the HCLK division factor*/
-        UART_BRGInit(MDR_UART, UART_HCLKdiv1);
+        UART_BRGInit(MDR_UART, CLK::getHCLKdiv());
 
         //EnableIRQ
         if (IRQ_ENABLED){

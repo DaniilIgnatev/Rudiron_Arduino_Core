@@ -1,4 +1,5 @@
 #include "spi.h"
+#include "clk.h"
 
 namespace Rudiron
 {
@@ -17,9 +18,8 @@ namespace Rudiron
         //Сброс настроек контроллера SPI1
         SSP_DeInit(MDR_SSP);
 
-        //Сделать расчет делителей!!!
         //Установка делителя тактовой частоты SPI1
-        SSP_BRGInit(MDR_SSP, SSP_HCLKdiv1);
+        SSP_BRGInit(MDR_SSP, CLK::getHCLKdiv());
 
         SSP_StructInit(&SPI_InitStructure); //значения по умолчанию
         SPI_InitStructure.SSP_SCR = 0x0;    //коэффициент скорости обмена

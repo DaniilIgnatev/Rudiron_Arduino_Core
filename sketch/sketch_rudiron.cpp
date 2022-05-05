@@ -8,7 +8,10 @@
 
 uint8_t nrf_buffer[32] = {0};
 
+#define MASTER
 
+
+#ifdef MASTER
 void reverse()
 {
     nrf_buffer[0] = !nrf_buffer[0];
@@ -27,14 +30,37 @@ void turnRight(bool stop)
     digitalWrite(LED_BUILTIN_2, stop);
     nrf_buffer[2] = stop;
 }
+#else
+void reverse()
+{
+    
+}
 
+
+void turnLeft()
+{
+    digitalWrite(LED_BUILTIN_1, nrf_buffer[1]);
+}
+
+
+void turnRight()
+{
+    digitalWrite(LED_BUILTIN_2, nrf_buffer[2]);
+}
+#endif
 
 void setup()
 {
+    tone(8,500);
+
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
-    // nRF24::begin(false, false);
+#ifdef MASTER
+    nRF24::begin(false, false);
+#else
+     nRF24::begin(true, false);
+#endif
 
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
@@ -67,7 +93,9 @@ void loop()
 {
     String can_rx_buffer;
 
+#ifdef MASTER
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
+#endif
 
     if (digitalRead(BUTTON_BUILTIN_1))
     {
@@ -112,9 +140,16 @@ void loop()
         pressed3 = false;
     }
 
+#ifdef MASTER
     turnRight(digitalRead(BUTTON_BUILTIN_3));
+#endif
+
+#ifdef MASTER
+    nRF24::write(nrf_buffer);
+#else
+    nRF24::read(nrf_buffer);
+#endif
     
-    // nRF24::write(nrf_buffer);
 
     if (Serial.available()){
         String s = Serial.readString();
