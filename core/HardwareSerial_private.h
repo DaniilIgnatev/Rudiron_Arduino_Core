@@ -19,7 +19,7 @@
   Modified 23 November 2006 by David A. Mellis
   Modified 28 September 2010 by Mark Sproul
   Modified 14 August 2012 by Alarus
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  Modified for Rudiron_Arduino_Core by Daniil Ignatev on 08.03.2022
 */
 
 #include "wiring_private.h"

@@ -6,17 +6,20 @@
 #include "rudiron/can.h"
 
 
+// #define NRF_TRANSMITTER
+// #define NRF_RECEIVER
+
+#if defined(NRF_RECEIVER) || defined(NRF_TRANSMITTER)
 uint8_t nrf_buffer[32] = {0};
+#endif
 
-#define MASTER
 
+#ifdef NRF_TRANSMITTER
 
-#ifdef MASTER
 void reverse()
 {
     nrf_buffer[0] = !nrf_buffer[0];
 }
-
 
 void turnLeft(bool stop)
 {
@@ -24,24 +27,23 @@ void turnLeft(bool stop)
     nrf_buffer[1] = stop;
 }
 
-
 void turnRight(bool stop)
 {
     digitalWrite(LED_BUILTIN_2, stop);
     nrf_buffer[2] = stop;
 }
-#else
+
+#elif defined(NRF_RECEIVER)
+
 void reverse()
 {
     
 }
 
-
 void turnLeft()
 {
     digitalWrite(LED_BUILTIN_1, nrf_buffer[1]);
 }
-
 
 void turnRight()
 {
@@ -49,16 +51,17 @@ void turnRight()
 }
 #endif
 
+
 void setup()
 {
-    tone(8,500);
+    tone(8, 500);
 
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
-#ifdef MASTER
+#ifdef NRF_TRANSMITTER
     nRF24::begin(false, false);
-#else
+#elif defined(NRF_RECEIVER)
      nRF24::begin(true, false);
 #endif
 
@@ -93,7 +96,7 @@ void loop()
 {
     String can_rx_buffer;
 
-#ifdef MASTER
+#ifdef NRF_TRANSMITTER
     turnLeft(digitalRead(BUTTON_BUILTIN_1));
 #endif
 
@@ -116,7 +119,9 @@ void loop()
         if (!pressed2){
             pressed2 = true;
 
+#if defined(NRF_RECEIVER) || defined(NRF_TRANSMITTER)
             reverse();
+#endif
             can_rx_buffer = CAN::getCAN1()->readString();
             Serial.print(can_rx_buffer);
         }
@@ -140,13 +145,10 @@ void loop()
         pressed3 = false;
     }
 
-#ifdef MASTER
+#ifdef NRF_TRANSMITTER
     turnRight(digitalRead(BUTTON_BUILTIN_3));
-#endif
-
-#ifdef MASTER
     nRF24::write(nrf_buffer);
-#else
+#elif defined(NRF_RECEIVER)
     nRF24::read(nrf_buffer);
 #endif
     

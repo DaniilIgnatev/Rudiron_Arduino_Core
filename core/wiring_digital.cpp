@@ -20,7 +20,7 @@
   Boston, MA  02111-1307  USA
 
   Modified 28 September 2010 by Mark Sproul
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  Modified for Rudiron_Arduino_Core by Daniil Ignatev on 08.03.2022
 */
 
 #define ARDUINO_MAIN

@@ -16,7 +16,7 @@
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
-// Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+// Modified for Rudiron_Arduino_Core by Daniil Ignatev on 08.03.2022
 //*/
 //
 //#ifndef __USBAPI__

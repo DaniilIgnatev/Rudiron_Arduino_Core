@@ -14,7 +14,7 @@
 //** ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
 //** SOFTWARE.
 //
-// Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+// Modified for Rudiron_Arduino_Core by Daniil Ignatev on 08.03.2022
 //*/
 //
 //#ifndef __USBCORE_H__

@@ -18,7 +18,7 @@
   *
   * <h2><center>&copy; COPYRIGHT 2011 Milandr</center></h2>
   * 
-  * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  * Modified for Rudiron_Arduino_Core by Daniil Ignatev on 08.03.2022
   */
 
 /* Includes ------------------------------------------------------------------*/
