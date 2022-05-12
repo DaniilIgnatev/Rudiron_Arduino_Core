@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Arduino_Core_Rudiron.iml" filepath="$PROJECT_DIR$/.idea/Arduino_Core_Rudiron.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Rudiron_Arduino_Core.iml" filepath="$PROJECT_DIR$/.idea/Rudiron_Arduino_Core.iml" />
     </modules>
   </component>
 </project>
