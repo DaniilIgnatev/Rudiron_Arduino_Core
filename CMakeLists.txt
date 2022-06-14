@@ -29,7 +29,6 @@ SET(CMAKE_BUILD_TYPE "Debug")
 set(core M3)
 set(cpu_name "MDR32F9Qx")
 set(board_name "Rudiron_Buterbrod")
-set(revision "revision_2")
 
 # Optional: issue a message to be sure it uses the correct toolchain file.
 message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
@@ -127,10 +126,10 @@ add_executable(${EXECUTABLE} ${SRC_LIST})
 target_include_directories(${EXECUTABLE} PRIVATE
         ${core_path}
         ${libraries_path}
-        "${libraries_path}/SPI"
-        "${libraries_path}/nrf24l01"
-        "${libraries_path}/Wire"
-        "${libraries_path}/MPU6050"
+        ${libraries_path}/SPI
+        ${libraries_path}/nrf24l01
+        ${libraries_path}/Wire
+        ${libraries_path}/MPU6050
         ${sketch_path}
         ${cmsis_include_path}
         ${cmsis_source_path}

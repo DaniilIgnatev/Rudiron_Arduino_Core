@@ -1,11 +1,4 @@
 #include "clk.h"
-#include "wiring_private.h"
-
-#if defined(Rudiron_Buterbrod) && defined(revision_2)
-#define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul1 // 16mhz * 1
-#else
-#define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul2 // 8mhz * 2
-#endif
 
 namespace Rudiron
 {

@@ -1,21 +1,21 @@
 /**
-  ******************************************************************************
-  * @file    MDR32F9Qx_Demo\Project\Demo\MDR32F9Qx_config.h
-  * @author  Milandr Application Team
-  * @version V1.2.0
-  * @date    10/07/2010
-  * @brief   Library configuration file.
-  ******************************************************************************
-  * <br><br>
-  * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
-  * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
-  * TIME. AS A RESULT, MILANDR SHALL NOT BE HELD LIABLE FOR ANY
-  * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
-  * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
-  * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
-  *
-  * <h2><center>&copy; COPYRIGHT 2014 Milandr</center></h2>
-  */
+ ******************************************************************************
+ * @file    MDR32F9Qx_Demo\Project\Demo\MDR32F9Qx_config.h
+ * @author  Milandr Application Team
+ * @version V1.2.0
+ * @date    10/07/2010
+ * @brief   Library configuration file.
+ ******************************************************************************
+ * <br><br>
+ * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+ * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE
+ * TIME. AS A RESULT, MILANDR SHALL NOT BE HELD LIABLE FOR ANY
+ * DIRECT, INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING
+ * FROM THE CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE
+ * CODING INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+ *
+ * <h2><center>&copy; COPYRIGHT 2014 Milandr</center></h2>
+ */
 
 /**
  * @mainpage MDR32F9Qx Standard Peripherals Library.
@@ -37,7 +37,7 @@
  * (EVAL 22.0 B) and evaluation board for MC 1986VE3T.
  *
  * The MDR32F9Qx Standard Peripherals Library is full CMSIS compliant.
- * 
+ *
  * Modified for Rudiron_Arduino_Core by Daniil Ignatev on 08.03.2022
  */
 
@@ -46,124 +46,126 @@
 #define __MDR32F9Qx_CONFIG_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
-
 
 #include "MDR_lib.h"
 #include <stdint.h>
 #include "MDR32Fx.h"
 
+#ifdef HCLK_DISABLE
+#define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul2 // 8mhz * 2
+#else
+#define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul1 // 16mhz * 1
+#endif
 
 #define MICROS_STEP ((uint8_t)10)
 #define SERIAL_TX_BUFFER_SIZE 64
 #define SERIAL_RX_BUFFER_SIZE 64
 #define CAN_RX_BUFFER_SIZE 0
 
-
 //Выбор отладочного интерфейса
 #ifdef MILANDR_EVAL_BOARD
-    #if MILANDR_EVAL_BOARD == 1
-    #define USE_JTAG_A
-    #endif
-    #if MILANDR_EVAL_BOARD == 2
-    #define USE_JTAG_B
-    #endif
+#if MILANDR_EVAL_BOARD == 1
+#define USE_JTAG_A
+#endif
+#if MILANDR_EVAL_BOARD == 2
+#define USE_JTAG_B
+#endif
 #else
 #define USE_SWD_A
 #endif
 
-
 //Выбор библиотек для микроконтроллера
 #define USE_MDR1986VE9x
 
-#if defined (USE_MDR1986BE7T)
+#if defined(USE_MDR1986BE7T)
 #define USE_MDR1986VE1T
 #endif
 
-
 /* Target system parameters */
 /* RST_CLK generators frequencies in HZ */
-#define HSI_Value       ((uint32_t)8000000)
-#define HSE_Value       ((uint32_t)16000000)
-#define HSE2_Value      ((uint32_t)25000000)
-#define LSI_Value       ((uint32_t)40000)
-#define LSE_Value       ((uint32_t)32768)
+#define HSI_Value ((uint32_t)8000000)
+#define HSE_Value ((uint32_t)16000000)
+#define HSE2_Value ((uint32_t)25000000)
+#define LSI_Value ((uint32_t)40000)
+#define LSE_Value ((uint32_t)32768)
 
 /* RST_CLK frequencies startup timeouts settings */
-#define HSEonTimeOut    ((uint16_t)0x0600)
-#define HSE2onTimeOut	((uint16_t)0x8000)
-#define LSEonTimeOut    ((uint16_t)0x0600)
-#define HSIonTimeOut    ((uint16_t)0x0600)
-#define LSIonTimeOut    ((uint16_t)0x0600)
+#define HSEonTimeOut ((uint16_t)0x0600)
+#define HSE2onTimeOut ((uint16_t)0x8000)
+#define LSEonTimeOut ((uint16_t)0x0600)
+#define HSIonTimeOut ((uint16_t)0x0600)
+#define LSIonTimeOut ((uint16_t)0x0600)
 #define PLLCPUonTimeOut ((uint16_t)0x0600)
 #define PLLUSBonTimeOut ((uint16_t)0x0600)
 #define PLLDSPonTimeOut ((uint16_t)0x0600)
 
 /* EEPROM programming the max MCU frequency */
-#define FLASH_PROG_FREQ_MHZ     (8.0)
+#define FLASH_PROG_FREQ_MHZ (8.0)
 
-/* Use debug uart */
-/* #define _USE_DEBUG_UART_ */
+  /* Use debug uart */
+  /* #define _USE_DEBUG_UART_ */
 
-#if defined (_USE_DEBUG_UART_)
+#if defined(_USE_DEBUG_UART_)
 
-#define DEBUG_BAUD_RATE					115200
+#define DEBUG_BAUD_RATE 115200
 
-#if defined (USE_MDR1986VE3)
-#define DEBUG_UART					MDR_UART1
-#define DEBUG_UART_PORT				MDR_PORTD
-#define DEBUG_UART_TX_PIN			PORT_Pin_13
-#define DEBUG_UART_RX_PIN			PORT_Pin_14
-#define DEBUG_UART_PINS_FUNCTION	PORT_FUNC_MAIN
-#elif defined (USE_MDR1986VE1T)
-#define DEBUG_UART 					MDR_UART1
-#define DEBUG_UART_PORT				MDR_PORTC
-#define DEBUG_UART_TX_PIN			PORT_Pin_3
-#define DEBUG_UART_RX_PIN			PORT_Pin_4
-#define DEBUG_UART_PINS_FUNCTION	PORT_FUNC_MAIN
-#elif defined (USE_MDR1986VE9x)
-#define DEBUG_UART 					MDR_UART2
-#define DEBUG_UART_PORT				MDR_PORTF
-#define DEBUG_UART_TX_PIN			PORT_Pin_1
-#define DEBUG_UART_RX_PIN			PORT_Pin_0
-#define DEBUG_UART_PINS_FUNCTION	PORT_FUNC_OVERRID
-#elif defined (USE_MDR1901VC1T)
-#define DEBUG_UART					MDR_UART3
-#define DEBUG_UART_PORT				MDR_PORTF
-#define DEBUG_UART_TX_PIN			PORT_Pin_1
-#define DEBUG_UART_RX_PIN			PORT_Pin_0
-#define DEBUG_UART_PINS_FUNCTION	PORT_FUNC_ALTER
+#if defined(USE_MDR1986VE3)
+#define DEBUG_UART MDR_UART1
+#define DEBUG_UART_PORT MDR_PORTD
+#define DEBUG_UART_TX_PIN PORT_Pin_13
+#define DEBUG_UART_RX_PIN PORT_Pin_14
+#define DEBUG_UART_PINS_FUNCTION PORT_FUNC_MAIN
+#elif defined(USE_MDR1986VE1T)
+#define DEBUG_UART MDR_UART1
+#define DEBUG_UART_PORT MDR_PORTC
+#define DEBUG_UART_TX_PIN PORT_Pin_3
+#define DEBUG_UART_RX_PIN PORT_Pin_4
+#define DEBUG_UART_PINS_FUNCTION PORT_FUNC_MAIN
+#elif defined(USE_MDR1986VE9x)
+#define DEBUG_UART MDR_UART2
+#define DEBUG_UART_PORT MDR_PORTF
+#define DEBUG_UART_TX_PIN PORT_Pin_1
+#define DEBUG_UART_RX_PIN PORT_Pin_0
+#define DEBUG_UART_PINS_FUNCTION PORT_FUNC_OVERRID
+#elif defined(USE_MDR1901VC1T)
+#define DEBUG_UART MDR_UART3
+#define DEBUG_UART_PORT MDR_PORTF
+#define DEBUG_UART_TX_PIN PORT_Pin_1
+#define DEBUG_UART_RX_PIN PORT_Pin_0
+#define DEBUG_UART_PINS_FUNCTION PORT_FUNC_ALTER
 #endif
 
-/* #define PRINTF_FORMAT_FULL */
-/* #define PRINTF_FORMAT_LARGE */
+  /* #define PRINTF_FORMAT_FULL */
+  /* #define PRINTF_FORMAT_LARGE */
 
 #endif /* #if defined (_USE_DEBUG_UART_) */
 
-#if defined ( USE_MDR1986VE3 ) || defined ( USE_MDR1986VE1T )
-#define MIL_STD_1553_TERMINAL_ADDRESS	0x01
+#if defined(USE_MDR1986VE3) || defined(USE_MDR1986VE1T)
+#define MIL_STD_1553_TERMINAL_ADDRESS 0x01
 #endif /* #if defined ( USE_MDR1986VE3 ) || defined ( USE_MDR1986VE1T ) */
 
 /* RTC configuration parameters */
-#define RTC_CalibratorValue   	0
-#define RTC_PRESCALER_VALUE		32768
+#define RTC_CalibratorValue 0
+#define RTC_PRESCALER_VALUE 32768
 
 /* DMA configuration parameters */
 /* Number of DMA channels to use */
-#define DMA_Channels_Number   32          /* This parameter is in range 1..32 */
+#define DMA_Channels_Number 32 /* This parameter is in range 1..32 */
 
 /* Alternate Control Data Structure Usage */
 /* This parameter can be a value of:
     0 = DMA_ALternateDataDisabled;
     1 = DMA_ALternateDataEnabled; */
-/*#define DMA_AlternateData   0 */          /* DMA_AlternateDataDisabled */
-#define DMA_AlternateData   1             /* DMA_AlternateDataEnabled */
+/*#define DMA_AlternateData   0 */ /* DMA_AlternateDataDisabled */
+#define DMA_AlternateData 1        /* DMA_AlternateDataEnabled */
 
 /* USB configuration parameters ----------------------------------------------*/
 /* Uncomment one of the lines below to select the Device Class. Leave all commented
  * if the desired device class is not currently supported by USB library */
-#define USB_DEVICE_CLASS  USB_DEVICE_CLASS_CDC
+#define USB_DEVICE_CLASS USB_DEVICE_CLASS_CDC
 
 /* USB Device management */
 /* Uncomment the line below to enable appropriate functionality. */
@@ -207,18 +209,18 @@ extern "C" {
      2 - check enabled, source file ID, line number and checking expression
          (as string) are available (increased code size).
 */
-#define USE_ASSERT_INFO    0
+#define USE_ASSERT_INFO 0
 /* #define USE_ASSERT_INFO    1 */
 /* #define USE_ASSERT_INFO    2 */
 
 /**
-  * @brief  The assert_param macro is used for function's parameters check.
-  * @param  expr: If expr is false, it calls assert_failed user's function
-  *   which gets the source file ID (see MDR32F9Qx_lib.h), line number and
-  *   expression text (if USE_ASSERT_INFO == 2) of the call that failed. That
-  *   function should not return. If expr is true, nothing is done.
-  * @retval None
-  */
+ * @brief  The assert_param macro is used for function's parameters check.
+ * @param  expr: If expr is false, it calls assert_failed user's function
+ *   which gets the source file ID (see MDR32F9Qx_lib.h), line number and
+ *   expression text (if USE_ASSERT_INFO == 2) of the call that failed. That
+ *   function should not return. If expr is true, nothing is done.
+ * @retval None
+ */
 #if (USE_ASSERT_INFO == 0)
 #define assert_param(expr) ((void)0)
 #elif (USE_ASSERT_INFO == 1)
@@ -226,26 +228,26 @@ extern "C" {
 void assert_failed(uint32_t file_id, uint32_t line);
 #elif (USE_ASSERT_INFO == 2)
 #define assert_param(expr) ((expr) ? (void)0 : assert_failed(ASSERT_INFO_FILE_ID, __LINE__, #expr))
-void assert_failed(uint32_t file_id, uint32_t line, const uint8_t* expr);
+void assert_failed(uint32_t file_id, uint32_t line, const uint8_t *expr);
 #else
 #error "Unsupported USE_ASSERT_INFO level"
 #endif /* USE_ASSERT_INFO */
 
-#if defined (__ICCARM__)
+#if defined(__ICCARM__)
 #define __attribute__(name_section)
-#if defined (USE_MDR1986VE3) || defined (USE_MDR1986VE1T)
+#if defined(USE_MDR1986VE3) || defined(USE_MDR1986VE1T)
 #pragma section = "EXECUTABLE_MEMORY_SECTION"
-#define IAR_SECTION(section) @ section
-#elif defined (USE_MDR1986VE9x)
+#define IAR_SECTION(section) @section
+#elif defined(USE_MDR1986VE9x)
 #define IAR_SECTION(section)
 #endif
 #endif
-#if defined (__CMCARM__)
+#if defined(__CMCARM__)
 #define __attribute__(name_section)
 #define IAR_SECTION(section)
 #endif
 
-#if defined (__CC_ARM)
+#if defined(__CC_ARM)
 #define IAR_SECTION(section)
 #endif
 
