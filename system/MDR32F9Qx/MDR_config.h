@@ -56,6 +56,9 @@ extern "C" {
 
 
 #define MICROS_STEP ((uint8_t)10)
+#define SERIAL_TX_BUFFER_SIZE 64
+#define SERIAL_RX_BUFFER_SIZE 64
+#define CAN_RX_BUFFER_SIZE 0
 
 
 //Выбор отладочного интерфейса

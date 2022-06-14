@@ -329,9 +329,6 @@ void UART_BRGInit(MDR_UART_TypeDef* UARTx, uint32_t UART_BRG);
 
 /** @} */ /* End of group MDR32F9Qx_StdPeriph_Driver */
 
-#define SERIAL_TX_BUFFER_SIZE 64
-#define SERIAL_RX_BUFFER_SIZE 64
-
 typedef uint8_t tx_buffer_index_t;
 typedef uint8_t rx_buffer_index_t;
 

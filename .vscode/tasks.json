@@ -1,6 +1,6 @@
 {
-	"version": "2.0.0",
-	"tasks": [
+    "version": "2.0.0",
+    "tasks": [
         {
             "type": "shell",
             "label": "Build",
@@ -29,9 +29,31 @@
             },
             "group": "build",
             "problemMatcher": {
-                "base": "$gcc", 
-                "fileLocation": ["relative", "${workspaceFolder}/build"]
+                "base": "$gcc",
+                "fileLocation": [
+                    "relative",
+                    "${workspaceFolder}/build"
+                ]
             }
-}
+        },
+        {
+            "type": "shell",
+            "label": "Launch_UART",
+            "command": "/Users/daniilignatev/GitHub/build-RudironProgrammer-Desktop_Qt_5_12_12_clang_64bit-Release/RudironProgrammer",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "args": [
+                "bootloader_1986be92qi.hex",
+                "build/Rudiron_Arduino_Core.hex",
+                "--load",
+                "--run",
+                "--verify_bootloader",
+                "--speed",
+                "16"
+            ],
+            "group": "test",
+            "problemMatcher": []
+        }
     ]
 }

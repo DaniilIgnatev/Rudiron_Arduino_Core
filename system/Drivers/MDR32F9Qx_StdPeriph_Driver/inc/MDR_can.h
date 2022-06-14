@@ -515,8 +515,6 @@ extern "C"
 
   /** @} */ /* End of group MDR32F9Qx_StdPeriph_Driver */
 
-#define CAN_RX_BUFFER_SIZE 64
-
   typedef struct
   {
     uint32_t ID;

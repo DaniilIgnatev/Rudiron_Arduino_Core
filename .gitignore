@@ -4,3 +4,4 @@ cmake-build-release/
 .vscode/.cortex-debug.peripherals.state.json
 *.DS_Store
 .DS_Store
+*.user
