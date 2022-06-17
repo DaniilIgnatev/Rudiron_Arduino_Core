@@ -684,23 +684,6 @@ void UART_BRGInit(MDR_UART_TypeDef* UARTx, uint32_t UART_BRG)
   MDR_RST_CLK->UART_CLOCK = tmpreg;
 }
 
-rx_buffer_index_t _uart1_rx_buffer_head = 0;
-rx_buffer_index_t _uart1_rx_buffer_tail = 0;
-// tx_buffer_index_t _uart1_tx_buffer_head = 0;
-// tx_buffer_index_t _uart1_tx_buffer_tail = 0;
-
-int _uart1_rx_buffer[SERIAL_RX_BUFFER_SIZE] = {0};
-// int _uart1_tx_buffer[SERIAL_TX_BUFFER_SIZE] = {0};
-
-
-rx_buffer_index_t _uart2_rx_buffer_head = 0;
-rx_buffer_index_t _uart2_rx_buffer_tail = 0;
-// tx_buffer_index_t _uart2_tx_buffer_head = 0;
-// tx_buffer_index_t _uart2_tx_buffer_tail = 0;
-
-int _uart2_rx_buffer[SERIAL_RX_BUFFER_SIZE] = {0};
-// int _uart2_tx_buffer[SERIAL_TX_BUFFER_SIZE] = {0};
-
 /** @} */ /* End of group UART_Private_Functions */
 
 /** @} */ /* End of group UART */

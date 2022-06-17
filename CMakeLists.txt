@@ -110,7 +110,6 @@ set(CMAKE_C_EXTENSIONS OFF)
 
 set(SRC_LIST
         ${core_sources}
-        ${libraries_sources}
         ${cmsis_include_sources}
         ${cmsis_source_sources}
         ${cmsis_startup_sources}
@@ -118,6 +117,7 @@ set(SRC_LIST
         ${system_sources}
         ${variants_sources}
         ${sketch_sources}
+        ${libraries_sources}
         )
 
 add_executable(${EXECUTABLE} ${SRC_LIST})
@@ -125,11 +125,6 @@ add_executable(${EXECUTABLE} ${SRC_LIST})
 #Includes
 target_include_directories(${EXECUTABLE} PRIVATE
         ${core_path}
-        ${libraries_path}
-        ${libraries_path}/SPI
-        ${libraries_path}/nrf24l01
-        ${libraries_path}/Wire
-        ${libraries_path}/MPU6050
         ${sketch_path}
         ${cmsis_include_path}
         ${cmsis_source_path}
@@ -141,6 +136,11 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${std_periph_driver_src_usb_path}
         ${system_path}
         ${variants_path}
+        ${libraries_path}
+        ${libraries_path}/SPI
+        ${libraries_path}/nrf24l01
+        ${libraries_path}/Wire
+        ${libraries_path}/MPU6050
         )
 
 # List of compiler defines, prefix with -D compiler option
@@ -161,7 +161,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     "-DUSE_${cpu_name}"
     "-D__STARTUP_CLEAR_BSS"
     "-D_start=main"
-    "-O0"
+    "-O2"
     )
 
 # Linker options

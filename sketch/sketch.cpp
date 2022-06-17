@@ -5,7 +5,7 @@
 
 void setup()
 {
-    CLK::setCPUSpeed(CLK_Speed::low);
+    CLK::setCPUSpeed(CLK_Speed::high);
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
@@ -25,7 +25,8 @@ void setup()
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
 
-    pinMode(6, OUTPUT);
+    pinMode(6, INPUT);
+    pinMode(1, OUTPUT);
 }
 
 
@@ -37,9 +38,12 @@ bool pressed3 = false;
 
 void loop()
 {
-    unsigned long pulse = pulseIn(6, HIGH);
+    // unsigned long pulse = pulseIn(6, HIGH);
 
-    delay(1000);
+    digitalWrite(1, true);
+    digitalWrite(1, false);
+
+    delayMicroseconds(20);
 
     // if (digitalRead(BUTTON_BUILTIN_1))
     // {

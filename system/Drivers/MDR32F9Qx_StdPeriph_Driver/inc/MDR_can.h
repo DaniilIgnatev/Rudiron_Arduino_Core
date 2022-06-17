@@ -515,15 +515,6 @@ extern "C"
 
   /** @} */ /* End of group MDR32F9Qx_StdPeriph_Driver */
 
-  typedef struct
-  {
-    uint32_t ID;
-    uint8_t Data[8];
-    uint8_t Mask;
-  } CAN_RX_Package;
-
-  extern CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_SIZE];
-
 #ifdef __cplusplus
 } // extern "C" block end
 #endif

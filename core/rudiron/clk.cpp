@@ -2,10 +2,34 @@
 
 namespace Rudiron
 {
-    CLK_Speed _CLK_Speed = CLK_Speed::low;
+    CLK_Speed _CLK_Speed;
 
-    void CLK::initialise()
+    int _CLK_Speed_delay;
+
+    uint32_t _CPU_Multiplier;
+
+    uint32_t _HCLKdiv;
+
+    void CLK::setCPUSpeed(CLK_Speed newValue)
     {
+        _CLK_Speed = newValue;
+
+        switch (_CLK_Speed)
+        {
+        case CLK_Speed::medium:
+            _CPU_Multiplier = ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 2) - 1;
+            _HCLKdiv = ((uint32_t)0x00000001);
+            break;
+        case CLK_Speed::high:
+            _CPU_Multiplier = ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 4) - 1;
+            _HCLKdiv = ((uint32_t)0x00000002);
+            break;
+        default:
+            _CPU_Multiplier = DEFAULT_RST_CLK_CPU_PLLmul;
+            _HCLKdiv = ((uint32_t)0x00000000);
+            break;
+        }
+
         RST_CLK_DeInit();
         RST_CLK_HSEconfig(RST_CLK_LSE_OFF);
 
@@ -23,12 +47,6 @@ namespace Rudiron
         init_irq();
     }
 
-    void CLK::setCPUSpeed(CLK_Speed newValue)
-    {
-        _CLK_Speed = newValue;
-        CLK::initialise();
-    }
-
     void CLK::init_irq()
     {
         SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
@@ -38,28 +56,12 @@ namespace Rudiron
 
     uint32_t CLK::getCPU_Multiplier()
     {
-        switch (_CLK_Speed)
-        {
-        case CLK_Speed::medium:
-            return ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 2) - 1;
-        case CLK_Speed::high:
-            return ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 4) - 1;
-        default:
-            return DEFAULT_RST_CLK_CPU_PLLmul;
-        }
+        return _CPU_Multiplier;
     }
 
     uint32_t CLK::getHCLKdiv()
     {
-        switch (_CLK_Speed)
-        {
-        case CLK_Speed::medium:
-            return ((uint32_t)0x00000001);
-        case CLK_Speed::high:
-            return ((uint32_t)0x00000002);
-        default:
-            return ((uint32_t)0x00000000);
-        }
+        return _HCLKdiv;
     }
 
     void CLK::updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul)
@@ -142,7 +144,7 @@ namespace Rudiron
         uint32_t SystemCoreClock = RST_CLK_Clocks.CPU_CLK_Frequency;
 
         // Set reload register to generate IRQ every microsecond
-        SysTick->LOAD = (uint32_t)((SystemCoreClock / 200000) - 1);
+        SysTick->LOAD = (uint32_t)((SystemCoreClock / 1000000 * MICROS_STEP) - 1);
 
         // Set priority for SysTick IRQ
         NVIC_SetPriority(SysTick_IRQn, (1UL << __NVIC_PRIO_BITS) - 1UL);
@@ -156,30 +158,13 @@ namespace Rudiron
 
     void CLK::delay_millis(uint32_t ms)
     {
-        __IO uint32_t target_counter = _millis + ms;
-
-        while (_millis != target_counter)
-        {
-        }
+        const uint64_t target_micros = _micros + ms * 1000;
+        while (_micros < target_micros) {}
     }
 
     void CLK::delay_micros(uint32_t us)
     {
-        if (us >= 1000)
-        {
-            uint32_t target_millis = us / 1000;
-            delay_millis(target_millis);
-            us = us % 1000;
-        }
-
-        us /= 9;
-
-        while (us)
-        {
-            if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk)
-            {
-                us--;
-            }
-        }
+        const uint64_t target_micros = _micros + us;
+        while (_micros < target_micros) {}
     }
 }

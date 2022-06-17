@@ -60,10 +60,41 @@ extern "C"
 #define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul1 // 16mhz * 1
 #endif
 
+
+  // CLK
+  extern __IO uint64_t _micros;
 #define MICROS_STEP ((uint8_t)10)
+
+// UART
 #define SERIAL_TX_BUFFER_SIZE 64
 #define SERIAL_RX_BUFFER_SIZE 64
+  typedef uint8_t tx_buffer_index_t;
+  typedef uint8_t rx_buffer_index_t;
+  extern rx_buffer_index_t _uart1_rx_buffer_head;
+  extern rx_buffer_index_t _uart1_rx_buffer_tail;
+  // extern tx_buffer_index_t _uart1_tx_buffer_head;
+  // extern tx_buffer_index_t _uart1_tx_buffer_tail;
+  extern int _uart1_rx_buffer[SERIAL_RX_BUFFER_SIZE];
+  // extern unsigned char _uart1_tx_buffer[SERIAL_TX_BUFFER_SIZE];
+  extern rx_buffer_index_t _uart2_rx_buffer_head;
+  extern rx_buffer_index_t _uart2_rx_buffer_tail;
+  // extern tx_buffer_index_t _uart2_tx_buffer_head;
+  // extern tx_buffer_index_t _uart2_tx_buffer_tail;
+  extern int _uart2_rx_buffer[SERIAL_RX_BUFFER_SIZE];
+  // extern unsigned char _uart2_tx_buffer[SERIAL_TX_BUFFER_SIZE];
+
+
+  // CAN
+  typedef struct
+  {
+    uint32_t ID;
+    uint8_t Data[8];
+    uint8_t Mask;
+  } CAN_RX_Package;
+
 #define CAN_RX_BUFFER_SIZE 0
+  extern CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_SIZE];
+
 
 //Выбор отладочного интерфейса
 #ifdef MILANDR_EVAL_BOARD

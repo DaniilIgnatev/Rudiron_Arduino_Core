@@ -24,9 +24,6 @@ along with Rudiron_Arduino_Core.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_rst_clk.h"
 #include "MDR_eeprom.h"
 
-extern __IO uint32_t _millis;
-extern __IO uint32_t _micros;
-
 namespace Rudiron
 {
     enum CLK_Speed
@@ -37,6 +34,10 @@ namespace Rudiron
     };
 
     extern CLK_Speed _CLK_Speed;
+
+    extern uint32_t _CPU_Multiplier;
+
+    extern uint32_t _HCLKdiv;
 
     class CLK
     {
@@ -65,8 +66,6 @@ namespace Rudiron
         static void init_delay();
 
     public:
-        ///Сброс настроек тактирования к значениям по умолчанию
-        static void initialise();
 
         ///Копия значения _CLK_Speed
         static inline CLK_Speed getSpeed()
@@ -92,7 +91,7 @@ namespace Rudiron
         ///Копия значения _millis
         static inline uint32_t millis(void)
         {
-            return _millis;
+            return _micros / 1000;
         }
 
         ///Копия значения _micros

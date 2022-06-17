@@ -137,9 +137,6 @@ void PendSV_Handler(void)
 {
 }
 
-extern __IO uint32_t _micros;
-extern __IO uint32_t _millis;
-
 /*******************************************************************************
 * Function Name  : SysTick_Handler
 * Description    : This function handles SysTick Handler.
@@ -149,11 +146,7 @@ extern __IO uint32_t _millis;
 *******************************************************************************/
 void SysTick_Handler(void)
 {
-    _micros += 5;
-    if (_micros >= 1000){
-        _micros = 0;
-        _millis++;
-    }
+    _micros += MICROS_STEP;
 }
 
 CAN_RxMsgTypeDef can_rx;

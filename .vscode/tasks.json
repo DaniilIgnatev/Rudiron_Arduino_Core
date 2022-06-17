@@ -46,6 +46,7 @@
             "args": [
                 "bootloader_1986be92qi.hex",
                 "build/Rudiron_Arduino_Core.hex",
+                "--erase",
                 "--load",
                 "--run",
                 "--verify_bootloader",

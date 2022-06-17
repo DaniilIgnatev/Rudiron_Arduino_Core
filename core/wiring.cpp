@@ -23,8 +23,4 @@
 */
 
 #include "wiring_private.h"
-#include "rudiron/clk.h"
-
-__IO uint32_t _millis = 0;
-__IO uint32_t _micros = 0;
 
