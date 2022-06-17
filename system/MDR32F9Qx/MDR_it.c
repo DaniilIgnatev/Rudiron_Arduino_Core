@@ -137,8 +137,8 @@ void PendSV_Handler(void)
 {
 }
 
-extern uint32_t _micros;
-extern uint32_t _millis;
+extern __IO uint32_t _micros;
+extern __IO uint32_t _millis;
 
 /*******************************************************************************
 * Function Name  : SysTick_Handler

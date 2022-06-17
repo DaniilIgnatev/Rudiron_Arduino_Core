@@ -161,7 +161,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     "-DUSE_${cpu_name}"
     "-D__STARTUP_CLEAR_BSS"
     "-D_start=main"
-    "-Os"
+    "-O0"
     )
 
 # Linker options

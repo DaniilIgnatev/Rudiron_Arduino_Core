@@ -266,4 +266,30 @@ namespace Rudiron {
         return false;
     }
 
+
+    unsigned long GPIO::pulseIn(PortPinName pin, bool state, unsigned long timeout){
+        unsigned long countdown_timeout = timeout;
+        unsigned long countdown_started = countdown_timeout;
+        bool started = false;
+
+        while (countdown_timeout){
+            if (SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk){
+                countdown_timeout -= MICROS_STEP;
+            }
+        
+            if (!started){
+                if (GPIO::readPin(pin) == state){
+                    started = true;
+                    countdown_started = countdown_timeout;
+                }
+            }
+            else{
+                if (GPIO::readPin(pin) != state){
+                    break;
+                }
+            }
+        }
+
+        return countdown_started - countdown_timeout;
+    }
 }

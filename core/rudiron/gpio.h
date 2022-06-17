@@ -23,7 +23,6 @@ along with Rudiron_Arduino_Core.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "MDR_config.h"
 #include "MDR32Fx.h"
-#include "MDR_uart.h"
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"
 
@@ -172,6 +171,9 @@ namespace Rudiron {
 
 
         static bool readPin(PortPinName name);
+
+
+        static unsigned long pulseIn(PortPinName pin, bool state, unsigned long timeout);
 
     };
 

@@ -20,13 +20,12 @@ along with Rudiron_Arduino_Core.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "MDR_config.h"
 #include "MDR32Fx.h"
-#include "MDR_uart.h"
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"
 #include "MDR_eeprom.h"
 
-extern uint32_t _millis;
-extern uint32_t _micros;
+extern __IO uint32_t _millis;
+extern __IO uint32_t _micros;
 
 namespace Rudiron
 {

@@ -156,7 +156,7 @@ namespace Rudiron
 
     void CLK::delay_millis(uint32_t ms)
     {
-        uint32_t target_counter = _millis + ms;
+        __IO uint32_t target_counter = _millis + ms;
 
         while (_millis != target_counter)
         {

@@ -5,6 +5,7 @@
 
 void setup()
 {
+    CLK::setCPUSpeed(CLK_Speed::low);
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
@@ -23,6 +24,8 @@ void setup()
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
+
+    pinMode(6, OUTPUT);
 }
 
 
@@ -34,47 +37,49 @@ bool pressed3 = false;
 
 void loop()
 {
-    if (digitalRead(BUTTON_BUILTIN_1))
-    {
-        if (!pressed1){
-            pressed1 = true;
-            bool b = digitalRead(LED_BUILTIN_1);
-            digitalWrite(LED_BUILTIN_1, !b);
-        }
-    }
-    else
-    {
-        pressed1 = false;
-    }
+    unsigned long pulse = pulseIn(6, HIGH);
 
-    if (digitalRead(BUTTON_BUILTIN_2))
-    {
-        if (!pressed2){
-            pressed2 = true;
-            bool b = digitalRead(LED_BUILTIN_1);
-            digitalWrite(LED_BUILTIN_1, !b);
+    delay(1000);
 
-            b = digitalRead(LED_BUILTIN_2);
-            digitalWrite(LED_BUILTIN_2, !b);
-        }
-    }
-    else
-    {
-        pressed2 = false;
-    }
+    // if (digitalRead(BUTTON_BUILTIN_1))
+    // {
+    //     if (!pressed1){
+    //         pressed1 = true;
+    //         bool b = digitalRead(LED_BUILTIN_1);
+    //         digitalWrite(LED_BUILTIN_1, !b);
+    //     }
+    // }
+    // else
+    // {
+    //     pressed1 = false;
+    // }
 
-    if (digitalRead(BUTTON_BUILTIN_3))
-    {
-        if (!pressed3){
-            pressed3 = true;
-            bool b = digitalRead(LED_BUILTIN_2);
-            digitalWrite(LED_BUILTIN_2, !b);
-        }
-    }
-    else
-    {
-        pressed3 = false;
-    }
+    // if (digitalRead(BUTTON_BUILTIN_2))
+    // {
+    //     if (!pressed2){
+    //         pressed2 = true;
+    //         bool b = digitalRead(LED_BUILTIN_1);
+    //         digitalWrite(LED_BUILTIN_1, !b);
 
-    delay(100);
+    //         b = digitalRead(LED_BUILTIN_2);
+    //         digitalWrite(LED_BUILTIN_2, !b);
+    //     }
+    // }
+    // else
+    // {
+    //     pressed2 = false;
+    // }
+
+    // if (digitalRead(BUTTON_BUILTIN_3))
+    // {
+    //     if (!pressed3){
+    //         pressed3 = true;
+    //         bool b = digitalRead(LED_BUILTIN_2);
+    //         digitalWrite(LED_BUILTIN_2, !b);
+    //     }
+    // }
+    // else
+    // {
+    //     pressed3 = false;
+    // }
 }
