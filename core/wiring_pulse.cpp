@@ -30,7 +30,10 @@
  * to 3 minutes in length, but must be called at least a few dozen microseconds
  * before the start of the pulse.
  *
- * This function performs better with short pulses in noInterrupt() context
+ * Надо переделать, чтобы работало без прерываний: "This function performs better with short pulses in noInterrupt() context"
+ * Сейчас тоже, что и pulseInLong
+ * ATTENTION:
+ * this function relies on micros() so cannot be used in noInterrupt() context
  */
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 {
@@ -48,32 +51,6 @@ unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
  */
 unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout)
 {
-  // cache the port and bit of the pin in order to speed up the
-  // pulse width measuring loop and achieve finer resolution.  calling
-  // digitalRead() instead yields much coarser resolution.
-  //	uint8_t bit = digitalPinToBitMask(pin);
-  //	uint8_t port = digitalPinToPort(pin);
-  //	uint8_t stateMask = (state ? bit : 0);
-  //
-  //	unsigned long startMicros = micros();
-  //
-  //	// wait for any previous pulse to end
-  //	while ((*portInputRegister(port) & bit) == stateMask) {
-  //		if (micros() - startMicros > timeout)
-  //			return 0;
-  //	}
-  //
-  //	// wait for the pulse to start
-  //	while ((*portInputRegister(port) & bit) != stateMask) {
-  //		if (micros() - startMicros > timeout)
-  //			return 0;
-  //	}
-  //
-  //	unsigned long start = micros();
-  //	// wait for the pulse to stop
-  //	while ((*portInputRegister(port) & bit) == stateMask) {
-  //		if (micros() - startMicros > timeout)
-  //			return 0;
-  //	}
-  return 0; // micros() - start;
+  PortPinName pinName = GPIO::pinMap[pin];
+  return GPIO::pulseIn(pinName, state, timeout);
 }
