@@ -44,17 +44,16 @@ int analogRead(uint8_t pin)
 }
 
 // Right now, PWM output only works on the pins with
-// hardware support.  These are defined in the appropriate
-// pins_*.c file.  For the rest of the pins, we default
-// to digital output.
+// hardware support.
 void analogWrite(uint8_t pin, int val)
 {
-	// We need to make sure the PWM output is enabled for those pins
-	// that support it, as we turn it off when digitally reading or
-	// writing with them.  Also, make sure the pin is in output mode
-	// for consistenty with Wiring, which doesn't require a pinMode
-	// call for the analog output pins.
+  PortPinName pinName = GPIO::pinMap[pin];
+  Timer *timer = Timer::getTimerForPinName(pinName);
 
-
+  if (timer != nullptr)
+  {
+    timer->start();
+    timer->PWM_setup(analogWrite_Frequency);
+    timer->PWM_start(pinName, val);
+  }
 }
-

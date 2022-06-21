@@ -38,31 +38,33 @@ Version Modified By Date     Comments
 
 #include "Arduino.h"
 #include "pins_arduino.h"
-#include "rudiron/gpio.h"
-#include "rudiron/timer.h"
+#include "wiring_private.h"
 
 // frequency (in hertz) and duration (in milliseconds).
-void tone(uint8_t _pin, unsigned int frequency, unsigned long duration)
+void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
 {
-  PortPinName pinName = GPIO::pinMap[_pin];
+  PortPinName pinName = GPIO::pinMap[pin];
   Timer *timer = Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)
   {
+    pinMode(pin, OUTPUT);
+    
     timer->start();
     timer->PWM_setup(frequency);
     timer->PWM_start(pinName, 50);
-  }
 
-  if (duration)
-  {
-    delay(duration);
+    if (duration)
+    {
+      delay(duration);
+      noTone(pin);
+    }
   }
 }
 
-void noTone(uint8_t _pin)
+void noTone(uint8_t pin)
 {
-  PortPinName pinName = GPIO::pinMap[_pin];
+  PortPinName pinName = GPIO::pinMap[pin];
   Timer *timer = Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)
