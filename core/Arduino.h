@@ -202,6 +202,8 @@ void digitalWrite(uint8_t pin, uint8_t val);
 int digitalRead(uint8_t pin);
 int analogRead(uint8_t pin);
 void analogReference(uint8_t mode);
+
+#define analogWrite_Frequency 490
 void analogWrite(uint8_t pin, int val);
 
 inline unsigned long millis(void){

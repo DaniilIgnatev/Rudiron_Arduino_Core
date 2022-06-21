@@ -71,17 +71,17 @@ namespace Rudiron
         TIMER_CntInit(MDR_TIMER, &sTIM_CntInit);
     }
 
-    void Timer::PWM_start(PortPinName pinName, uint8_t percentage)
+    void Timer::PWM_start(PortPinName pinName, uint8_t value)
     {
         PWM_initPin(pinName);
-        PWM_activateChannel(pinName, percentage, false);
+        PWM_activateChannel(pinName, value, false);
     }
 
-    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t percentage)
+    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t value)
     {
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
-        PWM_activateChannel(pinName, percentage, true);
+        PWM_activateChannel(pinName, value, true);
     }
 
     void Timer::PWM_initPin(PortPinName pinName)
@@ -111,11 +111,22 @@ namespace Rudiron
         return PORT_InitStructure;
     }
 
-    void Timer::PWM_activateChannel(PortPinName pinName, uint8_t percentage, bool withNegative)
+    void Timer::PWM_activateChannel(PortPinName pinName, uint8_t value, bool withNegative)
     {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has)
         {
+            return;
+        }
+
+        if (value == 255){
+            GPIO::configPinOutput(pinName);
+            GPIO::writePin(pinName, true);
+            return;
+        }
+        if (value == 0){
+            GPIO::configPinOutput(pinName);
+            GPIO::writePin(pinName, false);
             return;
         }
 
@@ -130,7 +141,7 @@ namespace Rudiron
         TIMER_ChnInit(this->MDR_TIMER, &sTIM_ChnInit);
 
         //Степень заполнения
-        uint16_t CCR = percentage * this->ARR / 100;
+        uint16_t CCR = value * this->ARR / 255;
         TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, CCR);
 
         //Выход канала

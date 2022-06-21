@@ -30,6 +30,8 @@
 
 #include "Arduino.h"
 #include "variant.h"
+#include "rudiron/gpio.h"
+#include "rudiron/timer.h"
 
 #ifdef __cplusplus
 extern "C"{
