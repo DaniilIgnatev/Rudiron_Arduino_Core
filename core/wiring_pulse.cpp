@@ -19,7 +19,7 @@
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
 
-  Modified for Rudiron_Arduino_Core by Daniil Ignatev on 17.06.2022
+  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 17.06.2022
 */
 
 #include "wiring_private.h"

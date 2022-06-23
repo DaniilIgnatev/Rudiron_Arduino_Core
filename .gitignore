@@ -1,4 +1,4 @@
-build/
+build/*
 cmake-build-debug/
 cmake-build-release/
 .vscode/.cortex-debug.peripherals.state.json

@@ -3,7 +3,7 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Build",
+            "label": "Собрать",
             "command": "cmake --build .",
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -22,7 +22,7 @@
         },
         {
             "type": "shell",
-            "label": "Clean and build",
+            "label": "Очистить и собрать",
             "command": "cmake --build . --clean-first",
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -38,20 +38,20 @@
         },
         {
             "type": "shell",
-            "label": "Launch_UART",
-            "command": "/Users/daniilignatev/GitHub/build-RudironProgrammer-Desktop_Qt_5_12_12_clang_64bit-Release/RudironProgrammer",
+            "label": "Прошить через UART",
+            "command": "Rudiron Programmer",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
             "args": [
                 "bootloader_1986be92qi.hex",
-                "build/Rudiron_Arduino_Core.hex",
-                "--erase",
+                "build/Arduino_Core_Rudiron.hex",
+                // "--erase",
                 "--load",
                 "--run",
                 "--verify_bootloader",
                 "--speed",
-                "16"
+                "16",
             ],
             "group": "test",
             "problemMatcher": []

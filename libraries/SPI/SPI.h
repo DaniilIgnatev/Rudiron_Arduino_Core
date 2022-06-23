@@ -10,7 +10,7 @@
   * or the GNU Lesser General Public License version 2.1, both as
   * published by the Free Software Foundation.
   *
-  * Modified for Rudiron_Arduino_Core by Daniil Ignatev on 13.03.2022
+  * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 13.03.2022
   */
 
  #ifndef _SPI_H_INCLUDED
