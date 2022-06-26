@@ -15,7 +15,7 @@
             "configFiles": [
                 "interface/1986be92_jlink.cfg"
             ],
-            "preLaunchTask": "Build"
+            "preLaunchTask": "Отладка: собрать"
         }
     ]
 }

@@ -18,13 +18,18 @@
 cmake_minimum_required(VERSION 3.15.3)
 # Optional: print out extra messages to see what is going on. Comment it to have less verbose messages
 set(CMAKE_VERBOSE_MAKEFILE ON)
-
 # Path to toolchain file. This one has to be before 'project()' below
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/arm-none-eabi-gcc.cmake")
 
 # Setup project
 project(Arduino_Core_Rudiron)
-SET(CMAKE_BUILD_TYPE "Debug")
+
+
+if(NOT CMAKE_BUILD_TYPE)
+        set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
+else()
+        message("Build type = ${CMAKE_BUILD_TYPE}")
+endif()
 
 set(core M3)
 set(cpu_name "MDR32F9Qx")
@@ -154,21 +159,30 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
 # Compiler options
 target_compile_options(${EXECUTABLE} PRIVATE
     "-mcpu=cortex-${core}"
-    "-mthumb"
-    "-ffunction-sections"
-    "-fdata-sections"
-    "-pipe"
     "-DUSE_${cpu_name}"
     "-D__STARTUP_CLEAR_BSS"
     "-D_start=main"
-    "-O2"
+    "-pipe"
+    "-mthumb"
+    "-ffunction-sections"
+    "-fdata-sections"
     )
+
+if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
+        target_compile_options(${EXECUTABLE} PRIVATE
+        "-Og"
+        "-g"
+        )
+else()
+        target_compile_options(${EXECUTABLE} PRIVATE
+        "-O2"
+        )
+endif ()
 
 # Linker options
 target_link_options(${EXECUTABLE} PRIVATE
     "-T${LINKER_FILE}"
     "-mcpu=cortex-${core}"
-    "-mthumb"
     "-Wl,--gc-sections"
     "-specs=nano.specs"
     "-ffreestanding"
