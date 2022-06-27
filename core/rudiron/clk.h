@@ -50,11 +50,7 @@ namespace Rudiron
             return RST_CLK_Clocks;
         }
 
-        ///Инициализация векторов прерываний
-        static void init_irq();
-
-        ///Установление задержки памяти
-        static void updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
+        static void updateHighSpeedConfig();
 
         ///Запуск на частоте внешнего генератора
         static void runHSE(uint32_t RST_CLK_CPU_PLLmul);
@@ -62,10 +58,17 @@ namespace Rudiron
         ///Запуск на частоте внутреннего генератора
         static void runHSI(uint32_t RST_CLK_CPU_PLLmul);
 
+        ///Установление задержки памяти
+        static void updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
+
         ///Инициализация системного таймера
         static void init_delay();
 
     public:
+
+        static inline void initialize(){
+            updateHighSpeedConfig();
+        }
 
         ///Копия значения _CLK_Speed
         static inline CLK_Speed getSpeed()
@@ -83,10 +86,14 @@ namespace Rudiron
         }
 
         ///Коэффициент умножения тактовой частоты микропроцессора
-        static inline uint32_t getCPU_Multiplier();
+        static inline uint32_t getCPU_Multiplier(){
+            return _CPU_Multiplier;
+        }
 
         ///Коэффициент деления тактирования блоков микроконтроллера
-        static uint32_t getHCLKdiv();
+        static inline uint32_t getHCLKdiv(){
+            return _HCLKdiv;
+        }
 
         ///Копия значения _millis
         static inline uint32_t millis(void)

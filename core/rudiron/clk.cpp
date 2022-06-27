@@ -2,13 +2,11 @@
 
 namespace Rudiron
 {
-    CLK_Speed _CLK_Speed;
+    CLK_Speed _CLK_Speed = CLK_Speed::low;
 
-    int _CLK_Speed_delay;
+    uint32_t _CPU_Multiplier = DEFAULT_RST_CLK_CPU_PLLmul;
 
-    uint32_t _CPU_Multiplier;
-
-    uint32_t _HCLKdiv;
+    uint32_t _HCLKdiv = (uint32_t)0x00000000;
 
     void CLK::setCPUSpeed(CLK_Speed newValue)
     {
@@ -30,9 +28,12 @@ namespace Rudiron
             break;
         }
 
-        RST_CLK_DeInit();
-        RST_CLK_HSEconfig(RST_CLK_LSE_OFF);
+        updateHighSpeedConfig();
+    }
 
+    void CLK::updateHighSpeedConfig()
+    {
+        RST_CLK_DeInit();
 #ifndef HCLK_DISABLE
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
         while (RST_CLK_HSEstatus() != SUCCESS)
@@ -40,28 +41,45 @@ namespace Rudiron
         };
         CLK::runHSE(getCPU_Multiplier());
 #else
+        RST_CLK_HSEconfig(RST_CLK_HSE_OFF);
         CLK::runHSI(getCPU_Multiplier());
 #endif
-
-        RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
-        init_irq();
     }
 
-    void CLK::init_irq()
+    ///Выбор внешнего источника тактирования и коэффициента умножения частоты
+    void CLK::runHSE(uint32_t RST_CLK_CPU_PLLmul)
     {
-        SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
-        SCB->VTOR = 0x08000000;
-        __enable_irq();
+        RST_CLK_HSEconfig(RST_CLK_HSE_ON);
+        if (RST_CLK_HSEstatus() == SUCCESS)
+        {
+            RST_CLK_CPU_PLLconfig(RST_CLK_CPU_PLLsrcHSEdiv1, RST_CLK_CPU_PLLmul);
+            RST_CLK_CPU_PLLcmd(ENABLE);
+            if (RST_CLK_CPU_PLLstatus() == SUCCESS)
+            {
+                updateEEPROMLatency(true, RST_CLK_CPU_PLLmul);
+                RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
+                RST_CLK_CPU_PLLuse(ENABLE);
+                RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);
+            }
+        }
+        init_delay();
     }
 
-    uint32_t CLK::getCPU_Multiplier()
+    ///Выбор внутреннего источника тактирования и коэффициента умножения частоты
+    void CLK::runHSI(uint32_t RST_CLK_CPU_PLLmul)
     {
-        return _CPU_Multiplier;
-    }
+        RST_CLK_HSIcmd(ENABLE);
+        RST_CLK_CPU_PLLcmd(ENABLE);
+        RST_CLK_CPU_PLLconfig(RST_CLK_CPU_PLLsrcHSIdiv1, RST_CLK_CPU_PLLmul);
 
-    uint32_t CLK::getHCLKdiv()
-    {
-        return _HCLKdiv;
+        if (RST_CLK_HSIstatus() == SUCCESS)
+        {
+            updateEEPROMLatency(false, RST_CLK_CPU_PLLmul);
+            RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
+            RST_CLK_CPU_PLLuse(ENABLE);
+            RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);
+        }
+        init_delay();
     }
 
     void CLK::updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul)
@@ -101,42 +119,6 @@ namespace Rudiron
         }
     }
 
-    ///Выбор внешнего источника тактирования и коэффициента умножения частоты
-    void CLK::runHSE(uint32_t RST_CLK_CPU_PLLmul)
-    {
-        RST_CLK_HSEconfig(RST_CLK_HSE_ON);
-        if (RST_CLK_HSEstatus() == SUCCESS)
-        {
-            RST_CLK_CPU_PLLconfig(RST_CLK_CPU_PLLsrcHSEdiv1, RST_CLK_CPU_PLLmul);
-            RST_CLK_CPU_PLLcmd(ENABLE);
-            if (RST_CLK_CPU_PLLstatus() == SUCCESS)
-            {
-                updateEEPROMLatency(true, RST_CLK_CPU_PLLmul);
-                RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
-                RST_CLK_CPU_PLLuse(ENABLE);
-                RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);
-            }
-        }
-        init_delay();
-    }
-
-    ///Выбор внутреннего источника тактирования и коэффициента умножения частоты
-    void CLK::runHSI(uint32_t RST_CLK_CPU_PLLmul)
-    {
-        RST_CLK_HSIcmd(ENABLE);
-        RST_CLK_CPU_PLLcmd(ENABLE);
-        RST_CLK_CPU_PLLconfig(RST_CLK_CPU_PLLsrcHSIdiv1, RST_CLK_CPU_PLLmul);
-
-        if (RST_CLK_HSIstatus() == SUCCESS)
-        {
-            updateEEPROMLatency(false, RST_CLK_CPU_PLLmul);
-            RST_CLK_CPUclkPrescaler(RST_CLK_CPUclkDIV1);
-            RST_CLK_CPU_PLLuse(ENABLE);
-            RST_CLK_CPUclkSelection(RST_CLK_CPUclkCPU_C3);
-        }
-        init_delay();
-    }
-
     void CLK::init_delay()
     {
         RST_CLK_FreqTypeDef RST_CLK_Clocks;
@@ -159,12 +141,16 @@ namespace Rudiron
     void CLK::delay_millis(uint32_t ms)
     {
         const uint64_t target_micros = _micros + ms * 1000;
-        while (_micros < target_micros) {}
+        while (_micros < target_micros)
+        {
+        }
     }
 
     void CLK::delay_micros(uint32_t us)
     {
         const uint64_t target_micros = _micros + us;
-        while (_micros < target_micros) {}
+        while (_micros < target_micros)
+        {
+        }
     }
 }
