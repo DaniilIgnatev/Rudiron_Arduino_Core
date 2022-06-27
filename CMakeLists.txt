@@ -166,6 +166,8 @@ target_compile_options(${EXECUTABLE} PRIVATE
     "-mthumb"
     "-ffunction-sections"
     "-fdata-sections"
+    "-flto"#включает оптимизацию линковщика
+    "-fno-rtti"#отключает динамическую идентификацию типов данных
     )
 
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
