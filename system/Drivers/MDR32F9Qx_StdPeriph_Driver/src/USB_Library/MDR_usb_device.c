@@ -1368,7 +1368,9 @@ USB_Result USB_DeviceDispatchEvent(void)
 
 void USB_IRQHandler(void)
 {
+  #ifdef USB_IRQ
   USB_DeviceDispatchEvent();
+  #endif
 }
 #endif /* USB_INT_HANDLE_REQUIRED */
 
