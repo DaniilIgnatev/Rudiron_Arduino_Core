@@ -189,6 +189,7 @@ target_link_options(${EXECUTABLE} PRIVATE
     "-specs=nano.specs"
     "-ffreestanding"
     "-nostartfiles"
+    "-Wl,--print-memory-usage"
     )
 
 
@@ -201,6 +202,6 @@ add_custom_command(TARGET ${EXECUTABLE}
 
 
 # Optional: Print executable size as part of the post build process
-add_custom_command(TARGET ${EXECUTABLE}
-        POST_BUILD
-        COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE})
+# add_custom_command(TARGET ${EXECUTABLE}
+#         POST_BUILD
+#         COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE})
