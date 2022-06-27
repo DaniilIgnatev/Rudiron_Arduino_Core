@@ -5,45 +5,45 @@
 
 void setup()
 {
-    CLK::setCPUSpeed(CLK_Speed::high);
-    pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
-    pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
-    pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
+    // CLK::setCPUSpeed(CLK_Speed::high);
+    // pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
+    // pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
+    // pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
 
-    pinMode(LED_BUILTIN_1, OUTPUT);
-    pinMode(LED_BUILTIN_2, OUTPUT);
+    // pinMode(LED_BUILTIN_1, OUTPUT);
+    // pinMode(LED_BUILTIN_2, OUTPUT);
 
-    for (int i = 0; i < 3; i++){
-        digitalWrite(LED_BUILTIN_1, true);
-        digitalWrite(LED_BUILTIN_2, true);
-        delay(100);
-        digitalWrite(LED_BUILTIN_1, false);
-        digitalWrite(LED_BUILTIN_2, false);
-        delay(100);
-    }
+    // for (int i = 0; i < 3; i++){
+    //     digitalWrite(LED_BUILTIN_1, true);
+    //     digitalWrite(LED_BUILTIN_2, true);
+    //     delay(100);
+    //     digitalWrite(LED_BUILTIN_1, false);
+    //     digitalWrite(LED_BUILTIN_2, false);
+    //     delay(100);
+    // }
 
-    Serial.begin(115200);
-    Serial.println("РУДИРОН Бутерброд!");
+    // Serial.begin(115200);
+    // Serial.println("РУДИРОН Бутерброд!");
 
-    pinMode(6, INPUT);
-    pinMode(1, OUTPUT);
+    // pinMode(6, INPUT);
+    // pinMode(1, OUTPUT);
 }
 
 
-bool pressed1 = false;
+// bool pressed1 = false;
 
-bool pressed2 = false;
+// bool pressed2 = false;
 
-bool pressed3 = false;
+// bool pressed3 = false;
 
 void loop()
 {
     // unsigned long pulse = pulseIn(6, HIGH);
 
-    digitalWrite(1, true);
-    digitalWrite(1, false);
+    // digitalWrite(1, true);
+    // digitalWrite(1, false);
 
-    delayMicroseconds(20);
+    // delayMicroseconds(20);
 
     // if (digitalRead(BUTTON_BUILTIN_1))
     // {

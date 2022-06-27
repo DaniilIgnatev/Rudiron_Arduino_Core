@@ -160,6 +160,7 @@ CAN_RxMsgTypeDef can_rx;
 *******************************************************************************/
 void CAN1_IRQHandler(void)
 {
+    #if CAN_RX_BUFFER_SIZE > 0
     CAN_GetRawReceivedData(MDR_CAN1, 1, &can_rx);
 
     uint8_t* bytes_to_write_pointer = (uint8_t*)&(can_rx.Data);
@@ -228,6 +229,7 @@ void CAN1_IRQHandler(void)
     
     CAN_ITClearRxTxPendingBit(MDR_CAN1, 1, CAN_STATUS_ERROR_OVER);
     CAN_ITClearRxTxPendingBit(MDR_CAN1, 1, CAN_STATUS_RX_READY);
+    #endif
 }
 
 /*******************************************************************************

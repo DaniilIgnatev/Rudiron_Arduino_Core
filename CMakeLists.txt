@@ -168,6 +168,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
     "-fdata-sections"
     "-flto"#включает оптимизацию линковщика
     "-fno-rtti"#отключает динамическую идентификацию типов данных
+    "-fno-exceptions"#отключает обработку исключений с++
     )
 
 if (${CMAKE_BUILD_TYPE} MATCHES "Debug")
