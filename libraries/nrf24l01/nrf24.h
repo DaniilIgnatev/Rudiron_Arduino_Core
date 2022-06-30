@@ -289,16 +289,31 @@ class nRF24 {
     
     static const uint8_t payload_length = 32;
 
+    ///Единичными битами помечены новые байты в rx_data
+    static uint32_t rx_bitMask;
+
+    ///Байт буфера приемника был обновлен
+    static bool rx_changed(uint8_t index);
+
+    ///Новые данные в буфере приемника
+    static inline bool rx_changed(){
+        return rx_bitMask != 0;
+    }
+
+    static uint8_t rx_data[payload_length];
+
+    static uint8_t tx_data[payload_length];
+
     static bool begin(bool receiver, bool irq);
 
     static void end();
 
     static bool available(void);
 
-    static nRF24_RXResult read(uint8_t data[32]);
+    static nRF24_RXResult read();
 
     //virtual void flush(void);
-    static nRF24_TXResult write(uint8_t data[32]);
+    static nRF24_TXResult write();
 } ;
 
 #ifdef __cplusplus

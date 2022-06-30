@@ -65,10 +65,17 @@ static void nRF24_WriteReg(uint8_t reg, uint8_t value) {
 //   count - number of bytes to read
 static void nRF24_ReadMBReg(uint8_t reg, uint8_t *pBuf, uint8_t count) {
 	nRF24_CSN_L;
+	nRF24::rx_bitMask = (uint32_t)0;
 	nRF24_LL_RW(reg);
-	while (count--) {
-		*pBuf++ = nRF24_LL_RW(nRF24_CMD_NOP);
+
+	for (uint8_t i = 0; i < count; i++){
+		uint8_t newValue = nRF24_LL_RW(nRF24_CMD_NOP);
+		if (nRF24::rx_data[i] != newValue){
+			nRF24::rx_bitMask |= 1 << i;
+		}
+		*(pBuf + i) = newValue;
 	}
+
 	nRF24_CSN_H;
 }
 
@@ -873,7 +880,12 @@ nRF24_TXResult nRF24_TransmitPacket(uint8_t *pBuf, uint8_t length) {
 }
 
 
-const uint8_t payload_length = 32;
+uint32_t nRF24::rx_bitMask = 0;
+
+
+bool nRF24::rx_changed(uint8_t index){
+	return (bool)(nRF24::rx_bitMask & (1 << index));
+}
 
 
 bool nRF24::begin(bool receiver, bool irq)
@@ -978,7 +990,14 @@ bool nRF24::available()
     return nRF24_GetStatus_RXFIFO() != nRF24_STATUS_RXFIFO_EMPTY;
 }
 
-nRF24_RXResult nRF24::read(uint8_t data[payload_length])
+
+uint8_t nRF24::rx_data[nRF24::payload_length] = {0};
+
+
+uint8_t nRF24::tx_data[nRF24::payload_length] = {0};
+
+
+nRF24_RXResult nRF24::read()
 {
     // Pipe number
     nRF24_RXResult pipe = nRF24_RX_EMPTY;
@@ -987,17 +1006,17 @@ nRF24_RXResult nRF24::read(uint8_t data[payload_length])
     uint8_t payload_length;
     if (nRF24_GetStatus_RXFIFO() != nRF24_STATUS_RXFIFO_EMPTY) {
         // Get a payload from the transceiver
-        pipe = nRF24_ReadPayload(data, &payload_length);
+        pipe = nRF24_ReadPayload(nRF24::rx_data, &payload_length);
     }
 
     return pipe;
 }
 
 
-nRF24_TXResult nRF24::write(uint8_t data[payload_length])
+nRF24_TXResult nRF24::write()
 {
     uint8_t packets_lost = 0;
-    nRF24_TXResult tx_res = nRF24_TransmitPacket(data, payload_length);
+    nRF24_TXResult tx_res = nRF24_TransmitPacket(nRF24::tx_data, payload_length);
     uint8_t otx = nRF24_GetRetransmitCounters();
     uint8_t otx_plos_cnt = (otx & nRF24_MASK_PLOS_CNT) >> 4; // packets lost counter
     //uint8_t otx_arc_cnt  = (otx & nRF24_MASK_ARC_CNT); // auto retransmissions counter
