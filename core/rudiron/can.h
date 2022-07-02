@@ -25,11 +25,10 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_rst_clk.h"
 #include "gpio.h"
 
-#define CANTEST 1
 
 namespace Rudiron
 {
-
+    ///Потоко-ориентированный интерфейс для работы с CAN
     class CAN : public Stream
     {
     private:
@@ -51,6 +50,8 @@ namespace Rudiron
 
         PORT_InitTypeDef TX_PortInit;
 
+        size_t transmit(const uint8_t *buffer, size_t size);
+
     public:
         explicit CAN(
             MDR_CAN_TypeDef *MDR_CAN,
@@ -71,19 +72,17 @@ namespace Rudiron
         ///Переключение ID для чтения и для записи. Позволяет установить расширенный идентификатор пакета
         bool setActiveID(uint32_t extendedID);
 
-        virtual int available(void);
+        virtual int available(void) override;
 
-        virtual int peek(void);
+        virtual int peek(void) override;
 
-        virtual int read(void);
-
-        size_t transmit(const uint8_t *buffer, size_t size);
+        virtual int read(void) override;
 
         using Print::write;
 
-        virtual size_t write(uint8_t byte);
+        virtual size_t write(uint8_t byte) override;
 
-        virtual size_t write(const uint8_t *buffer, size_t size);
+        virtual size_t write(const uint8_t *buffer, size_t size) override;
 
         operator bool() { return true; }
 

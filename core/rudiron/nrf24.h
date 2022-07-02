@@ -18,23 +18,36 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef NRF24_H
 #define NRF24_H
 
+#include "Stream.h"
 #include "nrf24l01.h"
 
-
-///Потоко-ориентированный интерфейс работы с nrf24
-class nRF24
+namespace Rudiron
 {
-private:
-    static nRF24_RXResult read(uint8_t buffer[NRF24_PAYLOAD_LENGTH]);
+    ///Потоко-ориентированный интерфейс для работы с nrf24
+    class nRF24: Stream
+    {
+    private:
+    public:
+        bool begin(bool receiver);
 
-    static nRF24_TXResult write(uint8_t buffer[NRF24_PAYLOAD_LENGTH]);
+        void end();
 
-public:
-    static bool begin(bool receiver, bool irq);
+        virtual int available(void) override;
 
-    static void end();
+        virtual int peek(void) override;
 
-    static bool available(void);
-};
+        virtual int read(void) override;
+
+        virtual int availableForWrite() override;
+
+        virtual void flush() override;
+
+        virtual size_t write(uint8_t byte) override;
+
+        using Print::write;
+
+        operator bool() { return true; }
+    };
+}
 
 #endif

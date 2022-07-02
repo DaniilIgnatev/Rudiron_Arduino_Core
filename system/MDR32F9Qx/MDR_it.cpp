@@ -456,14 +456,11 @@ void EXT_INT1_IRQHandler(void)
  *******************************************************************************/
 void EXT_INT2_IRQHandler(void)
 {
-#if NRF24_RX_BUFFER_SIZE > 0
+#if NRF24_USE_INTERRUPT
     NVIC_ClearPendingIRQ(EXT_INT2_IRQn);
 
     // Buffer to store a payload of maximum width
     uint8_t nRF24_payload[32];
-
-    // Pipe number
-    nRF24_RXResult pipe;
 
     // Length of received payload
     uint8_t payload_length;
@@ -472,8 +469,7 @@ void EXT_INT2_IRQHandler(void)
         // Get a payload from the transceiver
         nRF24_ClearIRQFlags();
         nRF24_maskIRQ(0, 0, 0);
-        pipe = nRF24_ReadPayload(nRF24_payload, &payload_length);
-        int a = 5;
+        nRF24_ReadPayload(nRF24_payload, &payload_length);
     }
 #endif
 }

@@ -60,11 +60,9 @@ extern "C"
 #define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul1 // 16mhz * 1
 #endif
 
-
   // CLK
 #define MICROS_STEP ((uint8_t)10)
   extern __IO uint64_t _micros;
-
 
 // UART
 #define SERIAL_RX_BUFFER_SIZE 64
@@ -73,12 +71,11 @@ extern "C"
 
   extern UART_BUFFER_INDEX_T _uart1_rx_buffer_head;
   extern UART_BUFFER_INDEX_T _uart1_rx_buffer_tail;
-  extern int _uart1_rx_buffer[SERIAL_RX_BUFFER_SIZE];
+  extern short _uart1_rx_buffer[SERIAL_RX_BUFFER_SIZE];
 
   extern UART_BUFFER_INDEX_T _uart2_rx_buffer_head;
   extern UART_BUFFER_INDEX_T _uart2_rx_buffer_tail;
-  extern int _uart2_rx_buffer[SERIAL_RX_BUFFER_SIZE];
-
+  extern short _uart2_rx_buffer[SERIAL_RX_BUFFER_SIZE];
 
   // CAN
   typedef struct
@@ -91,16 +88,15 @@ extern "C"
 #define CAN_RX_BUFFER_SIZE 0
   extern CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_SIZE];
 
-
-  // NRF24
+// NRF24
+// #define NRF24_USE_INTERRUPT
   typedef uint8_t NRF24_BUFFER_INDEX_T;
   extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head;
   extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail;
 
 #define NRF24_PAYLOAD_LENGTH 32
-#define NRF24_RX_BUFFER_SIZE NRF24_PAYLOAD_LENGTH * 1
-  extern uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_SIZE];
-
+#define NRF24_RX_BUFFER_SIZE NRF24_PAYLOAD_LENGTH * 2
+  extern short _nrf24_rx_buffer[NRF24_RX_BUFFER_SIZE];
 
 //Выбор отладочного интерфейса
 #ifdef MILANDR_EVAL_BOARD

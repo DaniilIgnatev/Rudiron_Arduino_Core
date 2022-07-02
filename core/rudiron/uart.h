@@ -50,7 +50,7 @@ namespace Rudiron {
 
         UART_BUFFER_INDEX_T *_rx_buffer_tail;
 
-        int *_rx_buffer;
+        short *_rx_buffer;
 
     public:
         explicit UART(
@@ -63,7 +63,7 @@ namespace Rudiron {
             IRQn_Type UART_IRQn = IRQn_Type::SysTick_IRQn,
             UART_BUFFER_INDEX_T *_rx_buffer_head = nullptr,
             UART_BUFFER_INDEX_T *_rx_buffer_tail = nullptr,
-            int *_rx_buffer = nullptr
+            short *_rx_buffer = nullptr
             );
 
 
@@ -78,22 +78,22 @@ namespace Rudiron {
         void end();
 
 
-        virtual int available(void);
+        virtual int available(void) override;
 
 
-        virtual int peek(void);
+        virtual int peek(void) override;
 
 
-        virtual int read(void);
+        virtual int read(void) override;
 
 
-        int availableForWrite();
+        virtual int availableForWrite() override;
 
 
-        void flush();
+        virtual void flush() override;
 
 
-        virtual size_t write(uint8_t byte);
+        virtual size_t write(uint8_t byte) override;
 
 
         using Print::write;

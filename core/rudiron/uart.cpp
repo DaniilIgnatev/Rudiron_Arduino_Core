@@ -16,7 +16,7 @@ namespace Rudiron {
         IRQn_Type UART_IRQn,
         UART_BUFFER_INDEX_T *_rx_buffer_head,
         UART_BUFFER_INDEX_T *_rx_buffer_tail,
-        int *_rx_buffer
+        short *_rx_buffer
         ): Stream(){
         this->MDR_UART = MDR_UART;
         this->RST_CLK_PCLK_UART = RST_CLK_PCLK_UART;
