@@ -2,10 +2,9 @@
 
 namespace Rudiron
 {
-    nRF24::nRF24(){
-
+    nRF24::nRF24()
+    {
     }
-
 
     bool nRF24::begin(bool receiver)
     {
@@ -156,7 +155,7 @@ namespace Rudiron
         //Заполнение кольцевого буфера
         uint8_t package_length = nRF24_payload[0];
 
-        for (uint8_t i = 1; i < package_length; i++)
+        for (uint8_t i = 1; i < package_length + 1; i++)
         {
             uint8_t data = nRF24_payload[i];
 
@@ -192,6 +191,7 @@ namespace Rudiron
 
     void nRF24::flush()
     {
+        nRF24_FlushTX();
         while (nRF24_GetStatus_TXFIFO() != nRF24_STATUS_TXFIFO_EMPTY)
         {
         }
@@ -199,10 +199,44 @@ namespace Rudiron
 
     size_t nRF24::write(uint8_t byte)
     {
+        transmit(&byte, 1);
+    }
+
+    size_t nRF24::write(const uint8_t *buffer, size_t size)
+    {
+        const int integer_length = NRF24_PAYLOAD_LENGTH - 1;
+        size_t sent_counter = 0;
+
+        uint8_t dividend = size / integer_length;
+        uint8_t remainder = size % integer_length;
+
+        size_t buffer_offset = 0;
+
+        if (dividend)
+        {
+            for (uint8_t i = 0; i < dividend; i++)
+            {
+                buffer_offset = i * integer_length;
+                sent_counter += transmit(buffer + buffer_offset, integer_length);
+            }
+            buffer_offset += integer_length;
+        }
+
+        sent_counter += transmit(buffer + buffer_offset, remainder);
+        return sent_counter;
+    }
+
+    size_t nRF24::transmit(const uint8_t *buffer, uint8_t length)
+    {
+        flush();
         // uint8_t packets_lost = 0;
         uint8_t nRF24_payload[NRF24_PAYLOAD_LENGTH];
-        nRF24_payload[0] = 1;
-        nRF24_payload[1] = byte;
+
+        nRF24_payload[0] = length;
+        for (uint8_t i = 0; i < length; i++)
+        {
+            *(((uint8_t *)&nRF24_payload) + i + 1) = buffer[i];
+        }
         nRF24_TXResult tx_res = nRF24_TransmitPacket(nRF24_payload, NRF24_PAYLOAD_LENGTH);
 
         // uint8_t otx = nRF24_GetRetransmitCounters();

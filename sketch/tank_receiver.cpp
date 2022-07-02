@@ -10,8 +10,8 @@ void tank_setup(){
 
 void tank_loop(){
     if (nrf24.available()){
-        uint8_t data = nrf24.read();
-        Serial.println(data);
+        char data = nrf24.read();
+        Serial.print(data);
     }
 }
 

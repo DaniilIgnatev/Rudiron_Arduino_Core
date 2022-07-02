@@ -25,8 +25,10 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 namespace Rudiron
 {
     ///Потоко-ориентированный интерфейс для работы с nrf24
-    class nRF24: Stream
+    class nRF24: public Stream
     {
+        private:
+        size_t transmit(const uint8_t *buffer, uint8_t length);
     public:
         explicit nRF24();
 
@@ -45,6 +47,8 @@ namespace Rudiron
         virtual void flush() override;
 
         virtual size_t write(uint8_t byte) override;
+
+        virtual size_t write(const uint8_t *buffer, size_t size) override;
 
         using Print::write;
 

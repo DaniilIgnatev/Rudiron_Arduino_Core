@@ -11,6 +11,11 @@ void tank_setup(){
 uint8_t c = 0;
 
 void tank_loop(){
+    while (Serial.available()){
+        String data = Serial.readString();
+        nrf24.print(data);
+    }
+
     if (pressed1){
         c--;
     }

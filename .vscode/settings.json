@@ -14,7 +14,9 @@
         "typeinfo": "cpp",
         "mdr_bkp.h": "c",
         "limits": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "exception": "cpp",
+        "new": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

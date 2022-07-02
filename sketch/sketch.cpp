@@ -80,9 +80,5 @@ void loop()
 
     tank_loop();
 
-    while (Serial.available()){
-        Serial.print((char)Serial.read());
-    }
-
     delay(100);
 }
