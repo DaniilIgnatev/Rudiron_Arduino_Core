@@ -50,7 +50,7 @@ namespace Rudiron {
 
         UART_BUFFER_INDEX_T *_rx_buffer_tail;
 
-        short *_rx_buffer;
+        uint8_t *_rx_buffer;
 
     public:
         explicit UART(
@@ -63,7 +63,7 @@ namespace Rudiron {
             IRQn_Type UART_IRQn = IRQn_Type::SysTick_IRQn,
             UART_BUFFER_INDEX_T *_rx_buffer_head = nullptr,
             UART_BUFFER_INDEX_T *_rx_buffer_tail = nullptr,
-            short *_rx_buffer = nullptr
+            uint8_t *_rx_buffer = nullptr
             );
 
 

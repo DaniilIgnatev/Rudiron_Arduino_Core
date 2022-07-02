@@ -16,7 +16,7 @@ namespace Rudiron {
         IRQn_Type UART_IRQn,
         UART_BUFFER_INDEX_T *_rx_buffer_head,
         UART_BUFFER_INDEX_T *_rx_buffer_tail,
-        short *_rx_buffer
+        uint8_t *_rx_buffer
         ): Stream(){
         this->MDR_UART = MDR_UART;
         this->RST_CLK_PCLK_UART = RST_CLK_PCLK_UART;
@@ -119,16 +119,7 @@ namespace Rudiron {
             }
 
             int data = _rx_buffer[*_rx_buffer_tail];
-            // if (data != EndOfStream){
-                // _rx_buffer[*_rx_buffer_tail] = EndOfStream;
-                
-                //_rx_buffer_tail = (rx_buffer_index_t)(_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_LENGTH;
-                (*_rx_buffer_tail)++;
-                if (*_rx_buffer_tail == SERIAL_RX_BUFFER_LENGTH){
-                    *_rx_buffer_tail = 0;
-                }
-            // }
-
+            *_rx_buffer_tail = (UART_BUFFER_INDEX_T)(*_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_LENGTH;
             return data;
         }
         else{

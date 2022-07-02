@@ -65,17 +65,18 @@ extern "C"
   extern __IO uint64_t _micros;
 
 // UART
+///Фактически на 1 байт меньше, чтобы не переполнить буфер
 #define SERIAL_RX_BUFFER_LENGTH 64
 
   typedef uint8_t UART_BUFFER_INDEX_T;
 
   extern UART_BUFFER_INDEX_T _uart1_rx_buffer_head;
   extern UART_BUFFER_INDEX_T _uart1_rx_buffer_tail;
-  extern short _uart1_rx_buffer[SERIAL_RX_BUFFER_LENGTH];
+  extern uint8_t _uart1_rx_buffer[SERIAL_RX_BUFFER_LENGTH];
 
   extern UART_BUFFER_INDEX_T _uart2_rx_buffer_head;
   extern UART_BUFFER_INDEX_T _uart2_rx_buffer_tail;
-  extern short _uart2_rx_buffer[SERIAL_RX_BUFFER_LENGTH];
+  extern uint8_t _uart2_rx_buffer[SERIAL_RX_BUFFER_LENGTH];
 
   // CAN
   typedef struct
@@ -94,9 +95,10 @@ extern "C"
   extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head;
   extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail;
 
+///Фактически на 1 байт меньше, чтобы не переполнить буфер
 #define NRF24_PAYLOAD_LENGTH 32
-#define NRF24_RX_BUFFER_LENGTH NRF24_PAYLOAD_LENGTH * 2
-  extern short _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
+#define NRF24_RX_BUFFER_LENGTH (NRF24_PAYLOAD_LENGTH - 1) * 2
+  extern uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
 
 //Выбор отладочного интерфейса
 #ifdef MILANDR_EVAL_BOARD
