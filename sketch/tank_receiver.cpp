@@ -3,20 +3,16 @@
 #ifndef TRANSMITTER
 
 void tank_setup(){
-    // nRF24::begin(true, false);
+    if (!nrf24.begin(true)){
+        Serial.println("Nrf24 Error!");
+    }
 }
 
 void tank_loop(){
-    // if (nRF24::available()){
-    //     nRF24::read();
-    //     if (nRF24::rx_changed()){
-    //         for (int i = 0; i < nRF24::payload_length;i++){
-    //             Serial.print(nRF24::rx_data[i]);
-    //             Serial.print(";");
-    //         }
-    //         Serial.println();
-    //     }
-    // }
+    if (nrf24.available()){
+        uint8_t data = nrf24.read();
+        Serial.println(data);
+    }
 }
 
 #endif

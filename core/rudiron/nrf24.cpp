@@ -2,6 +2,11 @@
 
 namespace Rudiron
 {
+    nRF24::nRF24(){
+
+    }
+
+
     bool nRF24::begin(bool receiver)
     {
         nRF24_GPIO_Init();
@@ -119,7 +124,7 @@ namespace Rudiron
 #endif
     }
 
-    int peek(void)
+    int nRF24::peek(void)
     {
 #if NRF24_RX_BUFFER_LENGTH > 0
         return _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
@@ -128,7 +133,7 @@ namespace Rudiron
 #endif
     }
 
-    int read(void)
+    int nRF24::read(void)
     {
 #ifndef NRF24_USE_INTERRUPT
         uint8_t nRF24_payload[NRF24_PAYLOAD_LENGTH];
@@ -180,17 +185,19 @@ namespace Rudiron
         return data;
     }
 
-    int availableForWrite()
+    int nRF24::availableForWrite()
     {
         return nRF24_GetStatus_TXFIFO() == nRF24_STATUS_TXFIFO_EMPTY;
     }
 
-    void flush()
+    void nRF24::flush()
     {
-        while (nRF24_GetStatus_TXFIFO() != nRF24_STATUS_TXFIFO_EMPTY) {}
+        while (nRF24_GetStatus_TXFIFO() != nRF24_STATUS_TXFIFO_EMPTY)
+        {
+        }
     }
 
-    size_t write(uint8_t byte)
+    size_t nRF24::write(uint8_t byte)
     {
         // uint8_t packets_lost = 0;
         uint8_t nRF24_payload[NRF24_PAYLOAD_LENGTH];
@@ -222,4 +229,8 @@ namespace Rudiron
 
         return false;
     }
+
+#if NRF24_RX_BUFFER_LENGTH > 0
+    nRF24 nrf24;
+#endif
 }

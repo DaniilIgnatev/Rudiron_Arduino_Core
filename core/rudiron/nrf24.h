@@ -27,8 +27,9 @@ namespace Rudiron
     ///Потоко-ориентированный интерфейс для работы с nrf24
     class nRF24: Stream
     {
-    private:
     public:
+        explicit nRF24();
+
         bool begin(bool receiver);
 
         void end();
@@ -49,6 +50,10 @@ namespace Rudiron
 
         operator bool() { return true; }
     };
+
+#if NRF24_RX_BUFFER_LENGTH > 0
+    extern nRF24 nrf24;
+#endif
 }
 
 #endif

@@ -3,20 +3,26 @@
 #ifdef TRANSMITTER
 
 void tank_setup(){
-    nRF24::begin(false, false);
+    if (!nrf24.begin(false)){
+        Serial.println("Nrf24 Error!");
+    }
 }
+
+uint8_t c = 0;
 
 void tank_loop(){
     if (pressed1){
-        nRF24::tx_data[0] = nRF24::tx_data[0] - 1;
+        c--;
     }
 
     if (pressed3){
-        nRF24::tx_data[0] = nRF24::tx_data[0] + 1;
+        c++;
     }
 
     if (pressed2){
-        nRF24::write();
+        if (nrf24.write(c)){
+            Serial.println(c);
+        }
     }
 }
 
