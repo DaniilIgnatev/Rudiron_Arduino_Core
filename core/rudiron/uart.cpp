@@ -14,8 +14,8 @@ namespace Rudiron {
         PortPinName TX_PIN,
         PORT_InitTypeDef TX_PortInit,
         IRQn_Type UART_IRQn,
-        tx_buffer_index_t *_rx_buffer_head,
-        tx_buffer_index_t *_rx_buffer_tail,
+        UART_BUFFER_INDEX_T *_rx_buffer_head,
+        UART_BUFFER_INDEX_T *_rx_buffer_tail,
         int *_rx_buffer
         ): Stream(){
         this->MDR_UART = MDR_UART;
@@ -49,7 +49,7 @@ namespace Rudiron {
 
         //EnableIRQ
         if (IRQ_ENABLED){
-            for (tx_buffer_index_t i = 0; i < SERIAL_RX_BUFFER_SIZE; i++){
+            for (UART_BUFFER_INDEX_T i = 0; i < SERIAL_RX_BUFFER_SIZE; i++){
                 _rx_buffer[i] = EndOfStream;
             }
 

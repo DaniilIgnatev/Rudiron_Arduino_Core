@@ -5,7 +5,7 @@
 
 void setup()
 {
-    CLK::setCPUSpeed(CLK_Speed::high);
+    CLK::setCPUSpeed(CLK_Speed::low);
     pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
     pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);

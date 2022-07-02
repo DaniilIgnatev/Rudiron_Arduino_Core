@@ -32,7 +32,7 @@ extern "C" {
 
 
 // Peripheral libraries
-#include "../nrf24.h"
+#include "../nrf24l01.h"
 
 
 typedef enum {

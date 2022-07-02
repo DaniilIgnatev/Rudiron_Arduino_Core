@@ -46,9 +46,9 @@ namespace Rudiron {
 
         IRQn_Type UART_IRQn;
 
-        tx_buffer_index_t *_rx_buffer_head;
+        UART_BUFFER_INDEX_T *_rx_buffer_head;
 
-        tx_buffer_index_t *_rx_buffer_tail;
+        UART_BUFFER_INDEX_T *_rx_buffer_tail;
 
         int *_rx_buffer;
 
@@ -61,8 +61,8 @@ namespace Rudiron {
             PortPinName TX_PIN,
             PORT_InitTypeDef TX_PortInit,
             IRQn_Type UART_IRQn = IRQn_Type::SysTick_IRQn,
-            tx_buffer_index_t *_rx_buffer_head = nullptr,
-            tx_buffer_index_t *_rx_buffer_tail = nullptr,
+            UART_BUFFER_INDEX_T *_rx_buffer_head = nullptr,
+            UART_BUFFER_INDEX_T *_rx_buffer_tail = nullptr,
             int *_rx_buffer = nullptr
             );
 
