@@ -24,7 +24,7 @@ void setup()
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
-    
+
     tank_setup();
 }
 
@@ -79,6 +79,10 @@ void loop()
     }
 
     tank_loop();
+
+    while (Serial.available()){
+        Serial.print((char)Serial.read());
+    }
 
     delay(100);
 }

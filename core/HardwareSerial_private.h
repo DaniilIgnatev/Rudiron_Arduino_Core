@@ -105,7 +105,7 @@
 //    // No Parity error, read byte and store it in the buffer if there is
 //    // room
 //    unsigned char c = *_udr;
-//    rx_buffer_index_t i = (unsigned int)(_rx_buffer_head + 1) % SERIAL_RX_BUFFER_SIZE;
+//    rx_buffer_index_t i = (unsigned int)(_rx_buffer_head + 1) % SERIAL_RX_BUFFER_LENGTH;
 //
 //    // if we should be storing the received character into the location
 //    // just before the tail (meaning that the head would advance to the

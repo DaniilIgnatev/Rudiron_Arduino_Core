@@ -106,14 +106,14 @@ namespace Rudiron
 #if NRF24_RX_BUFFER_SIZE > 0
         bool endofstream = _nrf24_rx_buffer[_nrf24_rx_buffer_tail] == EndOfStream;
 
+#ifndef NRF24_USE_INTERRUPT
         if (endofstream)
         {
             return nRF24_GetStatus_RXFIFO() != nRF24_STATUS_RXFIFO_EMPTY;
         }
-        else
-        {
-            return endofstream;
-        }
+#endif
+
+        return !endofstream;
 #else
         return 0;
 #endif
@@ -149,12 +149,12 @@ namespace Rudiron
         }
 
         //ДОДЕЛАТЬ! заполнять кольцевой буфер тут
-        _uart1_rx_buffer[_uart1_rx_buffer_head] = (unsigned char)MDR_UART1->DR;
-        _uart1_rx_buffer_head++;
+        _nrf24_rx_buffer[_nrf24_rx_buffer_head] = (unsigned char)MDR_UART1->DR;
+        _nrf24_rx_buffer_head++;
 
-        if (_uart1_rx_buffer_head == SERIAL_RX_BUFFER_SIZE)
+        if (_nrf24_rx_buffer_head == NRF24_RX_BUFFER_LENGTH)
         {
-            _uart1_rx_buffer_head = 0;
+            _nrf24_rx_buffer_head = 0;
         }
 #endif
 
@@ -163,9 +163,9 @@ namespace Rudiron
         {
             _nrf24_rx_buffer[_nrf24_rx_buffer_tail] = EndOfStream;
 
-            //_nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)(_nrf24_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_SIZE;
+            //_nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)(_nrf24_rx_buffer_tail + 1) % NRF24_RX_BUFFER_LENGTH;
             _nrf24_rx_buffer_tail++;
-            if (_nrf24_rx_buffer_tail == SERIAL_RX_BUFFER_SIZE)
+            if (_nrf24_rx_buffer_tail == NRF24_RX_BUFFER_LENGTH)
             {
                 _nrf24_rx_buffer_tail = 0;
             }

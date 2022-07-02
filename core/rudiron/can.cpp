@@ -108,7 +108,7 @@ namespace Rudiron
 
     int CAN::available(void)
     {
-        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++)
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_LENGTH; i++)
         {
             if (_can_rx_buffer[i].ID == this->activeID)
             {
@@ -121,7 +121,7 @@ namespace Rudiron
 
     int CAN::peek(void)
     {
-        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++)
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_LENGTH; i++)
         {
             if (_can_rx_buffer[i].ID == this->activeID)
             {
@@ -140,7 +140,7 @@ namespace Rudiron
 
     int CAN::read(void)
     {
-        for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++)
+        for (uint8_t i = 0; i < CAN_RX_BUFFER_LENGTH; i++)
         {
             if (_can_rx_buffer[i].ID == this->activeID)
             {

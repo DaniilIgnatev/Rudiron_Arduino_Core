@@ -28,6 +28,7 @@
 #include "MDR_can.h"
 
 #include "nrf24l01.h"
+#include "Arduino.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -173,7 +174,7 @@ void CAN1_IRQHandler(void)
     int last_free_buffer = -1;
 
     //сканирование буферов
-    for (int i = CAN_RX_BUFFER_SIZE - 1; i >= 0; i--)
+    for (int i = CAN_RX_BUFFER_LENGTH - 1; i >= 0; i--)
     {
         if (_can_rx_buffer[i].ID == can_rx.Rx_Header.ID)
         {
@@ -271,18 +272,7 @@ void DMA_IRQHandler(void)
  *******************************************************************************/
 void UART1_IRQHandler(void)
 {
-    if (UART_GetFlagStatus(MDR_UART1, UART_FLAG_RXFF) != SET)
-    {
-        return;
-    }
-
-    _uart1_rx_buffer[_uart1_rx_buffer_head] = (unsigned char)MDR_UART1->DR;
-    _uart1_rx_buffer_head++;
-
-    if (_uart1_rx_buffer_head == SERIAL_RX_BUFFER_SIZE)
-    {
-        _uart1_rx_buffer_head = 0;
-    }
+    
 }
 
 /*******************************************************************************
@@ -298,13 +288,18 @@ void UART2_IRQHandler(void)
     {
         return;
     }
+    unsigned char data = (unsigned char)MDR_UART2->DR;
 
-    _uart2_rx_buffer[_uart2_rx_buffer_head] = (unsigned char)MDR_UART2->DR;
-    _uart2_rx_buffer_head++;
-
-    if (_uart2_rx_buffer_head == SERIAL_RX_BUFFER_SIZE)
+    UART_BUFFER_INDEX_T next_head = _uart2_rx_buffer_head + 1;
+    if (next_head == SERIAL_RX_BUFFER_LENGTH)
     {
-        _uart2_rx_buffer_head = 0;
+        next_head = 0;
+    }
+
+    if (next_head != _uart2_rx_buffer_tail)
+    {
+        _uart2_rx_buffer[_uart2_rx_buffer_head] = data;
+        _uart2_rx_buffer_head = next_head;
     }
 }
 

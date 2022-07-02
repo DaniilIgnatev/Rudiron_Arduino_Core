@@ -30,7 +30,7 @@ void initVariant() {
     emptyPackage.ID = 0;
     emptyPackage.Mask = 0;
 
-    for (uint8_t i = 0; i < CAN_RX_BUFFER_SIZE; i++){
+    for (uint8_t i = 0; i < CAN_RX_BUFFER_LENGTH; i++){
       _can_rx_buffer[i] = emptyPackage;
     }
 }

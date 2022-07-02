@@ -49,7 +49,7 @@ namespace Rudiron {
 
         //EnableIRQ
         if (IRQ_ENABLED){
-            for (UART_BUFFER_INDEX_T i = 0; i < SERIAL_RX_BUFFER_SIZE; i++){
+            for (UART_BUFFER_INDEX_T i = 0; i < SERIAL_RX_BUFFER_LENGTH; i++){
                 _rx_buffer[i] = EndOfStream;
             }
 
@@ -89,7 +89,7 @@ namespace Rudiron {
 
     int UART::available() {
         if (IRQ_ENABLED){
-            return _rx_buffer[*_rx_buffer_tail] != EndOfStream;
+            return *_rx_buffer_tail != * _rx_buffer_head;
         }
         else{
             return UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF);
@@ -113,16 +113,21 @@ namespace Rudiron {
 
     int UART::read() {
         if (IRQ_ENABLED){
+            if (*_rx_buffer_tail == * _rx_buffer_head){
+                //нет данных для чтения
+                return EndOfStream;
+            }
+
             int data = _rx_buffer[*_rx_buffer_tail];
-            if (data != EndOfStream){
-                _rx_buffer[*_rx_buffer_tail] = EndOfStream;
+            // if (data != EndOfStream){
+                // _rx_buffer[*_rx_buffer_tail] = EndOfStream;
                 
-                //_rx_buffer_tail = (rx_buffer_index_t)(_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_SIZE;
+                //_rx_buffer_tail = (rx_buffer_index_t)(_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_LENGTH;
                 (*_rx_buffer_tail)++;
-                if (*_rx_buffer_tail == SERIAL_RX_BUFFER_SIZE){
+                if (*_rx_buffer_tail == SERIAL_RX_BUFFER_LENGTH){
                     *_rx_buffer_tail = 0;
                 }
-            }
+            // }
 
             return data;
         }
