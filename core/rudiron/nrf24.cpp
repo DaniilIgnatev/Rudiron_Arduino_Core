@@ -8,10 +8,10 @@ namespace Rudiron
 
         Rudiron::SPI::getSPI2().begin();
 
-        //работа через прерывания
-        #ifdef NRF24_USE_INTERRUPT
-            nRF24_InitIRQ();
-        #endif
+//работа через прерывания
+#ifdef NRF24_USE_INTERRUPT
+        nRF24_InitIRQ();
+#endif
 
         // RX/TX disabled
         nRF24_CE_L;
@@ -103,8 +103,8 @@ namespace Rudiron
 
     int nRF24::available()
     {
-#if NRF24_RX_BUFFER_SIZE > 0
-        bool endofstream = _nrf24_rx_buffer[_nrf24_rx_buffer_tail] == EndOfStream;
+#if NRF24_RX_BUFFER_LENGTH > 0
+        bool endofstream = _nrf24_rx_buffer_tail == _nrf24_rx_buffer_head;
 
 #ifndef NRF24_USE_INTERRUPT
         if (endofstream)
@@ -121,7 +121,7 @@ namespace Rudiron
 
     int peek(void)
     {
-#if NRF24_RX_BUFFER_SIZE > 0
+#if NRF24_RX_BUFFER_LENGTH > 0
         return _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
 #else
         return EndOfStream;
@@ -148,59 +148,71 @@ namespace Rudiron
             return EndOfStream;
         }
 
-        //ДОДЕЛАТЬ! заполнять кольцевой буфер тут
-        _nrf24_rx_buffer[_nrf24_rx_buffer_head] = (unsigned char)MDR_UART1->DR;
-        _nrf24_rx_buffer_head++;
+        //Заполнение кольцевого буфера
+        uint8_t package_length = nRF24_payload[0];
 
-        if (_nrf24_rx_buffer_head == NRF24_RX_BUFFER_LENGTH)
+        for (uint8_t i = 1; i < package_length; i++)
         {
-            _nrf24_rx_buffer_head = 0;
-        }
-#endif
+            uint8_t data = nRF24_payload[i];
 
-        int data = _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
-        if (data != EndOfStream)
-        {
-            _nrf24_rx_buffer[_nrf24_rx_buffer_tail] = EndOfStream;
-
-            //_nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)(_nrf24_rx_buffer_tail + 1) % NRF24_RX_BUFFER_LENGTH;
-            _nrf24_rx_buffer_tail++;
-            if (_nrf24_rx_buffer_tail == NRF24_RX_BUFFER_LENGTH)
+            NRF24_BUFFER_INDEX_T next_head = _nrf24_rx_buffer_head + 1;
+            if (next_head == NRF24_RX_BUFFER_LENGTH)
             {
-                _nrf24_rx_buffer_tail = 0;
+                next_head = 0;
+            }
+
+            if (next_head != _nrf24_rx_buffer_tail)
+            {
+                _nrf24_rx_buffer[_nrf24_rx_buffer_head] = data;
+                _nrf24_rx_buffer_head = next_head;
             }
         }
+#endif
+        //Чтение кольцевого буфера
+        if (_nrf24_rx_buffer_tail == _nrf24_rx_buffer_head)
+        {
+            //нет данных для чтения
+            return EndOfStream;
+        }
 
+        int data = _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
+        _nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)(_nrf24_rx_buffer_tail + 1) % NRF24_RX_BUFFER_LENGTH;
         return data;
     }
 
-
-    int availableForWrite(){
-
+    int availableForWrite()
+    {
+        return nRF24_GetStatus_TXFIFO() == nRF24_STATUS_TXFIFO_EMPTY;
     }
 
-    void flush(){
-
+    void flush()
+    {
+        while (nRF24_GetStatus_TXFIFO() != nRF24_STATUS_TXFIFO_EMPTY) {}
     }
 
-    size_t write(uint8_t byte){
-        uint8_t packets_lost = 0;
+    size_t write(uint8_t byte)
+    {
+        // uint8_t packets_lost = 0;
         uint8_t nRF24_payload[NRF24_PAYLOAD_LENGTH];
+        nRF24_payload[0] = 1;
+        nRF24_payload[1] = byte;
         nRF24_TXResult tx_res = nRF24_TransmitPacket(nRF24_payload, NRF24_PAYLOAD_LENGTH);
-        uint8_t otx = nRF24_GetRetransmitCounters();
-        uint8_t otx_plos_cnt = (otx & nRF24_MASK_PLOS_CNT) >> 4; // packets lost counter
+
+        // uint8_t otx = nRF24_GetRetransmitCounters();
+        // uint8_t otx_plos_cnt = (otx & nRF24_MASK_PLOS_CNT) >> 4; // packets lost counter
         // uint8_t otx_arc_cnt  = (otx & nRF24_MASK_ARC_CNT); // auto retransmissions counter
+
         switch (tx_res)
         {
         case nRF24_TX_SUCCESS:
             // UART_SendStr("OK");
-            break;
+            return true;
         case nRF24_TX_TIMEOUT:
             // UART_SendStr("TIMEOUT");
             break;
         case nRF24_TX_MAXRT:
             // UART_SendStr("MAX RETRANSMIT");
-            packets_lost += otx_plos_cnt;
+            // packets_lost += otx_plos_cnt;
             nRF24_ResetPLOS();
             break;
         default:
@@ -208,6 +220,6 @@ namespace Rudiron
             break;
         }
 
-        return 0;
+        return false;
     }
 }

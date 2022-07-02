@@ -89,15 +89,15 @@ extern "C"
 #define CAN_RX_BUFFER_LENGTH 0
   extern CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_LENGTH];
 
-// NRF24
-// #define NRF24_USE_INTERRUPT
+  // NRF24
+  // #define NRF24_USE_INTERRUPT
   typedef uint8_t NRF24_BUFFER_INDEX_T;
   extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head;
   extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail;
 
-///Фактически на 1 байт меньше, чтобы не переполнить буфер
 #define NRF24_PAYLOAD_LENGTH 32
-#define NRF24_RX_BUFFER_LENGTH (NRF24_PAYLOAD_LENGTH - 1) * 2
+///Фактически на 1 байт меньше, чтобы не переполнить буфер
+#define NRF24_RX_BUFFER_LENGTH 63
   extern uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
 
 //Выбор отладочного интерфейса

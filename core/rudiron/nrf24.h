@@ -18,6 +18,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef NRF24_H
 #define NRF24_H
 
+#include "MDR_config.h"
 #include "Stream.h"
 #include "nrf24l01.h"
 
