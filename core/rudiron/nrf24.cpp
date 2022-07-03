@@ -199,7 +199,7 @@ namespace Rudiron
 
     size_t nRF24::write(uint8_t byte)
     {
-        transmit(&byte, 1);
+        return transmit(&byte, 1);
     }
 
     size_t nRF24::write(const uint8_t *buffer, size_t size)
@@ -247,7 +247,7 @@ namespace Rudiron
         {
         case nRF24_TX_SUCCESS:
             // UART_SendStr("OK");
-            return true;
+            return length;
         case nRF24_TX_TIMEOUT:
             // UART_SendStr("TIMEOUT");
             break;

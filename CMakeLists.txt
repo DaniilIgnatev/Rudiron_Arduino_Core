@@ -97,7 +97,7 @@ file(GLOB_RECURSE system_sources
         ${system_path}/*
         )
 
-set(variants_path "${CMAKE_SOURCE_DIR}/variants/${board_name}")
+set(variants_path "${CMAKE_SOURCE_DIR}/variants/${cpu_name}/${board_name}")
 file(GLOB_RECURSE variants_sources
         ${variants_path}/*
         )
