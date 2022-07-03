@@ -1,6 +1,6 @@
 #pragma once
 
-#define TRANSMITTER
+// #define TRANSMITTER
 
 #include "Arduino.h"
 #include "rudiron/gpio.h"

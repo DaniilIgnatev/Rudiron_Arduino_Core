@@ -180,7 +180,11 @@ namespace Rudiron
         }
 
         int data = _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
-        _nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)(_nrf24_rx_buffer_tail + 1) % NRF24_RX_BUFFER_LENGTH;
+        NRF24_BUFFER_INDEX_T next_tail = _nrf24_rx_buffer_tail + 1;
+        if (next_tail == NRF24_RX_BUFFER_LENGTH){
+            next_tail = 0;
+        }
+        _nrf24_rx_buffer_tail = next_tail;
         return data;
     }
 

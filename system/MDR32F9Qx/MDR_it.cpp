@@ -24,10 +24,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "MDR_it.h"
 
+#include "config.h"
+#include "MDR_port.h"
+#include "MDR_bkp.h"
+
 #include "MDR_uart.h"
 #include "MDR_can.h"
-
 #include "nrf24l01.h"
+
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/

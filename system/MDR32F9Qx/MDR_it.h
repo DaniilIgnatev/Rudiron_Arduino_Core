@@ -26,8 +26,6 @@
 #define __MDR32F9QX_IT_H
 
 #include "MDR32Fx.h"
-#include "MDR_port.h"
-#include "MDR_bkp.h"
 
 #ifdef __cplusplus
 extern "C" {  // only need to export C interface if

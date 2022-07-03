@@ -119,7 +119,11 @@ namespace Rudiron {
             }
 
             int data = _rx_buffer[*_rx_buffer_tail];
-            *_rx_buffer_tail = (UART_BUFFER_INDEX_T)(*_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_LENGTH;
+            UART_BUFFER_INDEX_T next_tail = *_rx_buffer_tail + 1;
+            if (next_tail == SERIAL_RX_BUFFER_LENGTH){
+                next_tail = 0;
+            }
+            *_rx_buffer_tail = next_tail;
             return data;
         }
         else{

@@ -18,8 +18,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef CLK_H
 #define CLK_H
 
-#include "MDR_config.h"
-#include "MDR32Fx.h"
+#include "config.h"
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"
 #include "MDR_eeprom.h"

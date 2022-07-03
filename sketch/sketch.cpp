@@ -1,6 +1,6 @@
-#include "sketch.hpp"
-#include "tank_receiver.hpp"
-#include "tank_transmitter.hpp"
+#include "sketch.h"
+#include "tank_receiver.h"
+#include "tank_transmitter.h"
 
 
 void setup()

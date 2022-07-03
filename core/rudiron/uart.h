@@ -19,8 +19,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define UART_H
 
 
-#include "MDR_config.h"
-#include "MDR32Fx.h"
+#include "config.h"
 #include "MDR_uart.h"
 #include "MDR_port.h"
 #include "MDR_rst_clk.h"

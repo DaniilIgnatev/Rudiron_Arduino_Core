@@ -1,4 +1,4 @@
-#include "tank_transmitter.hpp"
+#include "tank_transmitter.h"
 
 #ifdef TRANSMITTER
 

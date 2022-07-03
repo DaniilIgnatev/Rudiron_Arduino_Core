@@ -1,4 +1,4 @@
-#include "tank_receiver.hpp"
+#include "tank_receiver.h"
 
 #ifndef TRANSMITTER
 
@@ -10,7 +10,7 @@ void tank_setup(){
 
 void tank_loop(){
     if (nrf24.available()){
-        char data = nrf24.read();
+        String data = nrf24.readString();
         Serial.print(data);
     }
 }

@@ -19,6 +19,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define GPIO_H
 
 
+#include "config.h"
 #include "MDR_config.h"
 #include "MDR32Fx.h"
 #include "MDR_port.h"
