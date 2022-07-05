@@ -32,6 +32,8 @@
 #include "MDR_can.h"
 #include "nrf24l01.h"
 
+#include "Arduino.h"
+
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -167,7 +169,7 @@ CAN_RxMsgTypeDef can_rx;
  *******************************************************************************/
 void CAN1_IRQHandler(void)
 {
-#if CAN_RX_BUFFER_SIZE > 0
+#if CAN_RX_BUFFER_LENGTH > 0
     CAN_GetRawReceivedData(MDR_CAN1, 1, &can_rx);
 
     uint8_t *bytes_to_write_pointer = (uint8_t *)&(can_rx.Data);

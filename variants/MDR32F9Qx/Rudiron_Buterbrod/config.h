@@ -39,7 +39,7 @@ typedef struct
 extern CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_LENGTH];
 
 // NRF24
-#define NRF24_USE_INTERRUPT
+// #define NRF24_USE_INTERRUPT
 typedef uint8_t NRF24_BUFFER_INDEX_T;
 extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head;
 extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail;

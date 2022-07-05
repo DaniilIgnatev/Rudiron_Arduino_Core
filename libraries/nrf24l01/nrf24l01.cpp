@@ -480,7 +480,7 @@ void nRF24_maskIRQ(uint8_t tx, uint8_t fail, uint8_t rx){
 //   data - value to transmit via SPI
 // return: value received from SPI
 uint8_t nRF24_LL_RW(uint8_t data) {
-    Rudiron::SPI::getSPI2().begin();
+    Rudiron::SPI::getSPI2().begin(1000000);
 	return Rudiron::SPI::getSPI2().read_write(data);
 }
 

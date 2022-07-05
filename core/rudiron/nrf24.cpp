@@ -2,15 +2,14 @@
 
 namespace Rudiron
 {
-    nRF24::nRF24()
+    nRF24::nRF24() : Stream()
     {
+        _timeout = 100; //надежный таймаут чтения сообщений неопределенной длины
     }
 
     bool nRF24::begin(bool receiver)
     {
         nRF24_GPIO_Init();
-
-        Rudiron::SPI::getSPI2().begin();
 
 //работа через прерывания
 #ifdef NRF24_USE_INTERRUPT
@@ -57,7 +56,7 @@ namespace Rudiron
         {
             nRF24_SetRXPipe(nRF24_PIPE0, nRF24_AA_ON, NRF24_PAYLOAD_LENGTH);
 
-            nRF24_SetTXPower(nRF24_TXPWR_18dBm);
+            nRF24_SetTXPower(nRF24_TXPWR_12dBm);
 
             // Set operational mode (PRX == receiver)
             nRF24_SetOperationalMode(nRF24_MODE_RX);
@@ -79,8 +78,8 @@ namespace Rudiron
             // Set TX power (maximum)
             nRF24_SetTXPower(nRF24_TXPWR_0dBm);
 
-            // Configure auto retransmit: 10 retransmissions with pause of 2500s in between
-            nRF24_SetAutoRetr(nRF24_ARD_2500us, 10);
+            // Configure auto retransmit: 10 retransmissions with pause of 250us in between
+            nRF24_SetAutoRetr(nRF24_ARD_250us, 10);
 
             // Enable Auto-ACK for pipe#0 (for ACK packets)
             nRF24_EnableAA(nRF24_PIPE0);
@@ -152,23 +151,26 @@ namespace Rudiron
             return EndOfStream;
         }
 
-        //Заполнение кольцевого буфера
-        uint8_t package_length = nRF24_payload[0];
-
-        for (uint8_t i = 1; i < package_length + 1; i++)
+        if (pipe != nRF24_RX_EMPTY)
         {
-            uint8_t data = nRF24_payload[i];
+            //Заполнение кольцевого буфера
+            uint8_t package_length = nRF24_payload[0];
 
-            NRF24_BUFFER_INDEX_T next_head = _nrf24_rx_buffer_head + 1;
-            if (next_head == NRF24_RX_BUFFER_LENGTH)
+            for (uint8_t i = 1; i < package_length + 1; i++)
             {
-                next_head = 0;
-            }
+                uint8_t data = nRF24_payload[i];
 
-            if (next_head != _nrf24_rx_buffer_tail)
-            {
-                _nrf24_rx_buffer[_nrf24_rx_buffer_head] = data;
-                _nrf24_rx_buffer_head = next_head;
+                NRF24_BUFFER_INDEX_T next_head = _nrf24_rx_buffer_head + 1;
+                if (next_head == NRF24_RX_BUFFER_LENGTH)
+                {
+                    next_head = 0;
+                }
+
+                if (next_head != _nrf24_rx_buffer_tail)
+                {
+                    _nrf24_rx_buffer[_nrf24_rx_buffer_head] = data;
+                    _nrf24_rx_buffer_head = next_head;
+                }
             }
         }
 #endif
@@ -181,7 +183,8 @@ namespace Rudiron
 
         int data = _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
         NRF24_BUFFER_INDEX_T next_tail = _nrf24_rx_buffer_tail + 1;
-        if (next_tail == NRF24_RX_BUFFER_LENGTH){
+        if (next_tail == NRF24_RX_BUFFER_LENGTH)
+        {
             next_tail = 0;
         }
         _nrf24_rx_buffer_tail = next_tail;

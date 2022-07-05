@@ -13,6 +13,8 @@ namespace Rudiron
         PortPinName TX_PIN,
         PORT_InitTypeDef TX_PortInit)
     {
+        _timeout = 100;
+
         this->MDR_CAN = MDR_CAN;
         this->RST_CLK_PCLK_CAN = RST_CLK_PCLK_CAN;
         this->CAN_IRQn = CAN_IRQn;
@@ -166,7 +168,8 @@ namespace Rudiron
         return -1;
     }
 
-    size_t CAN::transmit(const uint8_t *buffer, size_t size){
+    size_t CAN::transmit(const uint8_t *buffer, size_t size)
+    {
         CAN_TxMsgTypeDef message;
         message.IDE = activeID_extended ? CAN_ID_EXT : CAN_ID_STD;
         message.DLC = size;
@@ -177,9 +180,9 @@ namespace Rudiron
 
         for (uint8_t i = 0; i < size; i++)
         {
-            *(((uint8_t*)&message.Data) + i) = buffer[i];
+            *(((uint8_t *)&message.Data) + i) = buffer[i];
         }
-        
+
         CAN_Transmit(MDR_CAN, 0, &message);
         CLK::delay_micros(250);
 
@@ -195,13 +198,14 @@ namespace Rudiron
     size_t CAN::write(const uint8_t *buffer, size_t size)
     {
         size_t sent_counter = 0;
-        
+
         uint8_t dividend = size / 8;
         uint8_t remainder = size % 8;
 
         size_t buffer_offset = 0;
 
-        if (dividend){
+        if (dividend)
+        {
             for (uint8_t i = 0; i < dividend; i++)
             {
                 buffer_offset = i * 8;
