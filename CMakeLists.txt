@@ -21,10 +21,11 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # Path to toolchain file. This one has to be before 'project()' below
 set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/arm-none-eabi-gcc.cmake")
 
-enable_language(C ASM)
+
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS OFF)
+enable_language(C ASM)
 
 # Setup project
 project(Arduino_Core_Rudiron)
