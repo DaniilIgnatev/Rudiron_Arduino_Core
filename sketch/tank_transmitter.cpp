@@ -2,13 +2,20 @@
 
 #ifdef TRANSMITTER
 
+uint8_t package[3];
+
 void tank_setup(){
+    pinMode(LED_BUILTIN_1, OUTPUT);
+    pinMode(LED_BUILTIN_2, OUTPUT);
+
     if (!nrf24.begin(false)){
         Serial.println("Nrf24 Error!");
+        return;
     }
 }
 
-uint8_t c = 0;
+bool pressed2_last = false;
+bool isForwards = false;
 
 void tank_loop(){
     while (Serial.available()){
@@ -17,18 +24,26 @@ void tank_loop(){
     }
 
     if (pressed1){
-        c--;
+        package[1] = true;
     }
 
     if (pressed3){
-        c++;
+        package[2] = true;
     }
 
-    if (pressed2){
-        if (nrf24.write(c)){
-            Serial.println(c);
-        }
+    if (!pressed2_last && pressed2){
+        isForwards = !isForwards;
+        digitalWrite(LED_BUILTIN_1, !isForwards);
+        digitalWrite(LED_BUILTIN_2, isForwards);
     }
+    pressed2_last = pressed2;
+    package[0] = isForwards;
+    
+    if (nrf24.availableForWrite()){
+        nrf24.write(package, 3);
+    }
+
+    delay(100);
 }
 
 #endif

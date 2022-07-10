@@ -179,8 +179,8 @@ namespace Rudiron
             return EndOfStream;
         }
 
-        int data = _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
-        _nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)(_nrf24_rx_buffer_tail + 1) % NRF24_RX_BUFFER_LENGTH;
+        unsigned char data = _nrf24_rx_buffer[_nrf24_rx_buffer_tail];
+        _nrf24_rx_buffer_tail = (NRF24_BUFFER_INDEX_T)((_nrf24_rx_buffer_tail + 1) % NRF24_RX_BUFFER_LENGTH);
         return data;
     }
 

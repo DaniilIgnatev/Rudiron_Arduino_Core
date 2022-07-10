@@ -190,15 +190,6 @@ extern "C"
   typedef bool boolean;
   typedef uint8_t byte;
 
-  inline void init(void)
-  {
-    Rudiron::CLK::initialize();
-    RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
-    SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
-    SCB->VTOR = 0x08000000;
-    __enable_irq();
-  }
-
   void initVariant() __attribute__((weak));
 
   void setupUSB() __attribute__((weak));
@@ -238,6 +229,19 @@ extern "C"
 
   void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode);
   void detachInterrupt(uint8_t interruptNum);
+
+  inline void init(void)
+  {
+    Rudiron::CLK::initialize();
+    RST_CLK_PCLKcmd((RST_CLK_PCLK_RST_CLK), ENABLE);
+    SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
+    SCB->VTOR = 0x08000000;
+    __enable_irq();
+
+    pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
+    pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
+    pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
+  }
 
   void setup(void);
   void loop(void);
