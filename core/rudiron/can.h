@@ -18,6 +18,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef CAN_H
 #define CAN_H
 
+#include "config.h"
 #include "Stream.h"
 #include "MDR32Fx.h"
 #include "MDR_config.h"

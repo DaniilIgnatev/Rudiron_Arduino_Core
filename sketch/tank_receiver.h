@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sketch.hpp"
+#include "sketch.h"
 
 #ifndef TRANSMITTER
 

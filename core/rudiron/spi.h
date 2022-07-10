@@ -54,10 +54,14 @@ namespace Rudiron {
         //Посылается в шину для получения данных (No operation)
         uint8_t NOP = (uint8_t) 0xFF;
 
-
-        bool begin(
+        /*
+            Пример настроек:
             uint32_t speed = 4000000, uint16_t SSP_SPH = SSP_SPH_1Edge, uint16_t SSP_SPO = SSP_SPO_Low,
             uint16_t SSP_WordLength = SSP_WordLength8b, uint16_t SSP_FRF = SSP_FRF_SPI_Motorola, uint16_t SSP_HardwareFlowControl = SSP_HardwareFlowControl_SSE
+        */
+        bool begin(
+            uint32_t speed, uint16_t SSP_SPH, uint16_t SSP_SPO,
+            uint16_t SSP_WordLength, uint16_t SSP_FRF, uint16_t SSP_HardwareFlowControl
             );
 
 

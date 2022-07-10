@@ -1,4 +1,4 @@
-#include "tank_receiver.hpp"
+#include "tank_receiver.h"
 
 #ifndef TRANSMITTER
 

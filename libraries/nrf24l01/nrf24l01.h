@@ -21,6 +21,7 @@ extern "C"
 {
 #endif
 
+#include "config.h"
 #include "MDR_config.h"
 #include "MDR32Fx.h"
 #include "MDR_rst_clk.h"

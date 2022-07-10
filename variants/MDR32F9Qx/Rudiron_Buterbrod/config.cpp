@@ -1,8 +1,8 @@
-#include "MDR_config.h"
+#include "config.h"
 
 
 //CLK
-__IO uint64_t _micros = 0;
+volatile uint64_t _micros = 0;
 
 
 //UART

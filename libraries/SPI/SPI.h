@@ -153,7 +153,7 @@
      uint16_t SPH = settings.dataMode % 2 == 0 ? SSP_SPH_1Edge : SSP_SPH_2Edge;
      uint16_t SPO = settings.dataMode < 2 ? SSP_SPO_Low : SSP_SPO_High;
 
-     spi_instance.begin(settings.clock, SPH, SPO);
+     spi_instance.begin(settings.clock, SPH, SPO, SSP_WordLength8b, SSP_FRF_SPI_Motorola, SSP_HardwareFlowControl_SSE);
    }
 
    // Write to the SPI bus (MOSI pin) and also receive (MISO pin)

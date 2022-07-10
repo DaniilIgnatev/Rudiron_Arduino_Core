@@ -1,13 +1,13 @@
 #include "uart.h"
 #include "clk.h"
 
-
 #define IRQ_ENABLED UART_IRQn != IRQn::SysTick_IRQn
 
-namespace Rudiron {
+namespace Rudiron
+{
 
     UART::UART(
-        MDR_UART_TypeDef* MDR_UART,
+        MDR_UART_TypeDef *MDR_UART,
         uint32_t RST_CLK_PCLK_UART,
         PortPinName RX_PIN,
         PORT_InitTypeDef RX_PortInit,
@@ -16,8 +16,10 @@ namespace Rudiron {
         IRQn_Type UART_IRQn,
         UART_BUFFER_INDEX_T *_rx_buffer_head,
         UART_BUFFER_INDEX_T *_rx_buffer_tail,
-        uint8_t *_rx_buffer
-        ): Stream(){
+        uint8_t *_rx_buffer) : Stream()
+    {
+        _timeout = 100;
+
         this->MDR_UART = MDR_UART;
         this->RST_CLK_PCLK_UART = RST_CLK_PCLK_UART;
         this->RX_PIN = RX_PIN;
@@ -30,13 +32,12 @@ namespace Rudiron {
         this->_rx_buffer = _rx_buffer;
     }
 
-
     bool UART::begin(
-            uint32_t baudRate,
-            uint16_t UART_WordLength,
-            uint16_t UART_Parity,
-            uint16_t UART_StopBits
-            ){
+        uint32_t baudRate,
+        uint16_t UART_WordLength,
+        uint16_t UART_Parity,
+        uint16_t UART_StopBits)
+    {
 
         GPIO::configPin(RX_PIN, RX_PortInit);
         GPIO::configPin(TX_PIN, TX_PortInit);
@@ -47,9 +48,11 @@ namespace Rudiron {
         /* Set the HCLK division factor*/
         UART_BRGInit(MDR_UART, CLK::getHCLKdiv());
 
-        //EnableIRQ
-        if (IRQ_ENABLED){
-            for (UART_BUFFER_INDEX_T i = 0; i < SERIAL_RX_BUFFER_LENGTH; i++){
+        // EnableIRQ
+        if (IRQ_ENABLED)
+        {
+            for (UART_BUFFER_INDEX_T i = 0; i < SERIAL_RX_BUFFER_LENGTH; i++)
+            {
                 _rx_buffer[i] = EndOfStream;
             }
 
@@ -69,40 +72,47 @@ namespace Rudiron {
         /* Configure UART parameters*/
         bool status = UART_Init(MDR_UART, &UART_InitStructure);
 
-        if (status) {
+        if (status)
+        {
             UART_Cmd(MDR_UART, ENABLE);
         }
 
         return status;
     }
 
-
-    void UART::end() {
+    void UART::end()
+    {
         UART_Cmd(MDR_UART, DISABLE);
-        if (IRQ_ENABLED){
+        if (IRQ_ENABLED)
+        {
             NVIC_DisableIRQ(UART_IRQn);
             UART_ITConfig(MDR_UART, UART_IT_RX, DISABLE);
         }
         RST_CLK_PCLKcmd(RST_CLK_PCLK_UART, DISABLE);
     }
 
-
-    int UART::available() {
-        if (IRQ_ENABLED){
-            return *_rx_buffer_tail != * _rx_buffer_head;
+    int UART::available()
+    {
+        if (IRQ_ENABLED)
+        {
+            return *_rx_buffer_tail != *_rx_buffer_head;
         }
-        else{
+        else
+        {
             return UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF);
         }
     }
 
-
-    int UART::peek() {
-        if (IRQ_ENABLED){
+    int UART::peek()
+    {
+        if (IRQ_ENABLED)
+        {
             return _rx_buffer[*_rx_buffer_tail];
         }
-        else{
-            if (UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF) != SET) {
+        else
+        {
+            if (UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF) != SET)
+            {
                 return EndOfStream;
             }
 
@@ -110,20 +120,29 @@ namespace Rudiron {
         }
     }
 
-
-    int UART::read() {
-        if (IRQ_ENABLED){
-            if (*_rx_buffer_tail == * _rx_buffer_head){
+    int UART::read()
+    {
+        if (IRQ_ENABLED)
+        {
+            if (*_rx_buffer_tail == *_rx_buffer_head)
+            {
                 //нет данных для чтения
                 return EndOfStream;
             }
 
             int data = _rx_buffer[*_rx_buffer_tail];
-            *_rx_buffer_tail = (UART_BUFFER_INDEX_T)((*_rx_buffer_tail + 1) % SERIAL_RX_BUFFER_LENGTH);
+            UART_BUFFER_INDEX_T next_tail = *_rx_buffer_tail + 1;
+            if (next_tail == SERIAL_RX_BUFFER_LENGTH)
+            {
+                next_tail = 0;
+            }
+            *_rx_buffer_tail = next_tail;
             return data;
         }
-        else{
-            if (UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF) != SET) {
+        else
+        {
+            if (UART_GetFlagStatus(MDR_UART, UART_FLAG_RXFF) != SET)
+            {
                 return EndOfStream;
             }
 
@@ -131,29 +150,33 @@ namespace Rudiron {
         }
     }
 
-
-    int UART::availableForWrite() {
+    int UART::availableForWrite()
+    {
         return UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE);
     }
 
-
-    void UART::flush() {
-        while (UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE) != SET) {}
+    void UART::flush()
+    {
+        while (UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE) != SET)
+        {
+        }
     }
 
-
-    size_t UART::write(uint8_t byte) {
+    size_t UART::write(uint8_t byte)
+    {
         /* Check TXFE flag*/
-        while (UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE) != SET) {}
+        while (UART_GetFlagStatus(MDR_UART, UART_FLAG_TXFE) != SET)
+        {
+        }
 
         /* Send Data */
-        UART_SendData(MDR_UART, (uint16_t) byte);
+        UART_SendData(MDR_UART, (uint16_t)byte);
 
         return true;
     };
 
-
-    UART* UART::getUART1(){
+    UART *UART::getUART1()
+    {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
         RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
@@ -180,8 +203,8 @@ namespace Rudiron {
         return &uart;
     }
 
-
-    UART* UART::getUART2(){
+    UART *UART::getUART2()
+    {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
         RX_PortInit.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;

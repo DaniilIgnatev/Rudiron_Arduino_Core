@@ -21,9 +21,9 @@ set(CMAKE_SYSTEM_PROCESSOR ARM)
 
 #проверка нахождения gcc в path
 if (WIN32)
-    string(FIND "$ENV{PATH}" "components\\gcc-arm-none-eabi\\bin" TOOLCHAIN_FOUND_IN_PATH)
+    string(FIND "$ENV{PATH}" "gcc-arm-none-eabi\\bin" TOOLCHAIN_FOUND_IN_PATH)
 else ()
-    string(FIND "$ENV{PATH}" "components/gcc-arm-none-eabi/bin" TOOLCHAIN_FOUND_IN_PATH)
+    string(FIND "$ENV{PATH}" "gcc-arm-none-eabi/bin" TOOLCHAIN_FOUND_IN_PATH)
 endif ()
 
 if (NOT ${TOOLCHAIN_FOUND_IN_PATH} MATCHES "-1")

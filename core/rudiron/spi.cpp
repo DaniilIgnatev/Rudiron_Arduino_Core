@@ -19,14 +19,24 @@ namespace Rudiron
         SSP_DeInit(MDR_SSP);
 
         //Установка делителя тактовой частоты SPI1
+        //Частота тактирования модуля = 16Mhz
         SSP_BRGInit(MDR_SSP, CLK::getHCLKdiv());
 
-        SSP_StructInit(&SPI_InitStructure); //значения по умолчанию
-        SPI_InitStructure.SSP_SCR = 0x0;    //коэффициент скорости обмена
-        SPI_InitStructure.SSP_CPSDVSR = 12; //делитель частоты
-        //частота SPI = 48 / 12 (1 + 0) = 4Мгц
-        //частота SPI = 80 / 12 (1 + 0) = 6.(6)Мгц
+        speed /= 1000;//частота кратна тысячи герц
+        if (speed == 0){
+            return false;
+        }
 
+        const uint16_t SSP_CPSDVSR = 2;//делитель частоты от 2 до 254
+        const uint16_t SSP_SCR = (8000 / speed) - 1;//коэффициент скорости обмена от 1 до 255
+
+        if ( SSP_CPSDVSR < 2 || SSP_CPSDVSR > 254 || SSP_SCR > 255){
+            return false;
+        }
+
+        SSP_StructInit(&SPI_InitStructure); //значения по умолчанию
+        SPI_InitStructure.SSP_CPSDVSR = SSP_CPSDVSR;
+        SPI_InitStructure.SSP_SCR = SSP_SCR;    
         SPI_InitStructure.SSP_Mode = SSP_Mode;
         SPI_InitStructure.SSP_WordLength = SSP_WordLength;
         SPI_InitStructure.SSP_SPH = SSP_SPH;

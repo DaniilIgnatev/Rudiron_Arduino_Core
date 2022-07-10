@@ -19,6 +19,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "variant.h"
 #include "rudiron/can.h"
+#include "config.h"
 
 // Declared weak in Arduino.h to allow user redefinitions.
 int atexit(void (* /*func*/ )()) { return 0; }
