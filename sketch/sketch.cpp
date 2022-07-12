@@ -5,6 +5,9 @@
 
 void setup()
 {
+    pinMode(LED_BUILTIN_1, OUTPUT);
+    pinMode(LED_BUILTIN_2, OUTPUT);
+
     for (int i = 0; i < 3; i++){
         digitalWrite(LED_BUILTIN_1, true);
         digitalWrite(LED_BUILTIN_2, true);

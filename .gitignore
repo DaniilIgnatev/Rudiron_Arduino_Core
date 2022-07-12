@@ -5,3 +5,4 @@ cmake-build-release/
 *.DS_Store
 .DS_Store
 *.user
+.DS_Store
