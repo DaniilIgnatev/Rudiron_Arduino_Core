@@ -34,76 +34,75 @@ extern "C" {
 
 typedef struct {
 #if defined (USE_MDR1986VE9x) || defined (USE_MDR1901VC1T)
-	uint32_t ADC_SynchronousMode; 		/*!< Enables or disables the ADC1, ADC2 synchronous mode operation.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a value of @ref ADC_Synchronous_Mode */
+	uint32_t ADC_SynchronousMode; 		/*!< Включает или отключает синхронный режим работы АЦП1 и АЦП2.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения из @ref ADC_Synchronous_Mode */
 #endif
 
-	uint32_t ADC_StartDelay; 			/*!< Specifies the ADC1 and ADC2 conversion start delay.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a number between 0 and 15. */
+	uint32_t ADC_StartDelay; 			/*!< Указывает стартовую задержку АЦП1 и АЦП2.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения от 0 до 15. */
 
-	uint32_t ADC_TempSensor; 			/*!< Enables or disables the temperature sensor and internal voltage reference.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a value of @ref ADC_Temp_Sensor */
+	uint32_t ADC_TempSensor; 			/*!< Включает или отключает внутренний температурный датчик и внутренний источник опорного напряжения.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения из @ref ADC_Temp_Sensor */
 
-	uint32_t ADC_TempSensorAmplifier; 	/*!< Enables or disables the temperature sensor and internal voltage
-	 	 	 	 	 	 	 	 	 	 	 reference amplifier.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a value of @ref ADC_Temp_Sensor_Amplifier */
+	uint32_t ADC_TempSensorAmplifier; 	/*!< Включает или отключает внутренний температурный датчик и внутренний уселитель опорного источника напряжения.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения из @ref ADC_Temp_Sensor_Amplifier */
 
-	uint32_t ADC_TempSensorConversion; 	/*!< Enables or disables the temperature sensor conversion.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a value of @ref ADC_Temp_Sensor_Conversion */
+	uint32_t ADC_TempSensorConversion; 	/*!<Включает или отключает преобразование данных внутреннего температурног датчика.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения из @ref ADC_Temp_Sensor_Conversion */
 
-	uint32_t ADC_IntVRefConversion; 	/*!< Enables or disables the internal voltage reference conversion.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a value of @ref ADC_Int_VRef_Conversion */
+	uint32_t ADC_IntVRefConversion; 	/*!< Включает или отключает преобразование данных внутреннего источника опорного напряжения.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения из @ref ADC_Int_VRef_Conversion */
 
-	uint32_t ADC_IntVRefTrimming; 		/*!< Configures the internal voltage reference trimming.
-	 	 	 	 	 	 	 	 	 	 	 This parameter can be a number between 0 and 7. */
+	uint32_t ADC_IntVRefTrimming; 		/*!< Указывает опорное входное напряжение в пределах интервала.
+	 	 	 	 	 	 	 	 	 	 	 Этот параметр может принимать значения от 0 до 7. */
 #if defined (USE_MDR1986VE1T) || defined (USE_MDR1986VE3)
-	uint32_t ADC_IntVRefAmplifier;		/*!< Enable or disable the internal voltage reference amplifier.
-											 This parameter can be a value of @ref ADC_Int_VRef_Amlifier */
+	uint32_t ADC_IntVRefAmplifier;		/*!< Включает или отключает внутренний уселитель опорного источника напряжения.
+											 Этот параметр может принимать значения из of @ref ADC_Int_VRef_Amlifier */
 #endif
 
 } ADC_InitTypeDef;
 
 /**
-  * @brief  ADC1, ADC2 Init structure definition
+  * @brief  структура инициализации (определения) АЦП1,АЦП2 
   */
 
 typedef struct
 {
-  uint32_t ADC_ClockSource;             /*!< Specifies the ADCx clock source.
-                                             This parameter can be a value of @ref ADCx_Clock_Source */
+  uint32_t ADC_ClockSource;             /*!< Указывает источник тактирования АЦПx.
+                                             Этот параметр может принимать значения из @ref ADCx_Clock_Source */
 
-  uint32_t ADC_SamplingMode;            /*!< Specifies the ADCx sampling mode.
-                                             This parameter can be a value of @ref ADCx_Sampling_Mode */
+  uint32_t ADC_SamplingMode;            /*!< Устанавливает АЦПх в режим выборки.
+                                             Этот параметр может принимать значения из @ref ADCx_Sampling_Mode */
 
-  uint32_t ADC_ChannelSwitching;        /*!< Enables or disables the ADCx channel switching.
-                                             This parameter can be a value of @ref ADCx_Channel_Switching */
+  uint32_t ADC_ChannelSwitching;        /*!< Включает или отключает переключение каналов АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_Channel_Switching */
 
-  uint32_t ADC_ChannelNumber;           /*!< Specifies the ADCx channel number.
-                                             This parameter can be a value of @ref ADCx_Channel_Number */
+  uint32_t ADC_ChannelNumber;           /*!< Указывает номер рабочего канала АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_Channel_Number */
 
-  uint32_t ADC_Channels;                /*!< Specifies the ADCx channels mask.
-                                             This parameter can be a value of @ref ADCx_Channels */
+  uint32_t ADC_Channels;                /*!< Указывает маску переключаемых каналов АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_Channels */
 
-  uint32_t ADC_LevelControl;            /*!< Enables or disables the ADCx level control.
-                                             This parameter can be a value of @ref ADCx_Level_Control */
+  uint32_t ADC_LevelControl;            /*!< Включает или отключает контроль по уровню в АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_Level_Control */
 
-  uint16_t ADC_LowLevel;                /*!< Specifies the ADCx value low level.
-                                             This parameter can be a number between 0x0000 and 0x07FF. */
+  uint16_t ADC_LowLevel;                /*!< Указывает нижний уровень контроля значений АЦПх.
+                                             Этот параметр может принимать значения от 0x0000 до 0x07FF. */
 
-  uint16_t ADC_HighLevel;                /*!< Specifies the ADCx value high level.
-                                             This parameter can be a number between 0x0000 and 0x07FF. */
+  uint16_t ADC_HighLevel;                /*!< Указывает верхний уровень контроля значений АЦПх.
+                                             Этот параметр может принимать значения от 0x0000 до 0x07FF. */
 
-  uint32_t ADC_VRefSource;              /*!< Specifies the ADCx voltage reference source (internal or external).
-                                             This parameter can be a value of @ref ADCx_VRef_Source */
+  uint32_t ADC_VRefSource;              /*!< Указывает на (внешний или внутренний) источник напряжения на АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_VRef_Source */
 
-  uint32_t ADC_IntVRefSource;           /*!< Specifies the ADCx internal voltage reference source (inexact or exact).
-                                             This parameter can be a value of @ref ADCx_Int_VRef_Source */
+  uint32_t ADC_IntVRefSource;           /*!< Указывает на (точный или неточный) внутренний источник напряжения на АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_Int_VRef_Source */
 
-  uint32_t ADC_Prescaler;               /*!< Specifies the ADCx Prescaler configuration.
-                                             This parameter can be a value of @ref ADCx_Prescaler */
+  uint32_t ADC_Prescaler;               /*!< Указывает конфигурацию предделителя АЦПх.
+                                             Этот параметр может принимать значения из @ref ADCx_Prescaler */
 
-  uint32_t ADC_DelayGo;                 /*!< Specifies the ADCx start conversion delay at sequential conversion mode.
-                                             This parameter can be a number between 0 and 7. */
+  uint32_t ADC_DelayGo;                 /*!< Указывает началбную задержку преобразования при последовательном режиме АЦПх.
+                                             Этот параметр может принимать значения от 0 до 7. */
 }ADCx_InitTypeDef;
 
 /** @} */ /* End of group ADC_Exported_Types */
@@ -525,61 +524,281 @@ typedef struct
   * @{
   */
 
+
+
+
+/*
+ Переинициализация переферийных регистров АЦП 
+к их значениям по умолчанию. пишется в начале программы
+чтобы было удобнее назначать регитры
+*/
 void ADC_DeInit(void);
 
+/*
+ Инициализация регистров АЦП 
+в соответствии с входным экземпляром ADC_InitStruct
+*/
 void ADC_Init(const ADC_InitTypeDef* ADC_InitStruct);
+
+/*
+ Задает для элементов экземпляра ADC_InitStruct
+значения по умолчанию
+*/
 void ADC_StructInit(ADC_InitTypeDef* ADC_InitStruct);
 
+/*
+ Установка опорного входного напряжения
+в интервале от 0 до 7
+*/
 void ADC_SetTrim(uint32_t Trim);
 
+/* 
+ Инициализация АЦП1 в соответствии
+с значениями экземпляра ADCx_InitStruct
+*/
 void ADC1_Init(const ADCx_InitTypeDef* ADCx_InitStruct);
+
+/* 
+ Инициализация АЦП2 в соответствии
+с значениями экземпляра ADCx_InitStruct
+*/
 void ADC2_Init(const ADCx_InitTypeDef* ADCx_InitStruct);
+
+/*
+Заполняет все значения экземпляра 
+ADCx_InitStruct значениями по умолчанию
+*/ 
 void ADCx_StructInit(ADCx_InitTypeDef* ADCx_InitStruct);
 
+/*
+Подключает или отключает АЦП1
+*/
 void ADC1_Cmd(FunctionalState NewState);
+
+/*
+Подключает или отключает АЦП2
+*/
 void ADC2_Cmd(FunctionalState NewState);
 
+/*
+ Выбор канала АЦП1 для использования
+в режиме одиночной работы
+*/
 void ADC1_SetChannel(uint32_t Channel);
+
+/*
+ Выбор канала АЦП2 для использования
+в режиме одиночной работы
+*/
 void ADC2_SetChannel(uint32_t Channel);
+
+/*
+ Выбор каналов АЦП1 для использования
+в режиме переключения каналов
+*/
 void ADC1_SetChannels(uint32_t ChannelMask);
+
+/*
+ Выбор каналов АЦП2 для использования
+в режиме переключения каналов
+*/
 void ADC2_SetChannels(uint32_t ChannelMask);
 
+/*
+ Включение АЦП1 в режим 
+с определенной выборкой
+и переключаемыми каналами
+*/
 void ADC1_OperationModeConfig(uint32_t SamplingMode, uint32_t SwitchingMode);
+
+/*
+ Включение АЦП2 в режим 
+с определенной выборкой
+и переключаемыми каналами
+*/
 void ADC2_OperationModeConfig(uint32_t SamplingMode, uint32_t SwitchingMode);
+
+/*
+ Включение АЦП1 в режим 
+выборки
+*/
 void ADC1_SamplingModeConfig(uint32_t SamplingMode);
+
+/*
+ Включение АЦП2 в режим 
+выборки
+*/
 void ADC2_SamplingModeConfig(uint32_t SamplingMode);
+
+/*
+ Включение АЦП1 в режим 
+переключения каналов
+*/
 void ADC1_ChannelSwitchingConfig(uint32_t SwitchingMode);
+
+/*
+ Включение АЦП2 в режим 
+переключения каналов
+*/
 void ADC2_ChannelSwitchingConfig(uint32_t SwitchingMode);
 
+
+/*
+ Конфигурация (установка) в АЦП1 
+нижней и верхней границы значений 
+*/
 void ADC1_LevelsConfig(uint32_t LowLevel, uint32_t HighLevel, uint32_t NewState);
+
+/*
+ Конфигурация (установка) в АЦП2 
+нижней и верхней границ значений 
+*/
 void ADC2_LevelsConfig(uint32_t LowLevel, uint32_t HighLevel, uint32_t NewState);
+
+/*
+ Конфигурация (установка) в АЦП1 
+нижней границы значений 
+*/
 void ADC1_SetLowLevel(uint32_t LowLevel);
+
+/*
+ Конфигурация (установка) в АЦП2 
+нижней границы значений 
+*/
 void ADC2_SetLowLevel(uint32_t LowLevel);
+
+/*
+ Конфигурация (установка) в АЦП1 
+верхней границы значений 
+*/
 void ADC1_SetHighLevel(uint32_t HighLevel);
+
+/*
+ Конфигурация (установка) в АЦП2
+верхней границы значений 
+*/
 void ADC2_SetHighLevel(uint32_t HighLevel);
 
+/*
+ Начало преобразования на АЦП1
+*/
 void ADC1_Start(void);
+
+/*
+ Начало преобразования на АЦП2
+*/
 void ADC2_Start(void);
 
+/*
+ Получение результата 
+преобразования на АЦП1
+*/
 uint32_t ADC1_GetResult(void);
+
+/*
+ Получение результата 
+преобразования на АЦП2
+*/
 uint32_t ADC2_GetResult(void);
 
+/*
+ Получение статуса 
+обоих АЦП1 и АЦП2
+подробнее на 326 странице 
+документации
+*/
 uint32_t ADC_GetStatus(void);
+
+/*
+ Получение статуса АЦП1 
+подробнее на 326 странице 
+документации
+*/
 uint32_t ADC1_GetStatus(void);
+
+/*
+ Получение статуса АЦП2 
+подробнее на 326 странице 
+документации
+*/
 uint32_t ADC2_GetStatus(void);
+
+/*
+ Проверка флагов статусов АЦП1 
+и АЦП2 на наличие или отсутствие
+*/
 FlagStatus ADC_GetFlagStatus(uint32_t Flag);
+
+/*
+ Проверка флагов статуса АЦП1 
+на наличие или отсутствие
+*/
 FlagStatus ADC1_GetFlagStatus(uint32_t Flag);
+
+/*
+ Проверка флагов статуса
+АЦП2 на наличие или отсутствие
+*/
 FlagStatus ADC2_GetFlagStatus(uint32_t Flag);
+
+/*
+Снятие флага перезаписи АЦП1
+*/
 void ADC1_ClearOverwriteFlag(void);
+
+/*
+Снятие флага перезаписи АЦП2
+*/
 void ADC2_ClearOverwriteFlag(void);
+
+/*
+Снятие флага пересечения верхней
+или нижней границ автоматического
+контролирования уровней АЦП1
+*/
 void ADC1_ClearOutOfRangeFlag(void);
+
+/*
+Снятие флага пересечения верхней
+или нижней границ автоматического
+контролирования уровней АЦП2
+*/
 void ADC2_ClearOutOfRangeFlag(void);
 
+/*
+ Включение или отключение 
+прерываний на АЦП1 и АЦП2
+*/
 void ADC_ITConfig(uint32_t ADC_IT, FunctionalState NewState);
+
+/*
+ Включение или отключение 
+прерываний на АЦП1 
+*/
 void ADC1_ITConfig(uint32_t ADC_IT, FunctionalState NewState);
+
+/*
+ Включение или отключение 
+прерываний на АЦП2
+*/
 void ADC2_ITConfig(uint32_t ADC_IT, FunctionalState NewState);
+
+/* 
+Проверка на наличие прерывания 
+на АЦП1 и АЦП2
+*/
 ITStatus ADC_GetITStatus(uint32_t ADC_IT);
+
+/* 
+Проверка на наличие прерывания 
+на АЦП1
+*/
 ITStatus ADC1_GetITStatus(uint32_t ADC_IT);
+
+/* 
+Проверка на наличие прерывания 
+на АЦП2
+*/
 ITStatus ADC2_GetITStatus(uint32_t ADC_IT);
 
 /** @} */ /* End of group ADC_Exported_Functions */
