@@ -18,18 +18,8 @@ bool pressed2_last = false;
 bool isForwards = false;
 
 void tank_loop(){
-    while (Serial.available()){
-        String data = Serial.readString();
-        nrf24.print(data);
-    }
-
-    if (pressed1){
-        package[1] = true;
-    }
-
-    if (pressed3){
-        package[2] = true;
-    }
+    package[1] = pressed1;
+    package[2] = pressed3;
 
     if (!pressed2_last && pressed2){
         isForwards = !isForwards;

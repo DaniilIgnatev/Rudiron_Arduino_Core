@@ -193,6 +193,7 @@ namespace Rudiron
 
     int nRF24::availableForWrite()
     {
+        nRF24_FlushTX();
         return nRF24_GetStatus_TXFIFO() == nRF24_STATUS_TXFIFO_EMPTY;
     }
 
