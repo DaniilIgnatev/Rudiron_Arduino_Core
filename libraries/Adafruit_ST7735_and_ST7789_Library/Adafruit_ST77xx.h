@@ -88,11 +88,11 @@
 class Adafruit_ST77xx : public Adafruit_SPITFT {
 public:
   Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName _CS, PortPinName _DC, PortPinName _MOSI,
-                  PortPinName _SCLK, PortPinName _RST = PIN_NONE, PortPinName _MISO = PIN_NONE);
+                  PortPinName _SCLK, PortPinName _RST = PORT_PIN_NONE, PortPinName _MISO = PORT_PIN_NONE);
   Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName CS, PortPinName RS,
-                  PortPinName RST = PIN_NONE);
+                  PortPinName RST = PORT_PIN_NONE);
   Adafruit_ST77xx(uint16_t w, uint16_t h, SPI *spiClass, PortPinName CS,
-                  PortPinName RS, PortPinName RST = PIN_NONE);
+                  PortPinName RS, PortPinName RST = PORT_PIN_NONE);
 
   void setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
   void setRotation(uint8_t r);

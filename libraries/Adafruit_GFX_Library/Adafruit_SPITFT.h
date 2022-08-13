@@ -23,6 +23,11 @@
 
 
 #include "Adafruit_GFX.h"
+#include "rudiron/clk.h"
+#include "rudiron/gpio.h"
+#include "rudiron/spi.h"
+
+using namespace Rudiron;
 
 
 // CLASS DEFINITION --------------------------------------------------------
@@ -51,7 +56,7 @@ public:
   // rather than moving it to the optional arguments, it was done this way
   // to avoid breaking existing code (-1 option was a later addition).
   Adafruit_SPITFT(uint16_t w, uint16_t h, PortPinName cs, PortPinName dc, PortPinName mosi,
-                  PortPinName sck, PortPinName rst = PIN_NONE, PortPinName miso = PIN_NONE);
+                  PortPinName sck, PortPinName rst = PORT_PIN_NONE, PortPinName miso = PORT_PIN_NONE);
 
   // Hardware SPI constructor using the default SPI gpio: expects width &
   // height (at default rotation setting 0), 2 signal pins (cs, dc),
@@ -59,14 +64,14 @@ public:
   // than moving it to the optional arguments, it was done this way to
   // avoid breaking existing code (-1 option was a later addition).
   Adafruit_SPITFT(uint16_t w, uint16_t h, PortPinName cs, PortPinName dc,
-                  PortPinName rst = PIN_NONE);
+                  PortPinName rst = PORT_PIN_NONE);
 
 
   // Hardware SPI constructor using an arbitrary SPI peripheral: expects
   // width & height (rotation 0), SPIClass pointer, 2 signal pins (cs, dc)
   // and optional reset pin. cs is required but can be -1 if unused.
   Adafruit_SPITFT(uint16_t w, uint16_t h, SPI *spiClass, PortPinName cs,
-                  PortPinName dc, PortPinName rst = PIN_NONE);
+                  PortPinName dc, PortPinName rst = PORT_PIN_NONE);
 
 
   // DESTRUCTOR ----------------------------------------------------------

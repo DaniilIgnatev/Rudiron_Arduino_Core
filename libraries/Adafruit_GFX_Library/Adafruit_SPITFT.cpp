@@ -181,7 +181,7 @@ Adafruit_SPITFT::Adafruit_SPITFT(uint16_t w, uint16_t h, PortPinName cs, PortPin
 */
 Adafruit_SPITFT::Adafruit_SPITFT(uint16_t w, uint16_t h, PortPinName cs, PortPinName dc,
                                  PortPinName rst)
-        : Adafruit_SPITFT(w, h, &robot.spi1, cs, dc, rst) {
+        : Adafruit_SPITFT(w, h, &SPI::getSPI1(), cs, dc, rst) {
     // This just invokes the hardware SPI constructor below,
     // passing the default SPI device (&SPI).
 }
@@ -309,27 +309,27 @@ void Adafruit_SPITFT::initSPI(uint32_t freq, uint8_t spiMode) {
         hwspi._freq = freq; // Save freq value for later
         hwspi._mode = spiMode; // Save spiMode value for later
 
-        this->hwspi._spi->begin(spiMode);
+        this->hwspi._spi->begin(4000000, SSP_SPH_1Edge, SSP_SPO_Low, SSP_WordLength8b, SSP_FRF_SPI_Motorola, SSP_HardwareFlowControl_SSE);
     } else if (connection == TFT_SOFT_SPI) {
         GPIO::configPinOutput(swspi._mosi);
         GPIO::writePin(swspi._mosi, false);
         GPIO::configPinOutput(swspi._sck);
         GPIO::writePin(swspi._sck, false);
 
-        if (swspi._miso > PIN_NONE) {
+        if (swspi._miso > PORT_PIN_NONE) {
             GPIO::configPinInput(swspi._miso);
         }
     }
 
-    if (_rst > PIN_NONE) {
+    if (_rst > PORT_PIN_NONE) {
         // Toggle _rst low to reset
         GPIO::configPinOutput(_rst);
         GPIO::writePin(_rst, true);
-        CLK::delay(100);
+        CLK::delay_millis(100);
         GPIO::writePin(_rst, false);
-        CLK::delay(100);
+        CLK::delay_millis(100);
         GPIO::writePin(_rst, true);
-        CLK::delay(200);
+        CLK::delay_millis(200);
     }
 }
 
@@ -354,7 +354,7 @@ void Adafruit_SPITFT::setSPISpeed(uint32_t freq) {
 */
 void Adafruit_SPITFT::startWrite(void) {
     SPI_BEGIN_TRANSACTION();
-    if (_cs > PIN_NONE)
+    if (_cs > PORT_PIN_NONE)
         SPI_CS_LOW();
 }
 
@@ -365,7 +365,7 @@ void Adafruit_SPITFT::startWrite(void) {
             for all display types; not an SPI-specific function.
 */
 void Adafruit_SPITFT::endWrite(void) {
-    if (_cs > PIN_NONE)
+    if (_cs > PORT_PIN_NONE)
         SPI_CS_HIGH();
     SPI_END_TRANSACTION();
 }
@@ -955,7 +955,7 @@ data
 void Adafruit_SPITFT::sendCommand(uint8_t commandByte, uint8_t *dataBytes,
                                   uint8_t numDataBytes) {
     SPI_BEGIN_TRANSACTION();
-    if (_cs > PIN_NONE)
+    if (_cs > PORT_PIN_NONE)
         SPI_CS_LOW();
 
     SPI_DC_LOW();          // Command mode
@@ -972,7 +972,7 @@ void Adafruit_SPITFT::sendCommand(uint8_t commandByte, uint8_t *dataBytes,
         }
     }
 
-    if (_cs > PIN_NONE)
+    if (_cs > PORT_PIN_NONE)
         SPI_CS_HIGH();
     SPI_END_TRANSACTION();
 }
@@ -987,7 +987,7 @@ void Adafruit_SPITFT::sendCommand(uint8_t commandByte, uint8_t *dataBytes,
 void Adafruit_SPITFT::sendCommand(uint8_t commandByte, const uint8_t *dataBytes,
                                   uint8_t numDataBytes) {
     SPI_BEGIN_TRANSACTION();
-    if (_cs > PIN_NONE)
+    if (_cs > PORT_PIN_NONE)
         SPI_CS_LOW();
 
     SPI_DC_LOW();          // Command mode
@@ -998,7 +998,7 @@ void Adafruit_SPITFT::sendCommand(uint8_t commandByte, const uint8_t *dataBytes,
         spiWrite(*(dataBytes++));
     }
 
-    if (_cs > PIN_NONE) {
+    if (_cs > PORT_PIN_NONE) {
         SPI_CS_HIGH();
     }
 
@@ -1020,7 +1020,7 @@ void Adafruit_SPITFT::sendCommand16(uint16_t commandWord,
                                     const uint8_t *dataBytes,
                                     uint8_t numDataBytes) {
     SPI_BEGIN_TRANSACTION();
-    if (_cs > PIN_NONE)
+    if (_cs > PORT_PIN_NONE)
         SPI_CS_LOW();
 
     if (numDataBytes == 0) {
@@ -1036,7 +1036,7 @@ void Adafruit_SPITFT::sendCommand16(uint16_t commandWord,
         SPI_WRITE16((uint16_t) (*(dataBytes++)));
     }
 
-    if (_cs > PIN_NONE) {
+    if (_cs > PORT_PIN_NONE) {
         SPI_CS_HIGH();
     }
 
@@ -1222,7 +1222,7 @@ uint8_t Adafruit_SPITFT::spiRead(void) {
     if (connection == TFT_HARD_SPI) {
         return hwspi._spi->write((uint8_t) 0);
     } else if (connection == TFT_SOFT_SPI) {
-        if (swspi._miso > PIN_NONE) {
+        if (swspi._miso > PORT_PIN_NONE) {
             for (uint8_t i = 0; i < 8; i++) {
                 SPI_SCK_HIGH();
                 b <<= 1;
@@ -1281,7 +1281,7 @@ void Adafruit_SPITFT::writeCommand16(uint16_t cmd) {
 uint16_t Adafruit_SPITFT::read16(void) {
     uint16_t w = 0;
     if (connection == TFT_PARALLEL) {
-        if (tft8._rd > PIN_NONE) {
+        if (tft8._rd > PORT_PIN_NONE) {
 #if defined(USE_FAST_PINIO)
             TFT_RD_LOW();    // Read line LOW
             if (tft8.wide) { // 16-bit TFT connection

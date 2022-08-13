@@ -27,7 +27,7 @@
 class Adafruit_ST7789 : public Adafruit_ST77xx {
 public:
   Adafruit_ST7789(PortPinName cs, PortPinName dc, PortPinName mosi, PortPinName sclk,
-                  PortPinName rst = PIN_NONE);
+                  PortPinName rst = PORT_PIN_NONE);
   Adafruit_ST7789(PortPinName cs, PortPinName dc, PortPinName rst);
   Adafruit_ST7789(SPI *spiClass, PortPinName cs, PortPinName dc, PortPinName rst);
 
