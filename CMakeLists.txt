@@ -141,6 +141,8 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}/nrf24l01
         ${libraries_path}/Wire
         ${libraries_path}/MPU6050
+        ${libraries_path}/Adafruit_GFX_Library
+        ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
 )
 
 # Объявления
