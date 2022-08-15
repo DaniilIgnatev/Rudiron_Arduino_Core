@@ -47,8 +47,8 @@ int analogRead(uint8_t pin)
 // hardware support.
 void analogWrite(uint8_t pin, int val)
 {
-  PortPinName pinName = GPIO::pinMap[pin];
-  Timer *timer = Timer::getTimerForPinName(pinName);
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)
   {

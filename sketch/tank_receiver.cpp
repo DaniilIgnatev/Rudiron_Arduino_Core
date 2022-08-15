@@ -7,6 +7,8 @@
 #define rightEngineF 14
 #define rightEngineB 15
 
+using namespace Rudiron;
+
 void configEngines()
 {
     pinMode(leftEngineF, OUTPUT);

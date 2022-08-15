@@ -2,6 +2,8 @@
 
 #ifdef TRANSMITTER
 
+using namespace Rudiron;
+
 uint8_t package[3];
 
 void tank_setup(){

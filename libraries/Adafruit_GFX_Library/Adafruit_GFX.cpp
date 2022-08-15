@@ -1,5 +1,5 @@
 /*
-This is the Core graphics library for all our displays, providing a common
+This is the core graphics library for all our displays, providing a common
 set of graphics primitives (points, lines, circles, etc.).  It needs to be
 paired with a hardware-specific library for each display device we carry
 (to handle the lower-level functions).
@@ -117,16 +117,6 @@ Adafruit_GFX::Adafruit_GFX(int16_t w, int16_t h) : WIDTH(w), HEIGHT(h) {
   wrap = true;
   _cp437 = false;
   gfxFont = NULL;
-}
-
-int Adafruit_GFX::availableForWrite()
-{
-    return 0;
-}
-
-void Adafruit_GFX::flush()
-{
-
 }
 
 /**************************************************************************/
@@ -728,16 +718,16 @@ void Adafruit_GFX::drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
                               int16_t w, int16_t h, uint16_t color) {
 
   int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
 
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = pgm_read_byte(&bitmap[j * byteWidth + i / 8]);
-      if (byte & 0x80)
+        b = pgm_read_byte(&bitmap[j * byteWidth + i / 8]);
+      if (b & 0x80)
         writePixel(x + i, y, color);
     }
   }
@@ -763,16 +753,16 @@ void Adafruit_GFX::drawBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
                               uint16_t bg) {
 
   int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
 
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = pgm_read_byte(&bitmap[j * byteWidth + i / 8]);
-      writePixel(x + i, y, (byte & 0x80) ? color : bg);
+        b = pgm_read_byte(&bitmap[j * byteWidth + i / 8]);
+      writePixel(x + i, y, (b & 0x80) ? color : bg);
     }
   }
   endWrite();
@@ -794,16 +784,16 @@ void Adafruit_GFX::drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w,
                               int16_t h, uint16_t color) {
 
   int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
 
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = bitmap[j * byteWidth + i / 8];
-      if (byte & 0x80)
+        b = bitmap[j * byteWidth + i / 8];
+      if (b & 0x80)
         writePixel(x + i, y, color);
     }
   }
@@ -828,16 +818,16 @@ void Adafruit_GFX::drawBitmap(int16_t x, int16_t y, uint8_t *bitmap, int16_t w,
                               int16_t h, uint16_t color, uint16_t bg) {
 
   int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
 
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = bitmap[j * byteWidth + i / 8];
-      writePixel(x + i, y, (byte & 0x80) ? color : bg);
+        b = bitmap[j * byteWidth + i / 8];
+      writePixel(x + i, y, (b & 0x80) ? color : bg);
     }
   }
   endWrite();
@@ -862,18 +852,18 @@ void Adafruit_GFX::drawXBitmap(int16_t x, int16_t y, const uint8_t bitmap[],
                                int16_t w, int16_t h, uint16_t color) {
 
   int16_t byteWidth = (w + 7) / 8; // Bitmap scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
 
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte >>= 1;
+        b >>= 1;
       else
-        byte = pgm_read_byte(&bitmap[j * byteWidth + i / 8]);
+        b = pgm_read_byte(&bitmap[j * byteWidth + i / 8]);
       // Nearly identical to drawBitmap(), only the bit order
       // is reversed here (left-to-right = LSB to MSB):
-      if (byte & 0x01)
+      if (b & 0x01)
         writePixel(x + i, y, color);
     }
   }
@@ -947,15 +937,15 @@ void Adafruit_GFX::drawGrayscaleBitmap(int16_t x, int16_t y,
                                        const uint8_t mask[], int16_t w,
                                        int16_t h) {
   int16_t bw = (w + 7) / 8; // Bitmask scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = pgm_read_byte(&mask[j * bw + i / 8]);
-      if (byte & 0x80) {
+        b = pgm_read_byte(&mask[j * bw + i / 8]);
+      if (b & 0x80) {
         writePixel(x + i, y, (uint8_t)pgm_read_byte(&bitmap[j * w + i]));
       }
     }
@@ -981,15 +971,15 @@ void Adafruit_GFX::drawGrayscaleBitmap(int16_t x, int16_t y,
 void Adafruit_GFX::drawGrayscaleBitmap(int16_t x, int16_t y, uint8_t *bitmap,
                                        uint8_t *mask, int16_t w, int16_t h) {
   int16_t bw = (w + 7) / 8; // Bitmask scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = mask[j * bw + i / 8];
-      if (byte & 0x80) {
+        b = mask[j * bw + i / 8];
+      if (b & 0x80) {
         writePixel(x + i, y, bitmap[j * w + i]);
       }
     }
@@ -1058,15 +1048,15 @@ void Adafruit_GFX::drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap,
 void Adafruit_GFX::drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[],
                                  const uint8_t mask[], int16_t w, int16_t h) {
   int16_t bw = (w + 7) / 8; // Bitmask scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = pgm_read_byte(&mask[j * bw + i / 8]);
-      if (byte & 0x80) {
+        b = pgm_read_byte(&mask[j * bw + i / 8]);
+      if (b & 0x80) {
         writePixel(x + i, y, pgm_read_word(&bitmap[j * w + i]));
       }
     }
@@ -1091,15 +1081,15 @@ void Adafruit_GFX::drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[],
 void Adafruit_GFX::drawRGBBitmap(int16_t x, int16_t y, uint16_t *bitmap,
                                  uint8_t *mask, int16_t w, int16_t h) {
   int16_t bw = (w + 7) / 8; // Bitmask scanline pad = whole byte
-  uint8_t byte = 0;
+  uint8_t b = 0;
   startWrite();
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
       if (i & 7)
-        byte <<= 1;
+        b <<= 1;
       else
-        byte = mask[j * bw + i / 8];
-      if (byte & 0x80) {
+        b = mask[j * bw + i / 8];
+      if (b & 0x80) {
         writePixel(x + i, y, bitmap[j * w + i]);
       }
     }
@@ -1671,6 +1661,8 @@ void Adafruit_GFX_Button::initButtonUL(Adafruit_GFX *gfx, int16_t x1,
   _textsize_y = textsize_y;
   _gfx = gfx;
   strncpy(_label, label, 9);
+  _label[9] = 0; // strncpy does not place a null at the end.
+                 // When 'label' is >9 characters, _label is not terminated.
 }
 
 /**************************************************************************/
@@ -1875,8 +1867,7 @@ bool GFXcanvas1::getPixel(int16_t x, int16_t y) const {
 bool GFXcanvas1::getRawPixel(int16_t x, int16_t y) const {
   if ((x < 0) || (y < 0) || (x >= WIDTH) || (y >= HEIGHT))
     return 0;
-  if (this->getBuffer()) {
-    uint8_t *buffer = this->getBuffer();
+  if (buffer) {
     uint8_t *ptr = &buffer[(x / 8) + y * ((WIDTH + 7) / 8)];
 
 #ifdef __AVR__
@@ -2025,7 +2016,6 @@ void GFXcanvas1::drawFastRawVLine(int16_t x, int16_t y, int16_t h,
                                   uint16_t color) {
   // x & y already in raw (rotation 0) coordinates, no need to transform.
   int16_t row_bytes = ((WIDTH + 7) / 8);
-  uint8_t *buffer = this->getBuffer();
   uint8_t *ptr = &buffer[(x / 8) + y * row_bytes];
 
   if (color > 0) {
@@ -2064,7 +2054,6 @@ void GFXcanvas1::drawFastRawHLine(int16_t x, int16_t y, int16_t w,
                                   uint16_t color) {
   // x & y already in raw (rotation 0) coordinates, no need to transform.
   int16_t rowBytes = ((WIDTH + 7) / 8);
-  uint8_t *buffer = this->getBuffer();
   uint8_t *ptr = &buffer[(x / 8) + y * rowBytes];
   size_t remainingWidthBits = w;
 

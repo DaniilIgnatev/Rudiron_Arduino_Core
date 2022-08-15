@@ -29,8 +29,6 @@
 
 #include "rudiron/uart.h"
 
-using namespace Rudiron;
-
 // Define constants and variables for buffering incoming serial data.  We're
 // using a ring buffer (I think), in which head is the index of the location
 // to which to write the next incoming character and tail is the index of the
@@ -42,7 +40,6 @@ using namespace Rudiron;
 // atomicity guards needed for that are not implemented. This will
 // often work, but occasionally a race condition can occur that makes
 // Serial behave erratically. See https://github.com/arduino/Arduino/issues/2405
-
 
 // Define config for Serial.begin(baud, config);
 #define SERIAL_5N1 0x00
@@ -78,28 +75,29 @@ using namespace Rudiron;
 class HardwareSerial : public Stream
 {
 private:
-    UART* uart = nullptr;
+  Rudiron::UART *uart = nullptr;
 
-  public:
-    inline HardwareSerial(UART* uart){
-        this->uart = uart;
-    }
+public:
+  inline HardwareSerial(Rudiron::UART *uart)
+  {
+    this->uart = uart;
+  }
 
-    void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
-    void begin(unsigned long, uint8_t);
-    void end();
-    virtual int available(void);
-    virtual int peek(void);
-    virtual int read(void);
-    virtual int availableForWrite(void);
-    virtual void flush(void);
-    virtual size_t write(uint8_t);
-    inline size_t write(unsigned long n) { return write((uint8_t)n); }
-    inline size_t write(long n) { return write((uint8_t)n); }
-    inline size_t write(unsigned int n) { return write((uint8_t)n); }
-    inline size_t write(int n) { return write((uint8_t)n); }
-    using Print::write; // pull in write(str) and write(buf, size) from Print
-    operator bool() { return true; }
+  void begin(unsigned long baud) { begin(baud, SERIAL_8N1); }
+  void begin(unsigned long, uint8_t);
+  void end();
+  virtual int available(void);
+  virtual int peek(void);
+  virtual int read(void);
+  virtual int availableForWrite(void);
+  virtual void flush(void);
+  virtual size_t write(uint8_t);
+  inline size_t write(unsigned long n) { return write((uint8_t)n); }
+  inline size_t write(long n) { return write((uint8_t)n); }
+  inline size_t write(unsigned int n) { return write((uint8_t)n); }
+  inline size_t write(int n) { return write((uint8_t)n); }
+  using Print::write; // pull in write(str) and write(buf, size) from Print
+  operator bool() { return true; }
 };
 
 extern void serialEventRun(void) __attribute__((weak));

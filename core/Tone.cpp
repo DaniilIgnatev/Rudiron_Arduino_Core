@@ -43,8 +43,8 @@ Version Modified By Date     Comments
 // frequency (in hertz) and duration (in milliseconds).
 void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
 {
-  PortPinName pinName = GPIO::pinMap[pin];
-  Timer *timer = Timer::getTimerForPinName(pinName);
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)
   {
@@ -64,8 +64,8 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
 
 void noTone(uint8_t pin)
 {
-  PortPinName pinName = GPIO::pinMap[pin];
-  Timer *timer = Timer::getTimerForPinName(pinName);
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)
   {

@@ -25,10 +25,10 @@
 #include "Adafruit_ST77xx.h"
 #include <limits.h>
 #ifndef ARDUINO_STM32_FEATHER
-//#include "pins_arduino.h"
-//#include "wiring_private.h"
+#include "pins_arduino.h"
+#include "wiring_private.h"
 #endif
-//#include <SPI.h>
+#include <SPI.h>
 
 #define SPI_DEFAULT_FREQ 32000000 ///< Default SPI data clock frequency
 
@@ -45,9 +45,9 @@
     @param  miso  SPI MISO pin # (optional, pass -1 if unused)
 */
 /**************************************************************************/
-Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName cs, PortPinName dc,
-                                 PortPinName mosi, PortPinName sclk, PortPinName rst,
-                                 PortPinName miso)
+Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, int8_t cs, int8_t dc,
+                                 int8_t mosi, int8_t sclk, int8_t rst,
+                                 int8_t miso)
     : Adafruit_SPITFT(w, h, cs, dc, mosi, sclk, rst, miso) {}
 
 /**************************************************************************/
@@ -60,11 +60,11 @@ Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName cs, PortPin
     @param  rst   Reset pin # (optional, pass -1 if unused)
 */
 /**************************************************************************/
-Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName cs, PortPinName dc,
-                                 PortPinName rst)
+Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, int8_t cs, int8_t dc,
+                                 int8_t rst)
     : Adafruit_SPITFT(w, h, cs, dc, rst) {}
 
-
+#if !defined(ESP8266)
 /**************************************************************************/
 /*!
     @brief  Instantiate Adafruit ST77XX driver with selectable hardware SPI
@@ -76,9 +76,10 @@ Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName cs, PortPin
     @param  rst   Reset pin # (optional, pass -1 if unused)
 */
 /**************************************************************************/
-Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, SPI *spiClass,
-                                 PortPinName cs, PortPinName dc, PortPinName rst)
+Adafruit_ST77xx::Adafruit_ST77xx(uint16_t w, uint16_t h, SPIClass *spiClass,
+                                 int8_t cs, int8_t dc, int8_t rst)
     : Adafruit_SPITFT(w, h, spiClass, cs, dc, rst) {}
+#endif // end !ESP8266
 
 /**************************************************************************/
 /*!
@@ -105,7 +106,7 @@ void Adafruit_ST77xx::displayInit(const uint8_t *addr) {
       ms = *(addr++); // Read post-command delay time (ms)
       if (ms == 255)
         ms = 500; // If 255, delay for 500 ms
-      CLK::delay_millis(ms);
+      delay(ms);
     }
   }
 }
@@ -125,10 +126,6 @@ void Adafruit_ST77xx::begin(uint32_t freq) {
 
   invertOnCommand = ST77XX_INVON;
   invertOffCommand = ST77XX_INVOFF;
-
-  GPIO::configPinOutput(_rst);
-  GPIO::configPinOutput(_cs);
-  GPIO::configPinOutput(_dc);
 
   initSPI(freq, spiMode);
 }
@@ -227,7 +224,7 @@ void Adafruit_ST77xx::setColRowStart(int8_t col, int8_t row) {
  @param  enable True if you want the display ON, false OFF
  */
 /**************************************************************************/
-void Adafruit_ST77xx::enableDisplay(bool enable) {
+void Adafruit_ST77xx::enableDisplay(boolean enable) {
   sendCommand(enable ? ST77XX_DISPON : ST77XX_DISPOFF);
 }
 
@@ -237,7 +234,7 @@ void Adafruit_ST77xx::enableDisplay(bool enable) {
  @param  enable True if you want the TE pin ON, false OFF
  */
 /**************************************************************************/
-void Adafruit_ST77xx::enableTearing(bool enable) {
+void Adafruit_ST77xx::enableTearing(boolean enable) {
   sendCommand(enable ? ST77XX_TEON : ST77XX_TEOFF);
 }
 
@@ -247,7 +244,7 @@ void Adafruit_ST77xx::enableTearing(bool enable) {
  @param  enable True if you want sleep mode ON, false OFF
  */
 /**************************************************************************/
-void Adafruit_ST77xx::enableSleep(bool enable) {
+void Adafruit_ST77xx::enableSleep(boolean enable) {
   sendCommand(enable ? ST77XX_SLPIN : ST77XX_SLPOUT);
 }
 

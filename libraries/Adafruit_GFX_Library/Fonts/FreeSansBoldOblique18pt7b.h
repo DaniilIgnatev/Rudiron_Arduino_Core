@@ -1,26 +1,7 @@
-/*
-    This file is part of DIBotQBS.
-
-    DIBotQBS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Foobar is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-
-static const uint8_t FreeSansBoldOblique18pt7bBitmaps[] = {
+const uint8_t FreeSansBoldOblique18pt7bBitmaps[] = {
     0x06, 0x01, 0xC0, 0x7C, 0x1F, 0x0F, 0xC3, 0xE0, 0xF8, 0x3E, 0x0F, 0x83,
     0xC0, 0xF0, 0x7C, 0x1E, 0x07, 0x81, 0xE0, 0x78, 0x1C, 0x07, 0x01, 0xC0,
     0x60, 0x7C, 0x1F, 0x07, 0xC3, 0xF0, 0xF8, 0x00, 0x78, 0x7B, 0xC3, 0xFE,
@@ -462,7 +443,7 @@ static const uint8_t FreeSansBoldOblique18pt7bBitmaps[] = {
     0xF8, 0x00, 0x0F, 0x00, 0x1F, 0xC1, 0xDF, 0xF0, 0xEE, 0x3F, 0xE6, 0x07,
     0xF0, 0x01, 0xE0};
 
-static const GFXglyph FreeSansBoldOblique18pt7bGlyphs[] = {
+const GFXglyph FreeSansBoldOblique18pt7bGlyphs[] = {
     {0, 0, 0, 10, 0, 1},         // 0x20 ' '
     {0, 10, 25, 12, 4, -24},     // 0x21 '!'
     {32, 13, 9, 17, 6, -25},     // 0x22 '"'
@@ -559,7 +540,7 @@ static const GFXglyph FreeSansBoldOblique18pt7bGlyphs[] = {
     {5200, 14, 33, 14, 2, -25},  // 0x7D '}'
     {5258, 17, 6, 20, 3, -10}};  // 0x7E '~'
 
-static const GFXfont FreeSansBoldOblique18pt7b = {
+const GFXfont FreeSansBoldOblique18pt7b = {
     (uint8_t *)FreeSansBoldOblique18pt7bBitmaps,
     (GFXglyph *)FreeSansBoldOblique18pt7bGlyphs, 0x20, 0x7E, 42};
 

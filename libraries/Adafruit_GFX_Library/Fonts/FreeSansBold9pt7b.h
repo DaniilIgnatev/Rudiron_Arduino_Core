@@ -1,26 +1,7 @@
-/*
-    This file is part of DIBotQBS.
-
-    DIBotQBS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Foobar is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-
-static const uint8_t FreeSansBold9pt7bBitmaps[] = {
+const uint8_t FreeSansBold9pt7bBitmaps[] = {
     0xFF, 0xFF, 0xFE, 0x48, 0x7E, 0xEF, 0xDF, 0xBF, 0x74, 0x40, 0x19, 0x86,
     0x67, 0xFD, 0xFF, 0x33, 0x0C, 0xC3, 0x33, 0xFE, 0xFF, 0x99, 0x86, 0x61,
     0x90, 0x10, 0x1F, 0x1F, 0xDE, 0xFF, 0x3F, 0x83, 0xC0, 0xFC, 0x1F, 0x09,
@@ -125,7 +106,7 @@ static const uint8_t FreeSansBold9pt7bBitmaps[] = {
     0x66, 0x66, 0x67, 0x30, 0xFF, 0xFF, 0x80, 0xCE, 0x66, 0x66, 0x67, 0x76,
     0x66, 0x66, 0x6E, 0xC0, 0x71, 0x8E};
 
-static const GFXglyph FreeSansBold9pt7bGlyphs[] = {
+const GFXglyph FreeSansBold9pt7bGlyphs[] = {
     {0, 0, 0, 5, 0, 1},        // 0x20 ' '
     {0, 3, 13, 6, 2, -12},     // 0x21 '!'
     {5, 7, 5, 9, 1, -12},      // 0x22 '"'
@@ -222,7 +203,7 @@ static const GFXglyph FreeSansBold9pt7bGlyphs[] = {
     {1219, 4, 17, 7, 2, -12},  // 0x7D '}'
     {1228, 8, 2, 9, 0, -4}};   // 0x7E '~'
 
-static const GFXfont FreeSansBold9pt7b = {(uint8_t *)FreeSansBold9pt7bBitmaps,
+const GFXfont FreeSansBold9pt7b = {(uint8_t *)FreeSansBold9pt7bBitmaps,
                                            (GFXglyph *)FreeSansBold9pt7bGlyphs,
                                            0x20, 0x7E, 22};
 

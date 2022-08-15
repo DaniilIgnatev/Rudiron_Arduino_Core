@@ -11,8 +11,8 @@
     @param  sclk  SPI Clock pin #
     @param  rst   Reset pin # (optional, pass -1 if unused)
 */
-Adafruit_ST7789::Adafruit_ST7789(PortPinName cs, PortPinName dc, PortPinName mosi, PortPinName sclk,
-                                 PortPinName rst)
+Adafruit_ST7789::Adafruit_ST7789(int8_t cs, int8_t dc, int8_t mosi, int8_t sclk,
+                                 int8_t rst)
     : Adafruit_ST77xx(240, 320, cs, dc, mosi, sclk, rst) {}
 
 /*!
@@ -21,10 +21,10 @@ Adafruit_ST7789::Adafruit_ST7789(PortPinName cs, PortPinName dc, PortPinName mos
     @param  dc   Data/Command pin #
     @param  rst  Reset pin # (optional, pass -1 if unused)
 */
-Adafruit_ST7789::Adafruit_ST7789(PortPinName cs, PortPinName dc, PortPinName rst)
+Adafruit_ST7789::Adafruit_ST7789(int8_t cs, int8_t dc, int8_t rst)
     : Adafruit_ST77xx(240, 320, cs, dc, rst) {}
 
-
+#if !defined(ESP8266)
 /*!
     @brief  Instantiate Adafruit ST7789 driver with selectable hardware SPI
     @param  spiClass  Pointer to an SPI device to use (e.g. &SPI1)
@@ -32,10 +32,10 @@ Adafruit_ST7789::Adafruit_ST7789(PortPinName cs, PortPinName dc, PortPinName rst
     @param  dc        Data/Command pin #
     @param  rst       Reset pin # (optional, pass -1 if unused)
 */
-Adafruit_ST7789::Adafruit_ST7789(SPI *spiClass, PortPinName cs, PortPinName dc,
-                                 PortPinName rst)
+Adafruit_ST7789::Adafruit_ST7789(SPIClass *spiClass, int8_t cs, int8_t dc,
+                                 int8_t rst)
     : Adafruit_ST77xx(240, 320, spiClass, cs, dc, rst) {}
-
+#endif // end !ESP8266
 
 // SCREEN INITIALIZATION ***************************************************
 
@@ -47,8 +47,7 @@ Adafruit_ST7789::Adafruit_ST7789(SPI *spiClass, PortPinName cs, PortPinName dc,
 
 // clang-format off
 
-static const uint8_t
-  generic_st7789[] =  {                // Init commands for 7789 screens
+const uint8_t Adafruit_ST7789::generic_st7789[] =  {                // Init commands for 7789 screens
     9,                              //  9 commands in list:
     ST77XX_SWRESET,   ST_CMD_DELAY, //  1: Software reset, no args, w/delay
       150,                          //     ~150 ms delay
@@ -102,22 +101,23 @@ void Adafruit_ST7789::init(uint16_t width, uint16_t height, uint8_t mode) {
   // case-by-case basis.)
 
   commonInit(NULL);
-
-  if (width < 240) {
-    // 1.14" display
-    _rowstart = _rowstart2 = (int)((320 - height + 1) / 2);
-    _colstart = (int)((240 - width + 1) / 2);
-    _colstart2 = (int)((240 - width) / 2);
-  } else if (width == 240 && height == 280) {
-    // 1.69" display
-    _rowstart = 20;
-    _rowstart2 = 0;
-    _colstart = _colstart2 = 0;
-  } else {
-    // 1.3", 1.54", and 2.0" displays
+  if (width == 240 && height == 240) {
+    // 1.3", 1.54" displays (right justified)
     _rowstart = (320 - height);
     _rowstart2 = 0;
     _colstart = _colstart2 = (240 - width);
+  } else if (width == 135 && height == 240) {
+    // 1.14" display (centered, with odd size)
+    _rowstart = _rowstart2 = (int)((320 - height) / 2);
+    // This is the only device currently supported device that has different
+    // values for _colstart & _colstart2. You must ensure that the extra
+    // pixel lands in _colstart and not in _colstart2
+    _colstart = (int)((240 - width + 1) / 2);
+    _colstart2 = (int)((240 - width) / 2);
+  } else {
+    // 1.47", 1.69, 1.9", 2.0" displays (centered)
+    _rowstart = _rowstart2 = (int)((320 - height) / 2);
+    _colstart = _colstart2 = (int)((240 - width) / 2);
   }
 
   windowWidth = width;
@@ -149,7 +149,7 @@ void Adafruit_ST7789::setRotation(uint8_t m) {
   case 1:
     madctl = ST77XX_MADCTL_MY | ST77XX_MADCTL_MV | ST77XX_MADCTL_RGB;
     _xstart = _rowstart;
-    _ystart = _colstart;
+    _ystart = _colstart2;
     _height = windowWidth;
     _width = windowHeight;
     break;
@@ -163,7 +163,7 @@ void Adafruit_ST7789::setRotation(uint8_t m) {
   case 3:
     madctl = ST77XX_MADCTL_MX | ST77XX_MADCTL_MV | ST77XX_MADCTL_RGB;
     _xstart = _rowstart2;
-    _ystart = _colstart2;
+    _ystart = _colstart;
     _height = windowWidth;
     _width = windowHeight;
     break;

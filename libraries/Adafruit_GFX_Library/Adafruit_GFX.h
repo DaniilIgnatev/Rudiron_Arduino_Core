@@ -1,30 +1,13 @@
-/*!
- * @file Adafruit_SPITFT.h
- *
- * Part of Adafruit's GFX graphics library. Originally this class was
- * written to handle a range of color TFT displays connected via SPI,
- * but over time this library and some display-specific subclasses have
- * mutated to include some color OLEDs as well as parallel-interfaced
- * displays. The name's been kept for the sake of older code.
- *
- * Adafruit invests time and resources providing this open source code,
- * please support Adafruit and open-source hardware by purchasing
- * products from Adafruit!
- *
- * Written by Limor "ladyada" Fried for Adafruit Industries,
- * with contributions from the open source community.
- *
- * BSD license, all text here must be included in any redistribution.
- */
-
-
 #ifndef _ADAFRUIT_GFX_H
 #define _ADAFRUIT_GFX_H
 
-#define ARDUINO 100
 
+#include "Arduino.h"
 #include "Print.h"
 #include "gfxfont.h"
+
+#include <Adafruit_I2CDevice.h>
+#include <Adafruit_SPIDevice.h>
 
 /// A generic graphics superclass that can handle all sorts of drawing. At a
 /// minimum you can subclass and provide drawPixel(). At a maximum you can do a
@@ -33,10 +16,6 @@ class Adafruit_GFX : public Print {
 
 public:
   Adafruit_GFX(int16_t w, int16_t h); // Constructor
-
-
-  int availableForWrite();
-  void flush();
 
   /**********************************************************************/
   /*!
@@ -199,11 +178,7 @@ public:
   void cp437(bool x = true) { _cp437 = x; }
 
   using Print::write;
-#if ARDUINO >= 100
   virtual size_t write(uint8_t);
-#else
-  virtual void write(uint8_t);
-#endif
 
   /************************************************************************/
   /*!

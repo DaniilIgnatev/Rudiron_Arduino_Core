@@ -1,26 +1,7 @@
-/*
-    This file is part of DIBotQBS.
-
-    DIBotQBS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Foobar is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-
-static const uint8_t FreeSerifItalic9pt7bBitmaps[] = {
+const uint8_t FreeSerifItalic9pt7bBitmaps[] = {
     0x11, 0x12, 0x22, 0x24, 0x40, 0x0C, 0xDE, 0xE5, 0x40, 0x04, 0x82, 0x20,
     0x98, 0x24, 0x7F, 0xC4, 0x82, 0x23, 0xFC, 0x24, 0x11, 0x04, 0x83, 0x20,
     0x1C, 0x1B, 0x99, 0x4D, 0x26, 0x81, 0xC0, 0x70, 0x1C, 0x13, 0x49, 0xA4,
@@ -119,7 +100,7 @@ static const uint8_t FreeSerifItalic9pt7bBitmaps[] = {
     0x30, 0xC3, 0x8F, 0x00, 0xFF, 0xF0, 0x1E, 0x0C, 0x10, 0x20, 0xC1, 0x82,
     0x04, 0x1C, 0x30, 0x40, 0x83, 0x04, 0x08, 0x20, 0x60, 0x99, 0x8E};
 
-static const GFXglyph FreeSerifItalic9pt7bGlyphs[] = {
+const GFXglyph FreeSerifItalic9pt7bGlyphs[] = {
     {0, 0, 0, 5, 0, 1},        // 0x20 ' '
     {0, 4, 12, 6, 1, -11},     // 0x21 '!'
     {6, 5, 4, 6, 3, -11},      // 0x22 '"'
@@ -216,7 +197,7 @@ static const GFXglyph FreeSerifItalic9pt7bGlyphs[] = {
     {1146, 7, 16, 7, 0, -12},  // 0x7D '}'
     {1160, 8, 3, 10, 1, -5}};  // 0x7E '~'
 
-static const GFXfont FreeSerifItalic9pt7b = {
+const GFXfont FreeSerifItalic9pt7b = {
     (uint8_t *)FreeSerifItalic9pt7bBitmaps,
     (GFXglyph *)FreeSerifItalic9pt7bGlyphs, 0x20, 0x7E, 22};
 

@@ -41,9 +41,9 @@ void setupUSB() {
 
 }
 
-HardwareSerial Serial(UART::getUART2());
+HardwareSerial Serial(Rudiron::UART::getUART2());
 
-HardwareSerial Serial1(UART::getUART1());
+HardwareSerial Serial1(Rudiron::UART::getUART1());
 
 
 // Function that can be weakly referenced by serialEventRun to prevent

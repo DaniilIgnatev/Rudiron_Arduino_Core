@@ -6,13 +6,17 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # PARTICULAR PURPOSE.
 
 # This program built for i386-apple-darwin11.3.0
+ 
+make: *** No rule to make target `all'.  Stop.
 
-# Make data base, printed on Sat Aug 13 17:05:36 2022
+
+# Make data base, printed on Sun Aug 14 17:41:54 2022
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
+ 
 # automatic
 ?F = $(notdir $?)
 # automatic
@@ -42,7 +46,7 @@ ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.QE07LTNwEu/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.Tp5w0F5tLi/Listeners
 # automatic
 %F = $(notdir $%)
 # environment
@@ -126,7 +130,7 @@ MAKELEVEL := 0
 # environment
 LANG = C
 # environment
-VSCODE_PID = 10015
+VSCODE_PID = 2059
 # variable set hash-table stats:
 # Load=58/1024=6%, Rehash=0, Collisions=1/79=1%
 
@@ -136,7 +140,7 @@ VSCODE_PID = 10015
 
 # Directories
 
-# . (device 16777233, inode 10706288): 20 files, no impossibilities.
+# . (device 16777234, inode 10706288): 20 files, no impossibilities.
 
 # 20 files, no impossibilities in 1 directories.
 
@@ -162,6 +166,7 @@ all:
 #  File has not been updated.
 
 # Not a target:
+ 
 Makefile:
 #  A default, MAKEFILES, or -include/sinclude makefile.
 #  Implicit rule search has been done.
@@ -210,8 +215,6 @@ GNUmakefile:
 # strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
 # strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
 
-# Finished Make data base on Sat Aug 13 17:05:36 2022
+# Finished Make data base on Sun Aug 14 17:41:54 2022
 
  
-make: *** No rule to make target `all'.  Stop.
-

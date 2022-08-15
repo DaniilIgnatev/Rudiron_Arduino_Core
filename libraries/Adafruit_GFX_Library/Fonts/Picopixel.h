@@ -1,30 +1,10 @@
 // Picopixel by Sebastian Weber.  A tiny font
 // with all characters within a 6 pixel height.
 
-
-/*
-    This file is part of DIBotQBS.
-
-    DIBotQBS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Foobar is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-
-static const uint8_t PicopixelBitmaps[] = {
+const uint8_t PicopixelBitmaps[] = {
     0xE8, 0xB4, 0x57, 0xD5, 0xF5, 0x00, 0x4E, 0x3E, 0x80, 0xA5, 0x4A, 0x4A,
     0x5A, 0x50, 0xC0, 0x6A, 0x40, 0x95, 0x80, 0xAA, 0x80, 0x5D, 0x00, 0x60,
     0xE0, 0x80, 0x25, 0x48, 0x56, 0xD4, 0x75, 0x40, 0xC5, 0x4E, 0xC5, 0x1C,
@@ -41,7 +21,7 @@ static const uint8_t PicopixelBitmaps[] = {
     0x90, 0xE8, 0x71, 0xE0, 0xBA, 0x40, 0xB5, 0x80, 0xB5, 0x00, 0x8D, 0x54,
     0xAA, 0x80, 0xAC, 0xE0, 0xE5, 0x70, 0x6A, 0x26, 0xFC, 0xC8, 0xAC, 0x5A};
 
-static const GFXglyph PicopixelGlyphs[] = {{0, 0, 0, 2, 0, 1},     // 0x20 ' '
+const GFXglyph PicopixelGlyphs[] = {{0, 0, 0, 2, 0, 1},     // 0x20 ' '
                                             {0, 1, 5, 2, 0, -4},    // 0x21 '!'
                                             {1, 3, 2, 4, 0, -4},    // 0x22 '"'
                                             {2, 5, 5, 6, 0, -4},    // 0x23 '#'
@@ -137,7 +117,7 @@ static const GFXglyph PicopixelGlyphs[] = {{0, 0, 0, 2, 0, 1},     // 0x20 ' '
                                             {177, 3, 5, 4, 0, -4},  // 0x7D '}'
                                             {179, 4, 2, 5, 0, -3}}; // 0x7E '~'
 
-static const GFXfont Picopixel = {(uint8_t *)PicopixelBitmaps,
+const GFXfont Picopixel = {(uint8_t *)PicopixelBitmaps,
                                    (GFXglyph *)PicopixelGlyphs, 0x20, 0x7E, 7};
 
 // Approx. 852 bytes

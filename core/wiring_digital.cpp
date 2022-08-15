@@ -28,11 +28,9 @@
 #include "pins_arduino.h"
 #include "rudiron/gpio.h"
 
-using namespace Rudiron;
-
 void pinMode(uint8_t pin, uint8_t mode)
 {
-  PortPinName pinName = GPIO::pinMap[pin];
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
 
   switch (mode)
   {
@@ -55,12 +53,12 @@ void pinMode(uint8_t pin, uint8_t mode)
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {
-  PortPinName pinName = GPIO::pinMap[pin];
-  GPIO::writePin(pinName, (bool)val);
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::GPIO::writePin(pinName, (bool)val);
 }
 
 int digitalRead(uint8_t pin)
 {
-  PortPinName pinName = GPIO::pinMap[pin];
-  return GPIO::readPin(pinName);
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  return Rudiron::GPIO::readPin(pinName);
 }

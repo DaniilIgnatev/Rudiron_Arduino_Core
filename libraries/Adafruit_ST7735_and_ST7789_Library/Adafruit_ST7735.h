@@ -1,27 +1,8 @@
-/*!
- * @file Adafruit_SPITFT.h
- *
- * Part of Adafruit's GFX graphics library. Originally this class was
- * written to handle a range of color TFT displays connected via SPI,
- * but over time this library and some display-specific subclasses have
- * mutated to include some color OLEDs as well as parallel-interfaced
- * displays. The name's been kept for the sake of older code.
- *
- * Adafruit invests time and resources providing this open source code,
- * please support Adafruit and open-source hardware by purchasing
- * products from Adafruit!
- *
- * Written by Limor "ladyada" Fried for Adafruit Industries,
- * with contributions from the open source community.
- *
- * BSD license, all text here must be included in any redistribution.
- */
-
-
 #ifndef _ADAFRUIT_ST7735H_
 #define _ADAFRUIT_ST7735H_
 
 #include "Adafruit_ST77xx.h"
+#include "SPI.h"
 
 // some flags for initR() :(
 #define INITR_GREENTAB 0x00
@@ -70,9 +51,11 @@
 /// Subclass of ST77XX for ST7735B and ST7735R TFT Drivers:
 class Adafruit_ST7735 : public Adafruit_ST77xx {
 public:
-  Adafruit_ST7735(PortPinName cs, PortPinName dc, PortPinName mosi, PortPinName sclk, PortPinName rst);
-  Adafruit_ST7735(PortPinName cs, PortPinName dc, PortPinName rst);
-  Adafruit_ST7735(SPI *spiClass, PortPinName cs, PortPinName dc, PortPinName rst);
+  Adafruit_ST7735(int8_t cs, int8_t dc, int8_t mosi, int8_t sclk, int8_t rst);
+  Adafruit_ST7735(int8_t cs, int8_t dc, int8_t rst);
+#if !defined(ESP8266)
+  Adafruit_ST7735(SPIClass *spiClass, int8_t cs, int8_t dc, int8_t rst);
+#endif // end !ESP8266
 
   // Differences between displays (usu. identified by colored tab on
   // plastic overlay) are odd enough that we need to do this 'by hand':
@@ -83,6 +66,14 @@ public:
 
 private:
   uint8_t tabcolor;
+  static const uint8_t Bcmd[];
+  static const uint8_t Rcmd1[];
+  static const uint8_t Rcmd2green[];
+  static const uint8_t Rcmd2red[];
+  static const uint8_t Rcmd2green144[];
+  static const uint8_t Rcmd2green160x80[];
+  static const uint8_t Rcmd3[];
+
 };
 
 #endif // _ADAFRUIT_ST7735H_

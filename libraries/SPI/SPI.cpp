@@ -23,6 +23,8 @@
  uint8_t SPIClass::inTransactionFlag = 0;
  #endif
 
+SPISettings SPIClass::lastSettings;
+
  void SPIClass::begin()
  {
    // uint8_t sreg = SREG;

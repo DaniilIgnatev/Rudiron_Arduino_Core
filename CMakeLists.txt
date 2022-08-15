@@ -141,7 +141,9 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}/nrf24l01
         ${libraries_path}/Wire
         ${libraries_path}/MPU6050
+        ${libraries_path}/Adafruit_BusIO
         ${libraries_path}/Adafruit_GFX_Library
+        ${libraries_path}/Adafruit_GFX_Library/Fonts
         ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
 )
 
@@ -185,8 +187,8 @@ target_link_options(${EXECUTABLE} PRIVATE
         "-mcpu=cortex-${core}"
         "-Wl,--gc-sections"
         "-specs=nano.specs"
-        "-ffreestanding"
-        "-nostartfiles"
+        "-ffreestanding"#not make assumptions about the meanings of function names from the standard library
+        # "-nostartfiles"#Prevents the compiler from using standard startup files when linking
         "-Wl,--print-memory-usage"
 )
 

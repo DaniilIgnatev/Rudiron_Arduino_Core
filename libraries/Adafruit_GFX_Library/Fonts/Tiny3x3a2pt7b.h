@@ -12,12 +12,10 @@
 * Converted by eadmaster with fontconvert
 **/
 
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-static const uint8_t Tiny3x3a2pt7bBitmaps[] = {
+const uint8_t Tiny3x3a2pt7bBitmaps[] = {
     0xC0, 0xB4, 0xBF, 0x80, 0x6B, 0x00, 0xDD, 0x80, 0x59, 0x80, 0x80, 0x64,
     0x98, 0xF0, 0x5D, 0x00, 0xC0, 0xE0, 0x80, 0x2A, 0x00, 0x55, 0x00, 0x94,
     0xC9, 0x80, 0xEF, 0x80, 0xBC, 0x80, 0x6B, 0x00, 0x9F, 0x80, 0xE4, 0x80,
@@ -31,7 +29,7 @@ static const uint8_t Tiny3x3a2pt7bBitmaps[] = {
     0xDC, 0xD4, 0xF0, 0xF8, 0xF4, 0xE0, 0x60, 0x59, 0x80, 0xBC, 0xA8, 0xEC,
     0xF0, 0xAC, 0x80, 0x90, 0x79, 0x80, 0xF0, 0xCF, 0x00, 0x78};
 
-static const GFXglyph Tiny3x3a2pt7bGlyphs[] = {
+const GFXglyph Tiny3x3a2pt7bGlyphs[] = {
     {0, 0, 0, 4, 0, 1},     // 0x20 ' '
     {0, 1, 2, 3, 1, -2},    // 0x21 '!'
     {1, 3, 2, 4, 0, -2},    // 0x22 '"'
@@ -128,7 +126,7 @@ static const GFXglyph Tiny3x3a2pt7bGlyphs[] = {
     {139, 3, 3, 4, 0, -2},  // 0x7D '}'
     {141, 3, 2, 4, 0, -2}}; // 0x7E '~'
 
-static const GFXfont Tiny3x3a2pt7b = {(uint8_t *)Tiny3x3a2pt7bBitmaps,
+const GFXfont Tiny3x3a2pt7b = {(uint8_t *)Tiny3x3a2pt7bBitmaps,
                                        (GFXglyph *)Tiny3x3a2pt7bGlyphs, 0x20,
                                        0x7E, 4};
 

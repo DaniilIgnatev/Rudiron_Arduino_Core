@@ -1,26 +1,7 @@
-/*
-    This file is part of DIBotQBS.
-
-    DIBotQBS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Foobar is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-
-static const uint8_t FreeMono9pt7bBitmaps[] = {
+const uint8_t FreeMono9pt7bBitmaps[] = {
     0xAA, 0xA8, 0x0C, 0xED, 0x24, 0x92, 0x48, 0x24, 0x48, 0x91, 0x2F, 0xE4,
     0x89, 0x7F, 0x28, 0x51, 0x22, 0x40, 0x08, 0x3E, 0x62, 0x40, 0x30, 0x0E,
     0x01, 0x81, 0xC3, 0xBE, 0x08, 0x08, 0x71, 0x12, 0x23, 0x80, 0x23, 0xB8,
@@ -93,7 +74,7 @@ static const uint8_t FreeMono9pt7bBitmaps[] = {
     0xBF, 0x29, 0x24, 0xA2, 0x49, 0x26, 0xFF, 0xF8, 0x89, 0x24, 0x8A, 0x49,
     0x2C, 0x61, 0x24, 0x30};
 
-static const GFXglyph FreeMono9pt7bGlyphs[] = {
+const GFXglyph FreeMono9pt7bGlyphs[] = {
     {0, 0, 0, 11, 0, 1},      // 0x20 ' '
     {0, 2, 11, 11, 4, -10},   // 0x21 '!'
     {3, 6, 5, 11, 2, -10},    // 0x22 '"'
@@ -190,7 +171,7 @@ static const GFXglyph FreeMono9pt7bGlyphs[] = {
     {836, 3, 13, 11, 4, -10}, // 0x7D '}'
     {841, 7, 3, 11, 2, -6}};  // 0x7E '~'
 
-static const GFXfont FreeMono9pt7b = {(uint8_t *)FreeMono9pt7bBitmaps,
+const GFXfont FreeMono9pt7b = {(uint8_t *)FreeMono9pt7bBitmaps,
                                        (GFXglyph *)FreeMono9pt7bGlyphs, 0x20,
                                        0x7E, 18};
 

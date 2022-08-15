@@ -1,29 +1,10 @@
 // Org_v01 by Orgdot (www.orgdot.com/aliasfonts).  A tiny,
 // stylized font with all characters within a 6 pixel height.
 
-/*
-    This file is part of DIBotQBS.
-
-    DIBotQBS is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Foobar is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
-*/
-#pragma once
-
+#include "gfxfont.h"
 #include "stdint.h"
-#include "../Adafruit_GFX.h"
 
-
-static const uint8_t Org_01Bitmaps[] = {
+const uint8_t Org_01Bitmaps[] = {
     0xE8, 0xA0, 0x57, 0xD5, 0xF5, 0x00, 0xFD, 0x3E, 0x5F, 0x80, 0x88, 0x88,
     0x88, 0x80, 0xF4, 0xBF, 0x2E, 0x80, 0x80, 0x6A, 0x40, 0x95, 0x80, 0xAA,
     0x80, 0x5D, 0x00, 0xC0, 0xF0, 0x80, 0x08, 0x88, 0x88, 0x00, 0xFC, 0x63,
@@ -48,7 +29,7 @@ static const uint8_t Org_01Bitmaps[] = {
     0x99, 0x97, 0x8C, 0x6B, 0xF0, 0x96, 0x69, 0x99, 0x9F, 0x10, 0x2E, 0x8F,
     0x2B, 0x22, 0xF8, 0x89, 0xA8, 0x0F, 0xE0};
 
-static const GFXglyph Org_01Glyphs[] = {{0, 0, 0, 6, 0, 1},     // 0x20 ' '
+const GFXglyph Org_01Glyphs[] = {{0, 0, 0, 6, 0, 1},     // 0x20 ' '
                                          {0, 1, 5, 2, 0, -4},    // 0x21 '!'
                                          {1, 3, 1, 4, 0, -4},    // 0x22 '"'
                                          {2, 5, 5, 6, 0, -4},    // 0x23 '#'
@@ -144,7 +125,7 @@ static const GFXglyph Org_01Glyphs[] = {{0, 0, 0, 6, 0, 1},     // 0x20 ' '
                                          {267, 3, 5, 4, 0, -4},  // 0x7D '}'
                                          {269, 5, 3, 6, 0, -3}}; // 0x7E '~'
 
-static const GFXfont Org_01 = {(uint8_t *)Org_01Bitmaps,
+const GFXfont Org_01 = {(uint8_t *)Org_01Bitmaps,
                                 (GFXglyph *)Org_01Glyphs, 0x20, 0x7E, 7};
 
 // Approx. 943 bytes

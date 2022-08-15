@@ -25,10 +25,12 @@
 #ifndef _ADAFRUIT_ST77XXH_
 #define _ADAFRUIT_ST77XXH_
 
-//#include "Arduino.h"
-#include "../Adafruit_GFX_Library/Adafruit_GFX.h"
-#include "../Adafruit_GFX_Library/Adafruit_SPITFT.h"
-#include "../Adafruit_GFX_Library/Adafruit_SPITFT_Macros.h"
+// #include "Arduino.h"
+// #include "Print.h"
+// #include <Adafruit_GFX.h>
+#include <Adafruit_SPITFT.h>
+// #include <Adafruit_SPITFT_Macros.h>
+// #include "SPI.h"
 
 #define ST7735_TFTWIDTH_128 128  // for 1.44 and mini
 #define ST7735_TFTWIDTH_80 80    // for mini
@@ -87,23 +89,25 @@
 /// Subclass of SPITFT for ST77xx displays (lots in common!)
 class Adafruit_ST77xx : public Adafruit_SPITFT {
 public:
-  Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName _CS, PortPinName _DC, PortPinName _MOSI,
-                  PortPinName _SCLK, PortPinName _RST = PORT_PIN_NONE, PortPinName _MISO = PORT_PIN_NONE);
-  Adafruit_ST77xx(uint16_t w, uint16_t h, PortPinName CS, PortPinName RS,
-                  PortPinName RST = PORT_PIN_NONE);
-  Adafruit_ST77xx(uint16_t w, uint16_t h, SPI *spiClass, PortPinName CS,
-                  PortPinName RS, PortPinName RST = PORT_PIN_NONE);
+  Adafruit_ST77xx(uint16_t w, uint16_t h, int8_t _CS, int8_t _DC, int8_t _MOSI,
+                  int8_t _SCLK, int8_t _RST = -1, int8_t _MISO = -1);
+  Adafruit_ST77xx(uint16_t w, uint16_t h, int8_t CS, int8_t RS,
+                  int8_t RST = -1);
+#if !defined(ESP8266)
+  Adafruit_ST77xx(uint16_t w, uint16_t h, SPIClass *spiClass, int8_t CS,
+                  int8_t RS, int8_t RST = -1);
+#endif // end !ESP8266
 
   void setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h);
   void setRotation(uint8_t r);
-  void enableDisplay(bool enable);
-  void enableTearing(bool enable);
-  void enableSleep(bool enable);
+  void enableDisplay(boolean enable);
+  void enableTearing(boolean enable);
+  void enableSleep(boolean enable);
 
 protected:
   uint8_t _colstart = 0,   ///< Some displays need this changed to offset
       _rowstart = 0,       ///< Some displays need this changed to offset
-      spiMode = SSP_ModeMaster; ///< Certain display needs MODE3 instead
+      spiMode = SPI_MODE0; ///< Certain display needs MODE3 instead
 
   void begin(uint32_t freq = 0);
   void commonInit(const uint8_t *cmdList);

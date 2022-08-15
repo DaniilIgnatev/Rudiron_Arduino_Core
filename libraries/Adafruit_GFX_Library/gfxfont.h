@@ -1,23 +1,3 @@
-/*!
- * @file Adafruit_SPITFT.h
- *
- * Part of Adafruit's GFX graphics library. Originally this class was
- * written to handle a range of color TFT displays connected via SPI,
- * but over time this library and some display-specific subclasses have
- * mutated to include some color OLEDs as well as parallel-interfaced
- * displays. The name's been kept for the sake of older code.
- *
- * Adafruit invests time and resources providing this open source code,
- * please support Adafruit and open-source hardware by purchasing
- * products from Adafruit!
- *
- * Written by Limor "ladyada" Fried for Adafruit Industries,
- * with contributions from the open source community.
- *
- * BSD license, all text here must be included in any redistribution.
- */
-
-
 // Font structures for newer Adafruit_GFX (1.1 and later).
 // Example fonts are included in 'Fonts' directory.
 // To use a font in your Arduino sketch, #include the corresponding .h
@@ -26,9 +6,6 @@
 
 #ifndef _GFXFONT_H_
 #define _GFXFONT_H_
-
-#include <inttypes.h>
-#include <stdio.h>
 
 /// Font data stored PER GLYPH
 typedef struct {
