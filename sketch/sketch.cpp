@@ -29,15 +29,15 @@ void setup()
 
     // tank_setup();
 
-    // tft.initR(INITR_MINI160x80); // initialize a ST7735S chip, mini display
+    tft.initR(INITR_MINI160x80); // initialize a ST7735S chip, mini display
 
-    // tft.fillScreen(ST77XX_RED);
-    // delay(100);
-    // tft.fillScreen(ST77XX_GREEN);
-    // delay(100);
-    // tft.fillScreen(ST77XX_BLUE);
-    // delay(100);
-    // tft.fillScreen(ST77XX_BLACK);
+    tft.fillScreen(ST77XX_RED);
+    delay(100);
+    tft.fillScreen(ST77XX_GREEN);
+    delay(100);
+    tft.fillScreen(ST77XX_BLUE);
+    delay(100);
+    tft.fillScreen(ST77XX_BLACK);
 }
 
 bool pressed1 = false;

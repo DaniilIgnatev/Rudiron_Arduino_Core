@@ -47,7 +47,7 @@ Adafruit_ST7789::Adafruit_ST7789(SPIClass *spiClass, int8_t cs, int8_t dc,
 
 // clang-format off
 
-const uint8_t Adafruit_ST7789::generic_st7789[] =  {                // Init commands for 7789 screens
+static const uint8_t generic_st7789[] =  {                // Init commands for 7789 screens
     9,                              //  9 commands in list:
     ST77XX_SWRESET,   ST_CMD_DELAY, //  1: Software reset, no args, w/delay
       150,                          //     ~150 ms delay

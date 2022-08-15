@@ -25,7 +25,6 @@ protected:
 private:
   uint16_t windowWidth;
   uint16_t windowHeight;
-  static const uint8_t generic_st7789[];
 };
 
 #endif // _ADAFRUIT_ST7789H_

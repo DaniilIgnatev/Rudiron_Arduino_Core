@@ -66,13 +66,6 @@ public:
 
 private:
   uint8_t tabcolor;
-  static const uint8_t Bcmd[];
-  static const uint8_t Rcmd1[];
-  static const uint8_t Rcmd2green[];
-  static const uint8_t Rcmd2red[];
-  static const uint8_t Rcmd2green144[];
-  static const uint8_t Rcmd2green160x80[];
-  static const uint8_t Rcmd3[];
 
 };
 
