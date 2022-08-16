@@ -45,6 +45,8 @@ int analogRead(uint8_t pin)
 
 // Right now, PWM output only works on the pins with
 // hardware support.
+// pin -- номер вывода
+// val -- степень заполнения ШИМ от 0 до 255 
 void analogWrite(uint8_t pin, int val)
 {
   Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];

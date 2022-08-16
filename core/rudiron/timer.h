@@ -72,10 +72,10 @@ namespace Rudiron {
         void PWM_setup(uint16_t frequency = 500);
 
 
-        void PWM_start(PortPinName pinName, uint8_t percentage);
+        void PWM_start(PortPinName pinName, uint8_t value);
 
 
-        void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t percentage);
+        void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t value);
 
 
         void PWM_stop(PortPinName pinName);

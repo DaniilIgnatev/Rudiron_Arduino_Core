@@ -196,6 +196,10 @@ private:
     int16_t minAngle;
     int16_t maxAngle;
 
+    Rudiron::PortPinName portPin;
+    Rudiron::Timer *timer;
+    int pwmValue;
+
     void resetFields(void);
 };
 
