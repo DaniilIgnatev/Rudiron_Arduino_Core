@@ -145,6 +145,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}/Adafruit_GFX_Library
         ${libraries_path}/Adafruit_GFX_Library/Fonts
         ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
+        ${libraries_path}/Servo
 )
 
 # Объявления
@@ -152,7 +153,7 @@ target_compile_definitions(${EXECUTABLE} PRIVATE
         ${board_name}
 
         # USB_IRQ -- включает обработчик прерывания USB
-        # HCLK_DISABLE -- работа от внутреннего резонатора
+        # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
 )
 
 # Аргументы копилятору
@@ -187,8 +188,8 @@ target_link_options(${EXECUTABLE} PRIVATE
         "-mcpu=cortex-${core}"
         "-Wl,--gc-sections"
         "-specs=nano.specs"
-        "-ffreestanding"#not make assumptions about the meanings of function names from the standard library
-        # "-nostartfiles"#Prevents the compiler from using standard startup files when linking
+        "-ffreestanding"#Не делать предположений о значениях имен функций из стандартной библиотеки
+        # "-nostartfiles"#Предотвращает использование компилятором стандартных файлов запуска при компоновке
         "-Wl,--print-memory-usage"
 )
 

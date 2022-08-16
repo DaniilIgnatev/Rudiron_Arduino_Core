@@ -3,10 +3,9 @@
 #include "tank_transmitter.h"
 
 #include "Adafruit_ST7735.h"
+#include "FreeMono9pt7b.h"
 
 Adafruit_ST7735 tft(1, 4, 6);
-
-#include "SPI.h"
 
 void setup()
 {
@@ -38,6 +37,9 @@ void setup()
     tft.fillScreen(ST77XX_BLUE);
     delay(100);
     tft.fillScreen(ST77XX_BLACK);
+
+    tft.setFont(&FreeMono9pt7b);
+    tft.println(" Rudiron Buterbrod!");
 }
 
 bool pressed1 = false;
