@@ -66,7 +66,7 @@ file(GLOB_RECURSE sketch_sources
 set(examples_path "${CMAKE_SOURCE_DIR}/examples")
 file(GLOB_RECURSE examples_sources
         # ${examples_path}/display_basic/*
-        ${examples_path}/nrf24_tank/*
+        # ${examples_path}/nrf24_tank/*
 )
 
 set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
@@ -154,6 +154,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}/Adafruit_GFX_Library/Fonts
         ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
         ${libraries_path}/Servo
+        ${libraries_path}/arduino_timer
 )
 
 # Объявления
