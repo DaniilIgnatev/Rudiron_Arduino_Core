@@ -63,6 +63,12 @@ file(GLOB_RECURSE sketch_sources
         ${sketch_path}/*
 )
 
+set(examples_path "${CMAKE_SOURCE_DIR}/examples")
+file(GLOB_RECURSE examples_sources
+        # ${examples_path}/display_basic/*
+        ${examples_path}/nrf24_tank/*
+)
+
 set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
 
 set(cmsis_include_path "${cmsis_path}/Include")
@@ -112,6 +118,7 @@ set(LINKER_FILE "${cmsis_startup_path}/${cpu_name}.ld")
 set(EXECUTABLE "${PROJECT_NAME}.elf")
 add_executable(${EXECUTABLE}
         ${sketch_sources}
+        ${examples_sources}
         ${cmsis_startup_sources}
         ${system_sources}
         ${core_sources}
@@ -126,6 +133,7 @@ add_executable(${EXECUTABLE}
 target_include_directories(${EXECUTABLE} PRIVATE
         ${core_path}
         ${sketch_path}
+        ${examples_path}
         ${cmsis_include_path}
         ${cmsis_source_path}
         ${cmsis_source_templates_path}
@@ -199,7 +207,7 @@ add_custom_command(TARGET ${EXECUTABLE}
         COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
         COMMAND ${CMAKE_OBJCOPY} -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin)
 
-# Вывод информации о размере для продвинутых пользователей
+# Вывод информации о размере памяти для продвинутых пользователей
 # add_custom_command(TARGET ${EXECUTABLE}
 # POST_BUILD
 # COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE})

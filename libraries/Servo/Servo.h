@@ -32,6 +32,7 @@
 #define _SERVO_H_
 
 #include "Arduino.h"
+#include "rudiron/timer.h"
 
 /*
  * Note on Arduino compatibility:

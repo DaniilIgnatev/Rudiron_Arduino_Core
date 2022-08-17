@@ -17,7 +17,19 @@
         "type_traits": "cpp",
         "exception": "cpp",
         "new": "cpp",
-        "array": "cpp"
+        "array": "cpp",
+        "cctype": "cpp",
+        "cmath": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "cstdarg": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "utility": "cpp",
+        "initializer_list": "cpp",
+        "*.tcc": "cpp",
+        "cinttypes": "cpp",
+        "cstdint": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

@@ -1,12 +1,12 @@
-#include "tank_transmitter.h"
+#include "tank_transmitter_sketch.h"
 
-#ifdef TRANSMITTER
+#ifdef NRF_TRANSMITTER
 
 using namespace Rudiron;
 
 uint8_t package[3];
 
-void tank_setup(){
+void nrf24_tank_setup(){
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
@@ -19,7 +19,7 @@ void tank_setup(){
 bool pressed2_last = false;
 bool isForwards = false;
 
-void tank_loop(){
+void nrf24_tank_loop(){
     package[1] = pressed1;
     package[2] = pressed3;
 
