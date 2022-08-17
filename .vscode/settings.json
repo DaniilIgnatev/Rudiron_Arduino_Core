@@ -16,7 +16,8 @@
         "limits": "cpp",
         "type_traits": "cpp",
         "exception": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "array": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

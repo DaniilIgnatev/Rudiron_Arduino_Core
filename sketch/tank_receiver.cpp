@@ -2,19 +2,19 @@
 
 #ifndef TRANSMITTER
 
-#define leftEngineF 12
-#define leftEngineB 13
-#define rightEngineF 14
-#define rightEngineB 15
+#define leftEngineFrontPin 12
+#define leftEngineBackPin 13
+#define rightEngineFrontPin 14
+#define rightEngineBackPin 15
 
 using namespace Rudiron;
 
 void configEngines()
 {
-    pinMode(leftEngineF, OUTPUT);
-    pinMode(leftEngineB, OUTPUT);
-    pinMode(rightEngineF, OUTPUT);
-    pinMode(rightEngineB, OUTPUT);
+    pinMode(leftEngineFrontPin, OUTPUT);
+    pinMode(leftEngineBackPin, OUTPUT);
+    pinMode(rightEngineFrontPin, OUTPUT);
+    pinMode(rightEngineBackPin, OUTPUT);
 }
 
 void tank_setup()
@@ -28,29 +28,70 @@ void tank_setup()
     configEngines();
 }
 
-bool isForwards = false;
+const int testPackages_size = 8;
 
-void turn(bool left, bool active)
+int testPackages_index = 0;
+
+std::array<TankReceiverModel, testPackages_size> truthTable = {
+    TankReceiverModel{true, false, false, false, false, false, false},
+    TankReceiverModel{true, true, false, true, false, false, true},
+    TankReceiverModel{true, false, true, false, true, true, false},
+    TankReceiverModel{true, true, true, true, false, true, false},
+    TankReceiverModel{false, false, false, false, false, false, false},
+    TankReceiverModel{false, true, false, false, true, true, false},
+    TankReceiverModel{false, false, true, true, false, false, true},
+    TankReceiverModel{false, true, true, false, true, false, true}};
+
+TankReceiverModel updateModel()
 {
-    digitalWrite(leftEngineB, !(isForwards == left));
-    digitalWrite(rightEngineB, (isForwards == left));
+    TankReceiverModel result;
 
-    digitalWrite(leftEngineF, (isForwards == left));
-    digitalWrite(rightEngineF, !(isForwards == left));
+    for (auto truthModel : truthTable)
+    {
+        if (truthModel.isForwards == model.isForwards && truthModel.leftActive == model.leftActive && truthModel.rightActive == model.rightActive)
+        {
+            result = truthModel;
+            break;
+        }
+    }
 
-    digitalWrite(left ? LED_BUILTIN_1 : LED_BUILTIN_2, active);
+    return result;
+}
+
+bool hasNextTestDataPackage()
+{
+    return testPackages_index != testPackages_size;
+}
+
+TankReceiverModel nextTestDataPackage()
+{
+    return truthTable[testPackages_index++];
+}
+
+TankReceiverModel model;
+
+void move()
+{
+    model = updateModel();
+
+    digitalWrite(leftEngineFrontPin, model.leftEngineFront);
+    digitalWrite(rightEngineFrontPin, model.rightEngineFront);
+    digitalWrite(leftEngineBackPin, model.leftEngineBack);
+    digitalWrite(rightEngineBackPin, model.rightEngineBack);
+
+    digitalWrite(LED_BUILTIN_1, model.leftActive);
+    digitalWrite(LED_BUILTIN_2, model.rightActive);
 }
 
 void tank_loop()
 {
     if (nrf24.available())
     {
-        isForwards = nrf24.read();
-        bool leftActive = nrf24.read();
-        bool rightActive = nrf24.read();
+        model.isForwards = nrf24.read();
+        model.leftActive = nrf24.read();
+        model.rightActive = nrf24.read();
 
-        turn(true, leftActive);
-        turn(false, rightActive);
+        move();
     }
 
     delay(50);
