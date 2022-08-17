@@ -28,7 +28,7 @@ void nrf24_tank_setup()
     configEngines();
 }
 
-struct TankEngineModel
+struct TankControlModel
 {
     bool isForwards = false;
     bool leftActive = false;
@@ -40,19 +40,19 @@ struct TankEngineModel
     bool rightEngineBack = false;
 };
 
-TankEngineModel model;
+TankControlModel model;
 
 const int testPackages_size = 8;
 
-TankEngineModel truthTable[testPackages_size] = {
-    TankEngineModel{true, false, false, false, false, false, false},
-    TankEngineModel{true, true, false, true, false, false, true},
-    TankEngineModel{true, false, true, false, true, true, false},
-    TankEngineModel{true, true, true, true, false, true, false},
-    TankEngineModel{false, false, false, false, false, false, false},
-    TankEngineModel{false, true, false, false, true, true, false},
-    TankEngineModel{false, false, true, true, false, false, true},
-    TankEngineModel{false, true, true, false, true, false, true}};
+TankControlModel truthTable[testPackages_size] = {
+    TankControlModel{true, false, false, false, false, false, false},
+    TankControlModel{true, true, false, true, false, false, true},
+    TankControlModel{true, false, true, false, true, true, false},
+    TankControlModel{true, true, true, true, false, true, false},
+    TankControlModel{false, false, false, false, false, false, false},
+    TankControlModel{false, true, false, false, true, true, false},
+    TankControlModel{false, false, true, true, false, false, true},
+    TankControlModel{false, true, true, false, true, false, true}};
 
 void updateModelInputs()
 {
