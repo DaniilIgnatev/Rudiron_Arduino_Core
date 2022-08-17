@@ -20,24 +20,30 @@
 */
 
 #include <Arduino.h>
+#include "arduino-timer.h"
+
+Timer<> timer_lowPriority;
 
 int main(void)
 {
-	init();
+  init();
 
-	initVariant();
+  initVariant();
 
 #if defined(USBCON)
-	USBDevice.attach();
+  USBDevice.attach();
 #endif
 
-	setup();
-    
-	for (;;) {
-		loop();
-		if (serialEventRun) serialEventRun();
-	}
-        
-	return 0;
-}
+  setup();
 
+  for (;;)
+  {
+    loop();
+    if (serialEventRun)
+      serialEventRun();
+    
+    timer_lowPriority.tick();
+  }
+
+  return 0;
+}

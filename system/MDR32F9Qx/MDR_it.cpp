@@ -33,7 +33,7 @@
 #include "nrf24l01.h"
 
 #include "Arduino.h"
-
+#include "arduino-timer.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -146,6 +146,8 @@ void PendSV_Handler(void)
 {
 }
 
+Timer<4, micros, void*> timer_highPriority;
+
 /*******************************************************************************
  * Function Name  : SysTick_Handler
  * Description    : This function handles SysTick Handler.
@@ -156,6 +158,7 @@ void PendSV_Handler(void)
 void SysTick_Handler(void)
 {
     _micros += MICROS_STEP;
+    timer_highPriority.tick();
 }
 
 CAN_RxMsgTypeDef can_rx;
