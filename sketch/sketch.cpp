@@ -1,5 +1,14 @@
 #include "sketch.h"
 
+bool callback1(void*){
+    digitalWrite(LED_BUILTIN_1, !digitalRead(LED_BUILTIN_1));
+    return true;
+}
+
+bool callback2(void*){
+    digitalWrite(LED_BUILTIN_2, !digitalRead(LED_BUILTIN_2));
+    return true;
+}
 
 void setup()
 {
@@ -18,7 +27,12 @@ void setup()
 
     Serial.begin(115200);
     Serial.println("РУДИРОН Бутерброд!");
+
+    tasksTimer.start_every_millis(1000, callback1);
+    tasksTimer.start_every_millis(2000, callback2);
+
 }
+
 
 bool pressed1 = false;
 
@@ -31,4 +45,5 @@ void loop()
     pressed1 = digitalRead(BUTTON_BUILTIN_1);
     pressed2 = digitalRead(BUTTON_BUILTIN_2);
     pressed3 = digitalRead(BUTTON_BUILTIN_3);
+
 }

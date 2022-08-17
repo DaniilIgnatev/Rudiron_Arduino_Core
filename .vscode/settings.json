@@ -29,7 +29,9 @@
         "initializer_list": "cpp",
         "*.tcc": "cpp",
         "cinttypes": "cpp",
-        "cstdint": "cpp"
+        "cstdint": "cpp",
+        "climits": "cpp",
+        "cstdbool": "cpp"
     },
     "cortex-debug.variableUseNaturalFormat": true
 }

@@ -154,7 +154,6 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}/Adafruit_GFX_Library/Fonts
         ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
         ${libraries_path}/Servo
-        ${libraries_path}/arduino_timer
 )
 
 # Объявления

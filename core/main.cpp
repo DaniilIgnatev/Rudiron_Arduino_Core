@@ -20,9 +20,9 @@
 */
 
 #include <Arduino.h>
-#include "arduino-timer.h"
+#include "rudiron/tasks_timer.h"
 
-Timer<> timer_lowPriority;
+TasksTimer tasksTimer;
 
 int main(void)
 {
@@ -40,9 +40,14 @@ int main(void)
   {
     loop();
     if (serialEventRun)
+    {
       serialEventRun();
-    
-    timer_lowPriority.tick();
+    }
+
+    if (!tasksTimer.empty())
+    {
+      tasksTimer.tick();
+    }
   }
 
   return 0;
