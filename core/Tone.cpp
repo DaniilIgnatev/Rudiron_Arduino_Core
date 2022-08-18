@@ -52,7 +52,7 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
     
     timer->start();
     timer->PWM_setup(frequency);
-    timer->PWM_start(pinName, 50);
+    timer->PWM_start(pinName, 500);
 
     if (duration)
     {

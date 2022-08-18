@@ -58,8 +58,6 @@ Servo::Servo()
 
 bool Servo::attach(uint8_t pin, uint16_t minPW, uint16_t maxPW, int16_t minAngle, int16_t maxAngle)
 {
-    pinMode(pin, OUTPUT);
-
     if (this->attached())
     {
         this->detach();
@@ -71,10 +69,11 @@ bool Servo::attach(uint8_t pin, uint16_t minPW, uint16_t maxPW, int16_t minAngle
     this->minAngle = minAngle;
     this->maxAngle = maxAngle;
 
-    Rudiron::PortPinName portPin = Rudiron::GPIO::pinMap[pin];
+    portPin = Rudiron::GPIO::pinMap[pin];
     if (Rudiron::Timer::hasTimerForPin(portPin))
     {
-        Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(portPin);
+        timer = Rudiron::Timer::getTimerForPinName(portPin);
+        timer->start();
         timer->PWM_setup(50);
         return true;
     }
@@ -118,6 +117,8 @@ int Servo::read() const
     return a == this->minAngle || a == this->maxAngle ? a : a + 1;
 }
 
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
 void Servo::writeMicroseconds(uint16_t pulseWidth)
 {
     if (!this->attached())
@@ -127,9 +128,10 @@ void Servo::writeMicroseconds(uint16_t pulseWidth)
     }
 
     pulseWidth = constrain(pulseWidth, this->minPW, this->maxPW);
-    this->pwmValue = map(pulseWidth, this->minPW, this->maxPW, 0, 255);
+    this->pwmValue = map(pulseWidth, this->minPW, this->maxPW, 27, 120);
     timer->PWM_start(portPin, pwmValue);
 }
+#pragma gcc pop_options
 
 uint16_t Servo::readMicroseconds() const
 {

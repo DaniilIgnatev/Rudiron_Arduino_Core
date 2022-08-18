@@ -15,6 +15,7 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 The original idea and code was taken from arduino-timer library (regards to the author), then heavily optimized, simplified and tuned in the sdk to improve the user experience.
+https://www.arduino.cc/reference/en/libraries/arduino-timer/
 */
 
 #pragma once

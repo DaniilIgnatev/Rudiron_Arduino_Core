@@ -57,6 +57,7 @@ void analogWrite(uint8_t pin, int val)
     pinMode(pin, OUTPUT);
     timer->start();
     timer->PWM_setup(analogWrite_Frequency);
-    timer->PWM_start(pinName, val);
+    long pwm_val = map(val, 0, 255, 0, 1000);
+    timer->PWM_start(pinName, pwm_val);
   }
 }

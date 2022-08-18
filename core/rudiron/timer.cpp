@@ -48,9 +48,7 @@ namespace Rudiron
         RST_CLK_FreqTypeDef RST_CLK_Clocks;
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
 
-        uint32_t cpu_frequency = Rudiron::CLK::getCPUFrequency();
-
-        uint32_t fullARR = cpu_frequency / 8 / frequency;
+        uint32_t fullARR = 2000000 / frequency;
         prescaler = fullARR / 0xffff;
         ARR = fullARR - (prescaler * 0xffff);
 
@@ -71,17 +69,17 @@ namespace Rudiron
         TIMER_CntInit(MDR_TIMER, &sTIM_CntInit);
     }
 
-    void Timer::PWM_start(PortPinName pinName, uint8_t value)
+    void Timer::PWM_start(PortPinName pinName, uint16_t ppm)
     {
         PWM_initPin(pinName);
-        PWM_activateChannel(pinName, value, false);
+        PWM_activateChannel(pinName, ppm, false);
     }
 
-    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint8_t value)
+    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t ppm)
     {
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
-        PWM_activateChannel(pinName, value, true);
+        PWM_activateChannel(pinName, ppm, true);
     }
 
     void Timer::PWM_initPin(PortPinName pinName)
@@ -111,20 +109,20 @@ namespace Rudiron
         return PORT_InitStructure;
     }
 
-    void Timer::PWM_activateChannel(PortPinName pinName, uint8_t value, bool withNegative)
+    void Timer::PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative)
     {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has)
         {
             return;
         }
-
-        if (value == 255){
+        
+        if (ppm >= 1000){
             GPIO::configPinOutput(pinName);
             GPIO::writePin(pinName, true);
             return;
         }
-        if (value == 0){
+        if (ppm == 0){
             GPIO::configPinOutput(pinName);
             GPIO::writePin(pinName, false);
             return;
@@ -141,8 +139,7 @@ namespace Rudiron
         TIMER_ChnInit(this->MDR_TIMER, &sTIM_ChnInit);
 
         //Степень заполнения
-        uint16_t CCR = value * this->ARR / 255;
-        TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, CCR);
+        TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, ppm * this->ARR / 1000);
 
         //Выход канала
         TIMER_ChnOutInitTypeDef sTIM_ChnOutInit;
@@ -168,7 +165,7 @@ namespace Rudiron
         TIMER_ChnOutInit(this->MDR_TIMER, &sTIM_ChnOutInit);
 
         /* Enable TIMER1 clock */
-        TIMER_BRGInit(this->MDR_TIMER, TIMER_HCLKdiv8);
+        TIMER_BRGInit(this->MDR_TIMER, TIMER_HCLKdiv8 + CLK::getHCLKdiv());
         /* Enable TIMER */
         TIMER_Cmd(this->MDR_TIMER, ENABLE);
     }

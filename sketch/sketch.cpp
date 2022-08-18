@@ -30,9 +30,7 @@ void setup()
 
     tasksTimer.start_every_millis(1000, callback1);
     tasksTimer.start_every_millis(2000, callback2);
-
 }
-
 
 bool pressed1 = false;
 

@@ -4,7 +4,7 @@ namespace Rudiron
 {
     CLK_Speed _CLK_Speed = CLK_Speed::low;
 
-    uint32_t _CPU_Multiplier = DEFAULT_RST_CLK_CPU_PLLmul;
+    uint32_t _CPU_PLLmul = DEFAULT_RST_CLK_CPU_PLLmul;
 
     uint32_t _HCLKdiv = (uint32_t)0x00000000;
 
@@ -15,15 +15,15 @@ namespace Rudiron
         switch (_CLK_Speed)
         {
         case CLK_Speed::medium:
-            _CPU_Multiplier = ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 2) - 1;
+            _CPU_PLLmul = ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 2) - 1;
             _HCLKdiv = ((uint32_t)0x00000001);
             break;
         case CLK_Speed::high:
-            _CPU_Multiplier = ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 4) - 1;
+            _CPU_PLLmul = ((DEFAULT_RST_CLK_CPU_PLLmul + 1) * 4) - 1;
             _HCLKdiv = ((uint32_t)0x00000002);
             break;
         default:
-            _CPU_Multiplier = DEFAULT_RST_CLK_CPU_PLLmul;
+            _CPU_PLLmul = DEFAULT_RST_CLK_CPU_PLLmul;
             _HCLKdiv = ((uint32_t)0x00000000);
             break;
         }
@@ -39,10 +39,10 @@ namespace Rudiron
         while (RST_CLK_HSEstatus() != SUCCESS)
         {
         };
-        CLK::runHSE(getCPU_Multiplier());
+        CLK::runHSE(getCPU_PLLmul());
 #else
         RST_CLK_HSEconfig(RST_CLK_HSE_OFF);
-        CLK::runHSI(getCPU_Multiplier());
+        CLK::runHSI(getCPU_PLLmul());
 #endif
     }
 

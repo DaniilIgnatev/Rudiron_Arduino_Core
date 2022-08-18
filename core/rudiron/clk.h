@@ -34,7 +34,7 @@ namespace Rudiron
 
     extern CLK_Speed _CLK_Speed;
 
-    extern uint32_t _CPU_Multiplier;
+    extern uint32_t _CPU_PLLmul;
 
     extern uint32_t _HCLKdiv;
 
@@ -85,13 +85,18 @@ namespace Rudiron
         }
 
         ///Коэффициент умножения тактовой частоты микропроцессора
-        static inline uint32_t getCPU_Multiplier(){
-            return _CPU_Multiplier;
+        static inline uint32_t getCPU_PLLmul(){
+            return _CPU_PLLmul;
         }
 
         ///Коэффициент деления тактирования блоков микроконтроллера
         static inline uint32_t getHCLKdiv(){
             return _HCLKdiv;
+        }
+
+        ///Во сколько раз установленная частота процессора выше базовой
+        static inline uint8_t getCPU_Multiplier(){
+            return 1 << _HCLKdiv;
         }
 
         ///Копия значения _millis
