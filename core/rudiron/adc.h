@@ -54,27 +54,23 @@ namespace Rudiron
 
     class ADC
     {
-    protected:
-        uint32_t channelMask = 0;
+    private:
+        static uint32_t channelMask;
 
-        ADCResult readValues[7];
+        static ADCResult readValues[7];
 
-        GPIO port = GPIO();
-
-        void initPinADC(PortPinName pinName);
+        static void initPinADC(PortPinName pinName);
 
     public:
-        ADC();
+        static void configureDefault();
 
-        void configureDefault();
+        static bool configurePin(PortPinName pinName, bool enable);
 
-        bool configurePin(PortPinName pinName, bool enable);
+        static void start();
 
-        void start();
+        static void stop();
 
-        void stop();
-
-        ADCResult readPin(PortPinName pinName);
+        static ADCResult readPin(PortPinName pinName);
     };
 }
 

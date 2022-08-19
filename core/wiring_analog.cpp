@@ -26,30 +26,38 @@
 #include "wiring_private.h"
 #include "pins_arduino.h"
 
-
 void analogReference(uint8_t mode)
 {
-	// can't actually set the register here because the default setting
-	// will connect AVCC and the AREF pin, which would cause a short if
-	// there's something connected to AREF.
-
+  // can't actually set the register here because the default setting
+  // will connect AVCC and the AREF pin, which would cause a short if
+  // there's something connected to AREF.
 }
 
 int analogRead(uint8_t pin)
 {
-	uint8_t low, high;
+  // uint8_t low, high;
+  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::ADC::configurePin(pinName, true);
+  auto result = Rudiron::ADC::readPin(pinName);
 
-	// combine the two bytes
-	return (high << 8) | low;
+  if (!result.valid)
+  {
+    return -1;
+  }
+
+  return result.value;
+  // combine the two bytes
+  // return (high << 8) | low;
 }
 
 // Right now, PWM output only works on the pins with
 // hardware support.
 // pin -- номер вывода
-// val -- степень заполнения ШИМ от 0 до 255 
+// val -- степень заполнения ШИМ от 0 до 255
 void analogWrite(uint8_t pin, int val)
 {
   Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::ADC::configurePin(pinName, false);
   Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)

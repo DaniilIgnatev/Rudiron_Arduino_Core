@@ -15,43 +15,45 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 #include "variant.h"
-#include "rudiron/can.h"
+#include "wiring_private.h"
 #include "config.h"
 
 // Declared weak in Arduino.h to allow user redefinitions.
-int atexit(void (* /*func*/ )()) { return 0; }
+int atexit(void (* /*func*/)()) { return 0; }
 
-
-void initVariant() {
+void initVariant()
+{
 
     CAN_RX_Package emptyPackage;
     emptyPackage.ID = 0;
     emptyPackage.Mask = 0;
 
-    for (uint8_t i = 0; i < CAN_RX_BUFFER_LENGTH; i++){
-      _can_rx_buffer[i] = emptyPackage;
+    for (uint8_t i = 0; i < CAN_RX_BUFFER_LENGTH; i++)
+    {
+        _can_rx_buffer[i] = emptyPackage;
     }
+
+    Rudiron::ADC::configureDefault();
+     Rudiron::ADC::start();
 }
 
-void setupUSB() {
-
-
+void setupUSB()
+{
 }
 
 HardwareSerial Serial(Rudiron::UART::getUART2());
 
 HardwareSerial Serial1(Rudiron::UART::getUART1());
 
-
 // Function that can be weakly referenced by serialEventRun to prevent
 // pulling in this file if it's not otherwise used.
-bool Serial0_available() {
+bool Serial0_available()
+{
     return Serial.available();
 }
 
-bool Serial1_available() {
+bool Serial1_available()
+{
     return Serial1.available();
 }

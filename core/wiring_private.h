@@ -32,6 +32,8 @@
 #include "variant.h"
 #include "rudiron/gpio.h"
 #include "rudiron/timer.h"
+#include "rudiron/adc.h"
+#include "rudiron/can.h"
 
 #ifdef __cplusplus
 extern "C"{

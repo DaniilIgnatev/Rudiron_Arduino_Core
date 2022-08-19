@@ -38,13 +38,13 @@ extern "C" {
 #define PIN_SPI_SS                1
 #endif
 #ifndef PIN_SPI_SS1
-#define PIN_SPI_SS1               6
+#define PIN_SPI_SS1               4
 #endif
 #ifndef PIN_SPI_SS2
-#define PIN_SPI_SS2               7
+#define PIN_SPI_SS2               6
 #endif
 #ifndef PIN_SPI_SS3
-#define PIN_SPI_SS3               4
+#define PIN_SPI_SS3               8
 #endif
 #ifndef PIN_SPI_MOSI
 #define PIN_SPI_MOSI              3

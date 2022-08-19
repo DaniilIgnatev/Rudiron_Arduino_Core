@@ -1,5 +1,8 @@
 #include "sketch.h"
 
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+
 bool callback1(void*){
     digitalWrite(LED_BUILTIN_1, !digitalRead(LED_BUILTIN_1));
     return true;
@@ -30,6 +33,7 @@ void setup()
 
     tasksTimer.start_every_millis(1000, callback1);
     tasksTimer.start_every_millis(2000, callback2);
+    
 }
 
 bool pressed1 = false;
@@ -40,8 +44,10 @@ bool pressed3 = false;
 
 void loop()
 {
+    int adcValue = analogRead(A0);
     pressed1 = digitalRead(BUTTON_BUILTIN_1);
     pressed2 = digitalRead(BUTTON_BUILTIN_2);
     pressed3 = digitalRead(BUTTON_BUILTIN_3);
-
 }
+
+#pragma gcc pop_options

@@ -117,8 +117,6 @@ int Servo::read() const
     return a == this->minAngle || a == this->maxAngle ? a : a + 1;
 }
 
-#pragma GCC push_options
-#pragma GCC optimize ("O0")
 void Servo::writeMicroseconds(uint16_t pulseWidth)
 {
     if (!this->attached())
@@ -131,7 +129,6 @@ void Servo::writeMicroseconds(uint16_t pulseWidth)
     this->pwmValue = map(pulseWidth, this->minPW, this->maxPW, 27, 120);
     timer->PWM_start(portPin, pwmValue);
 }
-#pragma gcc pop_options
 
 uint16_t Servo::readMicroseconds() const
 {
