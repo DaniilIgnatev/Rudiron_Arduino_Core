@@ -237,10 +237,6 @@ extern "C"
     SCB->AIRCR = 0x05FA0000 | ((uint32_t)0x500);
     SCB->VTOR = 0x08000000;
     __enable_irq();
-
-    pinMode(BUTTON_BUILTIN_1, INPUT_PULLDOWN);
-    pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
-    pinMode(BUTTON_BUILTIN_3, INPUT_PULLDOWN);
   }
 
   void setup(void);

@@ -67,6 +67,7 @@ set(examples_path "${CMAKE_SOURCE_DIR}/examples")
 file(GLOB_RECURSE examples_sources
         # ${examples_path}/display_basic/*
         # ${examples_path}/nrf24_tank/*
+        ${examples_path}/self_driving_car/*
 )
 
 set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")

@@ -126,7 +126,7 @@ void Servo::writeMicroseconds(uint16_t pulseWidth)
     }
 
     pulseWidth = constrain(pulseWidth, this->minPW, this->maxPW);
-    this->pwmValue = map(pulseWidth, this->minPW, this->maxPW, 27, 120);
+    this->pwmValue = map(pulseWidth, this->minPW, this->maxPW, this->minPW / 20, this->maxPW / 20);
     timer->PWM_start(portPin, pwmValue);
 }
 
