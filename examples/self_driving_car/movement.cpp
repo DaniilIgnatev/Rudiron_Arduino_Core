@@ -5,7 +5,7 @@
 #define rightEngineFrontPin 14
 #define rightEngineBackPin 15
 
-void configureEngines()
+void setup_movement()
 {
     pinMode(leftEngineFrontPin, OUTPUT);
     pinMode(leftEngineBackPin, OUTPUT);
@@ -26,7 +26,7 @@ public:
     bool rightEngineBack = false;
 };
 
-MovementModel model;
+MovementModel movement_model;
 
 const int model_table_size = 8;
 
@@ -41,17 +41,24 @@ MovementModel modelTable[model_table_size] = {
     MovementModel{false, true, true, false, true, false, true}
 };
 
-void updateModel(bool isForwards, bool leftActive, bool rightActive){
-    model.isForwards = isForwards;
-    model.leftActive = leftActive;
-    model.rightActive = rightActive;
+void updateMovement(bool isForwards, bool leftActive, bool rightActive){
+    movement_model.isForwards = isForwards;
+    movement_model.leftActive = leftActive;
+    movement_model.rightActive = rightActive;
 
     for (auto matchedModel : modelTable)
     {
-        if (matchedModel.isForwards == model.isForwards && matchedModel.leftActive == model.leftActive && matchedModel.rightActive == model.rightActive)
+        if (matchedModel.isForwards == movement_model.isForwards && matchedModel.leftActive == movement_model.leftActive && matchedModel.rightActive == movement_model.rightActive)
         {
-            model = matchedModel;
+            movement_model = matchedModel;
             break;
         }
     }
+}
+
+void updateMovement(DirectionsEnum direction){
+    bool leftActive = direction == DirectionsEnum::left || direction == DirectionsEnum::straight;
+    bool rightActive = direction == DirectionsEnum::right || direction == DirectionsEnum::straight;
+
+    updateMovement(true, leftActive, rightActive);
 }

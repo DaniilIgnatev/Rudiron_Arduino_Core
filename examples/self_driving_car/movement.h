@@ -1,7 +1,9 @@
 #pragma once
 
 #include "Arduino.h"
+#include "directions.h"
 
-void configureEngines();
+void setup_movement();
 
-void updateModel(bool isForwards, bool leftActive, bool rightActive);
+void updateMovement(DirectionsEnum direction);
+

@@ -7,7 +7,7 @@
 
 using namespace Rudiron;
 
-void configureEngines()
+void setup_movement()
 {
     pinMode(leftEngineFrontPin, OUTPUT);
     pinMode(leftEngineBackPin, OUTPUT);
@@ -25,7 +25,7 @@ void setup_pinout()
     pinMode(LED_BUILTIN_1, OUTPUT);
     pinMode(LED_BUILTIN_2, OUTPUT);
 
-    configureEngines();
+    setup_movement();
 }
 
 ///Приветствие пользователя
