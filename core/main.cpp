@@ -20,9 +20,8 @@
 */
 
 #include <Arduino.h>
+#include "config.h"
 #include "rudiron/tasks_timer.h"
-
-TasksTimer tasksTimer;
 
 int main(void)
 {
@@ -44,10 +43,12 @@ int main(void)
       serialEventRun();
     }
 
+#ifdef TASKS_TIMER_ENABLED
     if (!tasksTimer.empty())
     {
       tasksTimer.tick();
     }
+#endif
   }
 
   return 0;

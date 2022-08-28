@@ -67,7 +67,7 @@ void wellcome()
     }
 
     Serial.begin(115200);
-    Serial.println("РУДИРОН Бутерброд!");
+    Serial.println("РУДИРОН Бутерброд!");    
 }
 
 ///Код выполняется многократно

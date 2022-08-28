@@ -1,10 +1,10 @@
-#include "display_sketch.h"
+#include "sketch.h"
 #include "Adafruit_ST7735.h"
 #include "FreeMono9pt7b.h"
 
 Adafruit_ST7735 tft(1, 4, 6);
 
-void display_basic_setup()
+void setup()
 {
     tft.initR(INITR_MINI160x80); // initialize a ST7735S chip, mini display
 
@@ -20,7 +20,7 @@ void display_basic_setup()
     tft.println(" Rudiron Buterbrod!");
 }
 
-void display_basic_loop()
+void loop()
 {
 
 }

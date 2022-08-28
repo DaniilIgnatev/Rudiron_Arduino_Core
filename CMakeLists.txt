@@ -59,15 +59,13 @@ file(GLOB_RECURSE libraries_sources
 )
 
 set(sketch_path "${CMAKE_SOURCE_DIR}/sketch")
+set(examples_path "${CMAKE_SOURCE_DIR}/examples")
 file(GLOB_RECURSE sketch_sources
         ${sketch_path}/*
-)
-
-set(examples_path "${CMAKE_SOURCE_DIR}/examples")
-file(GLOB_RECURSE examples_sources
         # ${examples_path}/display_basic/*
-        # ${examples_path}/nrf24_tank/*
-        ${examples_path}/self_driving_car/*
+        # ${examples_path}/nrf24_tank/receiver/*
+        # ${examples_path}/nrf24_tank/transmitter/*
+        # ${examples_path}/self_driving_car/*
 )
 
 set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
@@ -119,7 +117,6 @@ set(LINKER_FILE "${cmsis_startup_path}/${cpu_name}.ld")
 set(EXECUTABLE "${PROJECT_NAME}.elf")
 add_executable(${EXECUTABLE}
         ${sketch_sources}
-        ${examples_sources}
         ${cmsis_startup_sources}
         ${system_sources}
         ${core_sources}

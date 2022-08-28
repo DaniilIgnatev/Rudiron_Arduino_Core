@@ -22,8 +22,11 @@ https://www.arduino.cc/reference/en/libraries/arduino-timer/
 
 #include "clk.h"
 #include <limits.h>
+#include "config.h"
 
-#define TASKS_TIMER_MAX_TASKS 8
+namespace Rudiron{
+    #define TASKS_TIMER_MAX_TASKS 8
+
 
 ///Размещает и отслеживает задачи, вызывая их обработики при наступлении указанного момента времени
 class TasksTimer
@@ -38,7 +41,7 @@ public:
     ///Вызывает обработчик в определенный момент времени (микросекунды)
     TaskID start_at_micros(unsigned long time, handler_t handler, void *argument = nullptr)
     {
-        const unsigned long now = micros();
+        const unsigned long now = Rudiron::CLK::micros();
         return task_id(add_task(now, time - now, handler, argument));
     }
 
@@ -51,7 +54,7 @@ public:
     ///Вызывает обработчик через промежуток времени (микросекунды)
     TaskID start_in_micros(unsigned long delay, handler_t handler, void *argument = nullptr)
     {
-        return task_id(add_task(micros(), delay, handler, argument));
+        return task_id(add_task(Rudiron::CLK::micros(), delay, handler, argument));
     }
 
     ///Вызывает обработчик через промежуток времени (миллисекунды)
@@ -63,7 +66,7 @@ public:
     ///Вызывает обработчик через каждый промежуток времени (микросекунды)
     TaskID start_every_micros(unsigned long interval, handler_t handler, void *argument = nullptr)
     {
-        return task_id(add_task(micros(), interval, handler, argument, interval));
+        return task_id(add_task(Rudiron::CLK::micros(), interval, handler, argument, interval));
     }
 
     ///Вызывает обработчик через каждый промежуток времени (миллисекунды)
@@ -104,7 +107,7 @@ public:
     ///Проверяет обработчики на необходимость передачи им управления
     void tick()
     {
-        const unsigned long t = micros();
+        const unsigned long t = Rudiron::CLK::micros();
                 
         for (int i = 0; i < TASKS_TIMER_MAX_TASKS; i++)
         {
@@ -211,3 +214,8 @@ private:
         return slot;
     }
 };
+}
+
+#ifdef TASKS_TIMER_ENABLED
+extern Rudiron::TasksTimer tasksTimer;
+#endif

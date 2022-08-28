@@ -13,6 +13,9 @@
 #define MICROS_STEP ((uint8_t)10)
 extern volatile uint64_t _micros;
 
+// TASKS
+#define TASKS_TIMER_ENABLED
+
 // UART
 ///Фактически на 1 байт меньше, чтобы не переполнить буфер
 #define SERIAL_RX_BUFFER_LENGTH 64
