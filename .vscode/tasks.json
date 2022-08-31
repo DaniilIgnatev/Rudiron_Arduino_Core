@@ -3,8 +3,8 @@
     "tasks": [
         {
             "type": "shell",
-            "label": "Очистить",
-            "command": "git clean -d -f -x",
+            "label": "Очистить каталог сборки",
+            "command": "rm -rf build/.*;rm -rf build/*",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -141,7 +141,7 @@
                 "--verify_bootloader",
                 "--load",
                 "--run",
-                // "--english"
+                "--english",
             ],
             "dependsOn": [
                 "Выпуск: собрать"
@@ -171,6 +171,7 @@
                 "--speed",
                 "16",
                 "--erase",
+                "--english",
             ],
             "dependsOn": [
                 "Выпуск: собрать"

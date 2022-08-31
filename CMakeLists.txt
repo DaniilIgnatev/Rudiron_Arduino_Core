@@ -62,10 +62,10 @@ set(sketch_path "${CMAKE_SOURCE_DIR}/sketch")
 set(examples_path "${CMAKE_SOURCE_DIR}/examples")
 file(GLOB_RECURSE sketch_sources
         ${sketch_path}/*
-        # ${examples_path}/display_basic/*
-        # ${examples_path}/nrf24_tank/receiver/*
-        # ${examples_path}/nrf24_tank/receiver_lm2-130/*
-        # ${examples_path}/nrf24_tank/transmitter/*
+        # ${examples_path}/display/basic/*
+        # ${examples_path}/nrf24/tank/receiver/*
+        # ${examples_path}/nrf24/tank/receiver_lm2-130/*
+        # ${examples_path}/nrf24/tank/transmitter/*
         # ${examples_path}/self_driving_car/*
 )
 
@@ -146,6 +146,7 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}
         ${libraries_path}/SPI
         ${libraries_path}/nrf24l01
+        ${libraries_path}/ESP_AT_Lib
         ${libraries_path}/Wire
         ${libraries_path}/MPU6050
         ${libraries_path}/Adafruit_BusIO
