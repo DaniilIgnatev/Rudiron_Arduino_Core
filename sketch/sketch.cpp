@@ -32,7 +32,7 @@ bool task_led2(void *)
 void setup()
 {
     setup_pinout();
-    setup_tasks();
+    // setup_tasks();
     wellcome();
 }
 
@@ -68,7 +68,7 @@ void wellcome()
     }
 
     Serial.begin(115200);
-    Serial.println("РУДИРОН Бутерброд!");    
+    Serial1.begin(115200);
 }
 
 ///Код выполняется многократно
@@ -77,4 +77,16 @@ void loop()
     pressed1 = digitalRead(BUTTON_BUILTIN_1);
     pressed2 = digitalRead(BUTTON_BUILTIN_2);
     pressed3 = digitalRead(BUTTON_BUILTIN_3);
+
+    if (Serial1.available())
+    {
+        String str1 = Serial1.readString();
+        // str1.remove(str1.length() - 2);
+        Serial.print(str1);
+
+        String str = Serial.readString();
+        Serial1.print(str);
+    }
+
+    delay(1000);
 }

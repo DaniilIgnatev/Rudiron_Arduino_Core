@@ -30,18 +30,18 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
-// size_t Print::print(const __FlashStringHelper *ifsh)
-//{
-//   PGM_P p = reinterpret_cast<PGM_P>(ifsh);
-//   size_t n = 0;
-//   while (1) {
-//     unsigned char c = pgm_read_byte(p++);
-//     if (c == 0) break;
-//     if (write(c)) n++;
-//     else break;
-//   }
-//   return n;
-// }
+size_t Print::print(const __FlashStringHelper *ifsh)
+{
+  char* p = (char*)ifsh;
+  size_t n = 0;
+  while (1) {
+    unsigned char c = *(p++);
+    if (c == 0) break;
+    if (write(c)) n++;
+    else break;
+  }
+  return n;
+}
 
 size_t Print::print(const String &s)
 {

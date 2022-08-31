@@ -23,7 +23,7 @@ void setup()
         Serial.println("Nrf24 Error!");
         return;
     }
-
+    
     configEngines();
 }
 

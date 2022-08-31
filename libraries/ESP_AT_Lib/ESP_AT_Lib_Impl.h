@@ -2028,6 +2028,9 @@ uint32_t ESP8266::recv(uint8_t *coming_mux_id, uint8_t *buffer, uint32_t buffer_
 /* +IPD,<id>,<len>:<data> */
 /* +IPD,<len>:<data> */
 
+#pragma GCC push_options
+#pragma GCC optimize("O0")
+
 uint32_t ESP8266::recvPkg(uint8_t *buffer, uint32_t buffer_size, uint32_t *data_len, uint32_t timeout, uint8_t *coming_mux_id)
 {
   String data;
@@ -2135,6 +2138,8 @@ uint32_t ESP8266::recvPkg(uint8_t *buffer, uint32_t buffer_size, uint32_t *data_
   }
   return 0;
 }
+
+#pragma GCC pop_options
 ///////////////
 
 #endif    // __ESP_AT_LIB_IMPL_H__

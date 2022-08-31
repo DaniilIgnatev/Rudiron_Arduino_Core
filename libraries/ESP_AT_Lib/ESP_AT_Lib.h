@@ -44,8 +44,12 @@
 
 #define ESP_AT_LIB_VERSION              "ESP_AT_Lib v1.4.1"
 
+#define EspSerial Serial
+#define ESP_AT_BAUD 115200
+#define BOARD_NAME "RUDIRON BUTERBROD"
+
 #ifndef ESP_AT_LIB_DEBUG_OUTPUT
-  #define ESP_AT_LIB_DEBUG_OUTPUT       Serial
+  #define ESP_AT_LIB_DEBUG_OUTPUT       Serial1
 #endif
 
 #ifndef ESP_AT_LIB_DEBUG
