@@ -1,4 +1,4 @@
-#include "tank_receiver_sketch.h"
+#include "sketch.h"
 
 #define IN_LEFT 12
 #define PWM_LEFT 13
