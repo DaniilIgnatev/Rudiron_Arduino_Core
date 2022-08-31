@@ -1,4 +1,5 @@
-#include "sketch.h"
+#include "Arduino.h"
+#include "rudiron/nrf24.h"
 
 using namespace Rudiron;
 

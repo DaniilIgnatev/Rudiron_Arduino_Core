@@ -1,4 +1,5 @@
-#include "sketch.h"
+#include "Arduino.h"
+#include "rudiron/nrf24.h"
 
 #define IN_LEFT 12
 #define PWM_LEFT 13
