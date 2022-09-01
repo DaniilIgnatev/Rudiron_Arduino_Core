@@ -34,7 +34,6 @@
 #define SSID ""
 #define PASSWORD ""
 
-#define HOST_NAME "arduino.tips"
 #define HOST_PORT (80)
 
 ESP8266 wifi(&EspSerial);
@@ -45,33 +44,28 @@ void setup(void)
   {
     ESP_AT_LIB_DEBUG_OUTPUT.begin(115200);
     while (!ESP_AT_LIB_DEBUG_OUTPUT)
-    {
-    }
+      ;
 
 #if defined(BOARD_NAME)
-    ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart HTTPGET on " + String(BOARD_NAME));
+    ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart TCPServer on " + String(BOARD_NAME));
 #else
-    ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart HTTPGET");
+    ESP_AT_LIB_DEBUG_OUTPUT.println("\nStart TCPServer");
 #endif
-
-    ESP_AT_LIB_DEBUG_OUTPUT.println(ESP_AT_LIB_VERSION);
 
     // initialize serial for ESP module
     EspSerial.begin(ESP_AT_BAUD);
+    wifi.restart();
 
     ESP_AT_LIB_DEBUG_OUTPUT.print("FW Version:");
-    String version = wifi.getVersion();
-    ESP_AT_LIB_DEBUG_OUTPUT.println(version);
-
-    ESP_AT_LIB_DEBUG_OUTPUT.print("Set AP/STA Mode ");
+    ESP_AT_LIB_DEBUG_OUTPUT.println(wifi.getVersion().c_str());
 
     if (wifi.setOprToStationSoftAP())
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Set AP/STA Mode OK");
     }
     else
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Set AP/STA Mode failed");
       continue;
     }
 
@@ -87,79 +81,91 @@ void setup(void)
       continue;
     }
 
-    ESP_AT_LIB_DEBUG_OUTPUT.print("disableMUX ");
-
-    if (wifi.disableMUX())
+    if (wifi.enableMUX())
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("enableMUX OK");
+    }
+    else
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("enableMUX failed");
+      continue;
+    }
+
+    if (wifi.startTCPServer(HOST_PORT))
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Start TCP server OK");
+    }
+    else
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("start TCP server failed");
+      continue;
+    }
+
+    if (wifi.setTCPServerTimeout(10))
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Set TCP server timeout 10 seconds");
       break;
     }
     else
     {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Set TCP server timeout failed");
       continue;
     }
   }
 
   ESP_AT_LIB_DEBUG_OUTPUT.println("Done");
 }
-
-//Буфер передатчика esp8266 = 2920 байт
-char requestStr[] = "GET /asciilogo.txt HTTP/1.1\r\nHost: arduino.tips\r\nConnection: close\r\n\r\n";
-
-//Размер буфера приемника esp8266 = 1460 байт
-uint8_t buffer[1460] = {0};
-
 void loop(void)
 {
-  ESP_AT_LIB_DEBUG_OUTPUT.print("Create TCP ");
+  //Размер буфера приемника esp8266 = 1460 байт
+  uint8_t buffer[1460] = {0};
 
-  if (wifi.createTCP(HOST_NAME, HOST_PORT))
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("OK");
-  }
-  else
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("failed");
-    return;
-  }
+  // id сокета
+  uint8_t mux_id;
 
-  if (wifi.send((const uint8_t *)requestStr, strlen(requestStr)))
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Sent a request, OK");
-  }
-  else
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Sent a request, ERROR");
-    if (wifi.releaseTCP())
-    {
-      ESP_AT_LIB_DEBUG_OUTPUT.println("Release TCP OK");
-    }
-    return;
-  }
-
-  uint32_t len = wifi.recv(buffer, sizeof(buffer), 5000);
+  uint32_t len = wifi.recv(&mux_id, buffer, sizeof(buffer), 100);
 
   if (len > 0)
   {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("=========================Received============================");
+    ESP_AT_LIB_DEBUG_OUTPUT.print("Status:[");
+    ESP_AT_LIB_DEBUG_OUTPUT.print(wifi.getIPStatus().c_str());
+    ESP_AT_LIB_DEBUG_OUTPUT.println("]");
+
+    ESP_AT_LIB_DEBUG_OUTPUT.print("Received from :");
+    ESP_AT_LIB_DEBUG_OUTPUT.println(mux_id);
+    ESP_AT_LIB_DEBUG_OUTPUT.print("[");
 
     for (uint32_t i = 0; i < len; i++)
     {
       ESP_AT_LIB_DEBUG_OUTPUT.print((char)buffer[i]);
     }
 
-    ESP_AT_LIB_DEBUG_OUTPUT.println("\n============================================================");
-  }
-  else
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Received an empty response");
-  }
+    ESP_AT_LIB_DEBUG_OUTPUT.println("]");
 
-  if (wifi.releaseTCP())
-  {
-    ESP_AT_LIB_DEBUG_OUTPUT.println("Release TCP OK");
-  }
+    if (wifi.send(mux_id, buffer, len))
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Send back OK");
+    }
+    else
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.println("Send back failed");
+    }
 
-  delay(10000);
+    if (wifi.releaseTCP(mux_id))
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.print("Release TCP ");
+      ESP_AT_LIB_DEBUG_OUTPUT.print(mux_id);
+      ESP_AT_LIB_DEBUG_OUTPUT.println(" OK");
+    }
+    else
+    {
+      ESP_AT_LIB_DEBUG_OUTPUT.print("Release TCP ");
+      ESP_AT_LIB_DEBUG_OUTPUT.print(mux_id);
+      ESP_AT_LIB_DEBUG_OUTPUT.println(" failed");
+    }
+
+    ESP_AT_LIB_DEBUG_OUTPUT.print("Status:[");
+    ESP_AT_LIB_DEBUG_OUTPUT.print(wifi.getIPStatus().c_str());
+    ESP_AT_LIB_DEBUG_OUTPUT.println("]");
+  }
 }

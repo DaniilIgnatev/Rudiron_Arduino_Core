@@ -64,6 +64,7 @@ file(GLOB_RECURSE sketch_sources
         ${sketch_path}/*
         # ${examples_path}/display/basic/*
         # ${examples_path}/esp01/HTTPGET/*
+        # ${examples_path}/esp01/TCPServer/*
         # ${examples_path}/nrf24/tank/receiver/*
         # ${examples_path}/nrf24/tank/receiver_lm2-130/*
         # ${examples_path}/nrf24/tank/transmitter/*
