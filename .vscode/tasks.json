@@ -4,7 +4,7 @@
         {
             "type": "shell",
             "label": "Очистить каталог сборки",
-            "command": "rm -rf build/.*;rm -rf build/*",
+            "command": "rm -rf build",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
@@ -28,10 +28,7 @@
         {
             "type": "shell",
             "label": "Выпуск: собрать",
-            "command": "cmake -DCMAKE_BUILD_TYPE=Release .; cmake --build .",
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
+            "command": "mkdir build; cmake -DCMAKE_BUILD_TYPE=Release -S . -B build/; cmake --build build",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -55,18 +52,11 @@
         {
             "type": "shell",
             "label": "Выпуск: очистить и собрать",
-            "command": "cmake -DCMAKE_BUILD_TYPE=Release .; cmake --build . --clean-first",
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
             "group": "build",
-            "problemMatcher": {
-                "base": "$gcc",
-                "fileLocation": [
-                    "relative",
-                    "${workspaceFolder}/build"
-                ]
-            },
+            "dependsOn": [
+                "Очистить каталог сборки",
+                "Выпуск: собрать"
+            ],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -79,10 +69,7 @@
         {
             "type": "shell",
             "label": "Отладка: собрать",
-            "command": "cmake -DCMAKE_BUILD_TYPE=Debug .; cmake --build .",
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
+            "command": "mkdir build; cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build/; cmake --build build",
             "group": {
                 "kind": "build",
             },
@@ -105,18 +92,41 @@
         {
             "type": "shell",
             "label": "Отладка: очистить и собрать",
-            "command": "cmake -DCMAKE_BUILD_TYPE=Debug .; cmake --build . --clean-first",
-            "options": {
-                "cwd": "${workspaceFolder}/build"
-            },
             "group": "build",
-            "problemMatcher": {
-                "base": "$gcc",
-                "fileLocation": [
-                    "relative",
-                    "${workspaceFolder}/build"
-                ]
+            "dependsOn": [
+                "Очистить каталог сборки",
+                "Отладка: собрать"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "Очистить флеш-память",
+            "command": "Rudiron Programmer",
+            "options": {
+                "cwd": "${workspaceFolder}"
             },
+            "args": [
+                "bootloader_1986be92qi.hex",
+                "build/Arduino_Core_Rudiron.hex",
+                "--verify_bootloader",
+                "--speed",
+                "16",
+                "--erase",
+                "--english",
+            ],
+            "dependsOn": [
+                "Выпуск: собрать"
+            ],
+            "group": "none",
+            "problemMatcher": [],
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -141,36 +151,6 @@
                 "--verify_bootloader",
                 "--load",
                 "--run",
-                "--english",
-            ],
-            "dependsOn": [
-                "Выпуск: собрать"
-            ],
-            "group": "none",
-            "problemMatcher": [],
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared",
-                "showReuseMessage": true,
-                "clear": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "Очистить флеш-память",
-            "command": "Rudiron Programmer",
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "args": [
-                "bootloader_1986be92qi.hex",
-                "build/Arduino_Core_Rudiron.hex",
-                "--verify_bootloader",
-                "--speed",
-                "16",
-                "--erase",
                 "--english",
             ],
             "dependsOn": [
