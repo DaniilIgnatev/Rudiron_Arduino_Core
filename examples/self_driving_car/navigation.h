@@ -5,3 +5,5 @@
 #include "rangefinder.h"
 
 void setup_navigation();
+
+void loop_navigation();

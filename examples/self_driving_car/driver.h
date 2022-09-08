@@ -7,4 +7,4 @@
 
 void setup_driver();
 
-void update_driver(DirectionsEnum direction);
+void drive(DirectionsEnum direction);

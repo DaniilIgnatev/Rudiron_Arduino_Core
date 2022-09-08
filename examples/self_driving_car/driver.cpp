@@ -40,7 +40,7 @@ DriverModel modelTable[model_table_size] = {
     DriverModel{false, false, true, true, false, false, true},
     DriverModel{false, true, true, false, true, false, true}};
 
-void update_driver(bool isForwards, bool leftActive, bool rightActive)
+void drive(bool isForwards, bool leftActive, bool rightActive)
 {
     driver_model.isForwards = isForwards;
     driver_model.leftActive = leftActive;
@@ -56,10 +56,10 @@ void update_driver(bool isForwards, bool leftActive, bool rightActive)
     }
 }
 
-void update_driver(DirectionsEnum direction)
+void drive(DirectionsEnum direction)
 {
     bool leftActive = direction == DirectionsEnum::left || direction == DirectionsEnum::straight;
     bool rightActive = direction == DirectionsEnum::right || direction == DirectionsEnum::straight;
 
-    update_driver(true, leftActive, rightActive);
+    drive(true, leftActive, rightActive);
 }
