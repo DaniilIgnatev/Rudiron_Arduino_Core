@@ -10,13 +10,12 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 make: *** No rule to make target `all'.  Stop.
 
 
-# Make data base, printed on Sun Aug 14 17:41:54 2022
+# Make data base, printed on Thu Sep  8 11:44:12 2022
 
 # Variables
 
 # automatic
 <D = $(patsubst %/,%,$(dir $<))
- 
 # automatic
 ?F = $(notdir $?)
 # automatic
@@ -30,7 +29,7 @@ CURDIR := /Users/daniilignatev/GitHub/Arduino_Core_Rudiron
 # makefile
 SHELL = /bin/sh
 # environment
-VSCODE_NLS_CONFIG = {"locale":"en-gb","availableLanguages":{},"_languagePackSupport":true}
+VSCODE_NLS_CONFIG = {"locale":"ru","availableLanguages":{"*":"ru"},"_languagePackId":"3336b4f881aefc9e2340c398e06e2a31.ru","_translationsConfigFile":"/Users/daniilignatev/Library/Application Support/Code/clp/3336b4f881aefc9e2340c398e06e2a31.ru/tcf.json","_cacheRoot":"/Users/daniilignatev/Library/Application Support/Code/clp/3336b4f881aefc9e2340c398e06e2a31.ru","_resolvedLanguagePackCoreLocation":"/Users/daniilignatev/Library/Application Support/Code/clp/3336b4f881aefc9e2340c398e06e2a31.ru/784b0177c56c607789f9638da7b6bf3230d47a8c","_corruptedFile":"/Users/daniilignatev/Library/Application Support/Code/clp/3336b4f881aefc9e2340c398e06e2a31.ru/corrupted.info","_languagePackSupport":true}
 # environment
 _ = /usr/bin/make
 # makefile
@@ -40,15 +39,19 @@ __CFBundleIdentifier = com.microsoft.VSCode
 # environment
 VSCODE_CWD = /
 # environment
-PATH = /Users/daniilignatev/Qt5.12.12/5.12.12/clang_64/bin:/Users/daniilignatev/homebrew/Cellar/gcc/11.3.0_2/include/c++/11/stdlib.h:/Users/daniilignatev/homebrew/bin:/Users/daniilignatev/RudironDistributive/tools/Rudiron Programmer.app/Contents/MacOS:/Users/daniilignatev/RudironDistributive/components/openocd/bin:/Users/daniilignatev/RudironDistributive/components/gcc-arm-none-eabi/bin:/Users/daniilignatev/RudironDistributive/components/cmake/bin:/Users/daniilignatev/RudironDistributive/components/cmake:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Apple/usr/bin:/Users/daniilignatev/Library/Application Support/JetBrains/Toolbox/scripts
+PATH =    /Users/daniilignatev/RudironDistributive/tools:/Users/daniilignatev/opt/anaconda3/bin:/Users/daniilignatev/opt/anaconda3/condabin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin/gtkwave/Contents/Resources/bin:/Users/daniilignatev/flutter/bin:/Users/daniilignatev/RudironDistributive/components/gcc-arm-none-eabi/bin:/Users/daniilignatev/RudironDistributive/components/cmake:/Users/daniilignatev/RudironDistributive/components/openocd/bin:/usr/local/go/bin:/opt/X11/bin:/Library/Apple/usr/bin:/Users/daniilignatev/GitHub/build/components/gcc-arm-none-eabi/bin:/Users/daniilignatev/GitHub/build/components/openocd/bin:/Users/daniilignatev/GitHub/build/components/cmake/bin:/Users/daniilignatev/GitHub/build/tools/Rudiron Programmer.app/Contents/MacOS:/Users/daniilignatev/GitHub/build/tools/Rudiron Terminal.app/Contents/MacOS:/Users/daniilignatev/RudironDistributive/installer/Rudiron Installer.app/Contents/MacOS:/Users/daniilignatev/RudironDistributive//components/gcc-arm-none-eabi/bin:/Users/daniilignatev/RudironDistributive//components/openocd/bin:/Users/daniilignatev/RudironDistributive//components/cmake/bin:/Users/daniilignatev/RudironDistributive//tools/Rudiron Programmer.app/Contents/MacOS:/Users/daniilignatev/RudironDistributive//tools/Rudiron Terminal.app/Contents/MacOS:/Users/daniilignatev/GitHub/build/Rudiron Installer.app/Contents/MacOS
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # default
 .FEATURES := target-specific order-only second-expansion else-if archives jobserver check-symlink
 # environment
-SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.Tp5w0F5tLi/Listeners
+SSH_AUTH_SOCK = /private/tmp/com.apple.launchd.Ztc9BnVCHL/Listeners
 # automatic
 %F = $(notdir $%)
+# environment
+DISPLAY = /private/tmp/com.apple.launchd.hJLjhUnnBc/org.macosforge.xquartz:0
+# environment
+CONDA_EXE = /Users/daniilignatev/opt/anaconda3/bin/conda
 # environment
 PWD = /Users/daniilignatev/GitHub/Arduino_Core_Rudiron
 # environment
@@ -60,15 +63,19 @@ HOME = /Users/daniilignatev
 # default
 MAKEFILEPATH := /Applications/Xcode.app/Contents/Developer/Makefiles
 # environment
-VSCODE_CODE_CACHE_PATH = /Users/daniilignatev/Library/Application Support/Code/CachedData/6d9b74a70ca9c7733b29f0456fd8195364076dda
+VSCODE_CODE_CACHE_PATH = /Users/daniilignatev/Library/Application Support/Code/CachedData/784b0177c56c607789f9638da7b6bf3230d47a8c
 # environment
 LOGNAME = daniilignatev
 # environment
-APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
+# environment
+CONDA_PROMPT_MODIFIER = (base) 
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
+# environment
+CONDA_DEFAULT_ENV = base
 # environment
 XPC_FLAGS = 0x0
 # default
@@ -85,16 +92,18 @@ USER = daniilignatev
 .DEFAULT_GOAL := 
 # automatic
 %D = $(patsubst %/,%,$(dir $%))
+# environment
+CONDA_SHLVL = 1
 # default
 MAKE_COMMAND := /Applications/Xcode.app/Contents/Developer/usr/bin/make
 # default
 .VARIABLES := 
 # environment
-TMPDIR = /var/folders/4w/c8b_vsmx479f_qtvzrl35z5r0000gn/T/
+TMPDIR = /var/folders/z3/_twpg6_51mq5g2njgrnv8wnc0000gn/T/
 # automatic
 *F = $(notdir $*)
 # environment
-VSCODE_IPC_HOOK = /Users/daniilignatev/Library/Application Support/Code/1.70.1-main.sock
+VSCODE_IPC_HOOK = /Users/daniilignatev/Library/Application Support/Code/1.71.0-main.sock
 # environment
 MallocNanoZone = 0
 # makefile
@@ -104,13 +113,13 @@ MFLAGS = -Rrqp
 # automatic
 *D = $(patsubst %/,%,$(dir $*))
 # environment
-XPC_SERVICE_NAME = application.com.microsoft.VSCode.24641770.24641776
+XPC_SERVICE_NAME = application.com.microsoft.VSCode.45778597.45778603
 # automatic
 +D = $(patsubst %/,%,$(dir $+))
 # automatic
 +F = $(notdir $+)
 # environment
-__CF_USER_TEXT_ENCODING = 0x1F5:0x0:0x2
+__CF_USER_TEXT_ENCODING = 0x1F5:0x7:0x31
 # environment
 COMMAND_MODE = unix2003
 # default
@@ -119,20 +128,28 @@ MAKEFILES :=
 <F = $(notdir $<)
 # environment
 LC_ALL = C
+# environment
+CONDA_PYTHON_EXE = /Users/daniilignatev/opt/anaconda3/bin/python
 # automatic
 ^F = $(notdir $^)
 # default
 SUFFIXES := 
+# environment
+_CE_M = 
 # default
 .INCLUDE_DIRS = /usr/local/include
 # environment
 MAKELEVEL := 0
 # environment
-LANG = C
+CONDA_PREFIX = /Users/daniilignatev/opt/anaconda3
 # environment
-VSCODE_PID = 2059
+VSCODE_PID = 1096
+# environment
+_CE_CONDA = 
+# environment
+LANG = C
 # variable set hash-table stats:
-# Load=58/1024=6%, Rehash=0, Collisions=1/79=1%
+# Load=67/1024=7%, Rehash=0, Collisions=2/88=2%
 
 # Pattern-specific Variable Values
 
@@ -140,7 +157,7 @@ VSCODE_PID = 2059
 
 # Directories
 
-# . (device 16777234, inode 10706288): 20 files, no impossibilities.
+# . (device 16777223, inode 30688233): 20 files, no impossibilities.
 
 # 20 files, no impossibilities in 1 directories.
 
@@ -166,7 +183,6 @@ all:
 #  File has not been updated.
 
 # Not a target:
- 
 Makefile:
 #  A default, MAKEFILES, or -include/sinclude makefile.
 #  Implicit rule search has been done.
@@ -215,6 +231,6 @@ GNUmakefile:
 # strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
 # strcache free: total = 0 / max = 0 / min = 4096 / avg = 0
 
-# Finished Make data base on Sun Aug 14 17:41:54 2022
+# Finished Make data base on Thu Sep  8 11:44:12 2022
 
  

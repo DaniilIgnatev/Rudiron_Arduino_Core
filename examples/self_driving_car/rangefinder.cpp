@@ -1,7 +1,7 @@
-#include "distance.h"
+#include "rangefinder.h"
 #include "Servo.h"
 
-struct DistanceModel
+struct RangefinderModel
 {
     float direction_distances[3] = {0};
 
@@ -16,11 +16,11 @@ struct DistanceModel
     }
 };
 
-DistanceModel navigation_model;
+RangefinderModel rangefinder_model;
 
 bool isObstacle(DirectionsEnum direction)
 {
-    return navigation_model.isObstacle(direction);
+    return rangefinder_model.isObstacle(direction);
 }
 
 #define HCSR04_TRIG_PIN 9
@@ -41,7 +41,7 @@ void setup_servo()
     servo.attach(SERVO_PIN);
 }
 
-void setup_distance()
+void setup_rangefinder()
 {
     setup_sensor();
     setup_servo();
@@ -68,10 +68,10 @@ void updateDistance(DirectionsEnum direction)
 
     //Расстояние в сантиметрах
     float distance = (duration / 2) / 29.1;
-    navigation_model.setDistance(direction, distance);
+    rangefinder_model.setDistance(direction, distance);
 }
 
-void scan_distance(DirectionsEnum direction)
+void scan_range(DirectionsEnum direction)
 {
     turnHead(direction);
     updateDistance(direction);
