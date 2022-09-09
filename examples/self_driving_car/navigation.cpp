@@ -1,4 +1,5 @@
 #include "navigation.h"
+#include "rudiron/tasks_timer.h"
 
 void setup_navigation()
 {
@@ -27,15 +28,38 @@ DirectionsEnum findFreeDirection(){
     }
 }
 
+/// @brief Перемещение
+/// @param direction направление
+/// @param timeout максимальное время
+/// @param scanObstacle проверка на препятствие
+void move(DirectionsEnum direction, int timeout, bool scanObstacle){
+    auto time_end = millis() + timeout;
+    drive_towards(direction);
+
+    while (millis() < time_end)
+    {
+        if (scanObstacle){
+            scan_range(DirectionsEnum::straight);
+            if (isObstacle(DirectionsEnum::straight)){
+                break;
+            }
+        }
+    }
+    
+    driver_stop();
+}
+
 void loop_navigation()
 {
     scan_range(DirectionsEnum::straight);
-    bool obstacle = isObstacle(DirectionsEnum::straight);
-
-    if (isObstacle){
-        
+    if (!isObstacle(DirectionsEnum::straight)){
+        move(DirectionsEnum::straight, METER_MS, true);
     }
-    else{
-        drive(DirectionsEnum::straight);
+
+    DirectionsEnum freeDirection = findFreeDirection();
+    while (freeDirection == DirectionsEnum::backwards)
+    {
+        move(DirectionsEnum::backwards, METER_MS, false);
+        freeDirection = findFreeDirection();
     }
 }

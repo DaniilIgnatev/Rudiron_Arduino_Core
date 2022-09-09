@@ -56,10 +56,15 @@ void drive(bool isForwards, bool leftActive, bool rightActive)
     }
 }
 
-void drive(DirectionsEnum direction)
+void drive_towards(DirectionsEnum direction)
 {
-    bool leftActive = direction == DirectionsEnum::left || direction == DirectionsEnum::straight;
-    bool rightActive = direction == DirectionsEnum::right || direction == DirectionsEnum::straight;
+    bool leftActive = direction == DirectionsEnum::left || direction == DirectionsEnum::straight || direction == DirectionsEnum::backwards;
+    bool rightActive = direction == DirectionsEnum::right || direction == DirectionsEnum::straight || direction == DirectionsEnum::backwards;
 
-    drive(true, leftActive, rightActive);
+    drive(direction != DirectionsEnum::backwards, leftActive, rightActive);
+}
+
+void driver_stop()
+{
+    drive(true, false, false);
 }
