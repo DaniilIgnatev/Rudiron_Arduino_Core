@@ -1,4 +1,4 @@
-#include "sketch.h"
+#include "Arduino.h"
 #include "Adafruit_ST7735.h"
 #include "FreeSans9pt7b.h"
 

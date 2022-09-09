@@ -62,7 +62,8 @@ set(sketch_path "${CMAKE_SOURCE_DIR}/sketch")
 set(examples_path "${CMAKE_SOURCE_DIR}/examples")
 file(GLOB_RECURSE sketch_sources
         # ${sketch_path}/*
-        ${examples_path}/display/basic/*
+        # ${examples_path}/display/basic/*
+        ${examples_path}/display/flag/*
         # ${examples_path}/esp01/HTTPGET/*
         # ${examples_path}/esp01/TCPServer/*
         # ${examples_path}/sd/CardInfo/*

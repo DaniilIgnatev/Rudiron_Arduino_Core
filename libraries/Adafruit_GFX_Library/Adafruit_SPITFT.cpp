@@ -1889,8 +1889,8 @@ void Adafruit_SPITFT::invertDisplay(bool i) {
 */
 uint16_t Adafruit_SPITFT::color565(uint8_t red, uint8_t green, uint8_t blue) {
   uint16_t r = (red & 0xF8) >> 3;
-  uint16_t g = (green & 0xFC) << 3;
-  uint16_t b = blue << 8;
+  uint16_t g = (green & 0xFC) << 5 & 0b0000011111111111;
+  uint16_t b = blue << 11;
   return r | g | b;
 }
 
