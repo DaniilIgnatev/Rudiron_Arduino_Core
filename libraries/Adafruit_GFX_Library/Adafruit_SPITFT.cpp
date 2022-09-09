@@ -1888,7 +1888,10 @@ void Adafruit_SPITFT::invertDisplay(bool i) {
     @return  'Packed' 16-bit color value (565 format).
 */
 uint16_t Adafruit_SPITFT::color565(uint8_t red, uint8_t green, uint8_t blue) {
-  return ((red & 0xF8) << 8) | ((green & 0xFC) << 3) | (blue >> 3);
+  uint16_t r = (red & 0xF8) >> 3;
+  uint16_t g = (green & 0xFC) << 3;
+  uint16_t b = blue << 8;
+  return r | g | b;
 }
 
 /*!

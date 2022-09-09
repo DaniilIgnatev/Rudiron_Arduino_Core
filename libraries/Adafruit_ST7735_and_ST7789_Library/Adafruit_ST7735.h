@@ -38,15 +38,15 @@
 #define ST7735_GMCTRN1 0xE1
 
 // Some ready-made 16-bit ('565') color settings:
-#define ST7735_BLACK ST77XX_BLACK
-#define ST7735_WHITE ST77XX_WHITE
-#define ST7735_RED ST77XX_RED
-#define ST7735_GREEN ST77XX_GREEN
-#define ST7735_BLUE ST77XX_BLUE
-#define ST7735_CYAN ST77XX_CYAN
-#define ST7735_MAGENTA ST77XX_MAGENTA
-#define ST7735_YELLOW ST77XX_YELLOW
-#define ST7735_ORANGE ST77XX_ORANGE
+#define ST7735_BLACK 0x00
+#define ST7735_WHITE 0xffff
+#define ST7735_RED 0x1f
+#define ST7735_GREEN 0x7e0
+#define ST7735_BLUE 0xff00
+#define ST7735_CYAN 0xffe0
+#define ST7735_MAGENTA 0xff1f
+#define ST7735_YELLOW 0x7ff
+#define ST7735_ORANGE 0x41f
 
 /// Subclass of ST77XX for ST7735B and ST7735R TFT Drivers:
 class Adafruit_ST7735 : public Adafruit_ST77xx {
