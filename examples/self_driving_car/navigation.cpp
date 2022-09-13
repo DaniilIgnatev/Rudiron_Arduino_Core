@@ -34,7 +34,7 @@ DirectionsEnum findFreeDirection(){
 /// @param scanObstacle проверка на препятствие
 void move(DirectionsEnum direction, int timeout, bool scanObstacle){
     auto time_end = millis() + timeout;
-    drive_towards(direction);
+    drive_towards(direction, DriverSpeedEnum::third);
 
     while (millis() < time_end)
     {
@@ -46,7 +46,7 @@ void move(DirectionsEnum direction, int timeout, bool scanObstacle){
         }
     }
     
-    driver_stop();
+    drive_stop();
 }
 
 void loop_navigation()

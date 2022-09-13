@@ -1,70 +1,86 @@
 #include "driver.h"
 
-#define leftEngineFrontPin 12
-#define leftEngineBackPin 13
-#define rightEngineFrontPin 14
-#define rightEngineBackPin 15
+#define leftEngineDIR 12
+#define leftEngineSPEED 13
+#define rightEngineDIR 14
+#define rightEngineSPEED 15
 
 void setup_driver()
 {
-    pinMode(leftEngineFrontPin, OUTPUT);
-    pinMode(leftEngineBackPin, OUTPUT);
-    pinMode(rightEngineFrontPin, OUTPUT);
-    pinMode(rightEngineBackPin, OUTPUT);
+    pinMode(leftEngineDIR, OUTPUT);
+    pinMode(leftEngineSPEED, OUTPUT);
+    pinMode(rightEngineDIR, OUTPUT);
+    pinMode(rightEngineSPEED, OUTPUT);
 }
 
 struct DriverModel
 {
 public:
-    bool isForwards = false;
-    bool leftActive = false;
-    bool rightActive = false;
+    uint8_t speed = 0;
 
-    bool leftEngineFront = false;
-    bool leftEngineBack = false;
-    bool rightEngineFront = false;
-    bool rightEngineBack = false;
+    bool leftDir = false;
+    bool rightDir = false;
 };
 
-DriverModel driver_model;
-
-const int model_table_size = 8;
-
-DriverModel modelTable[model_table_size] = {
-    DriverModel{true, false, false, false, false, false, false},
-    DriverModel{true, true, false, true, false, false, true},
-    DriverModel{true, false, true, false, true, true, false},
-    DriverModel{true, true, true, true, false, true, false},
-    DriverModel{false, false, false, false, false, false, false},
-    DriverModel{false, true, false, false, true, true, false},
-    DriverModel{false, false, true, true, false, false, true},
-    DriverModel{false, true, true, false, true, false, true}};
-
-void drive(bool isForwards, bool leftActive, bool rightActive)
+uint8_t getSpeedValue(DriverSpeedEnum speed)
 {
-    driver_model.isForwards = isForwards;
-    driver_model.leftActive = leftActive;
-    driver_model.rightActive = rightActive;
-
-    for (auto matchedModel : modelTable)
+    switch (speed)
     {
-        if (matchedModel.isForwards == driver_model.isForwards && matchedModel.leftActive == driver_model.leftActive && matchedModel.rightActive == driver_model.rightActive)
-        {
-            driver_model = matchedModel;
-            break;
-        }
+    case DriverSpeedEnum::stop:
+        return 0;
+    case DriverSpeedEnum::first:
+        return 85;
+    case DriverSpeedEnum::second:
+        return 170;
+    case DriverSpeedEnum::third:
+        return 255;
     }
 }
 
-void drive_towards(DirectionsEnum direction)
+DriverModel getModel(DirectionsEnum direction, uint8_t speed)
 {
-    bool leftActive = direction == DirectionsEnum::left || direction == DirectionsEnum::straight || direction == DirectionsEnum::backwards;
-    bool rightActive = direction == DirectionsEnum::right || direction == DirectionsEnum::straight || direction == DirectionsEnum::backwards;
+    DriverModel driver_model;
+    driver_model.speed = speed;
 
-    drive(direction != DirectionsEnum::backwards, leftActive, rightActive);
+    switch (direction)
+    {
+    case DirectionsEnum::straight:
+        driver_model.leftDir = true;
+        driver_model.rightDir = true;
+        break;
+    case DirectionsEnum::backwards:
+        driver_model.leftDir = false;
+        driver_model.rightDir = false;
+        break;
+    case DirectionsEnum::left:
+        driver_model.leftDir = false;
+        driver_model.rightDir = true;
+        break;
+    case DirectionsEnum::right:
+        driver_model.leftDir = true;
+        driver_model.rightDir = false;
+        break;
+    }
+
+    return driver_model;
 }
 
-void driver_stop()
+void applyModel(DriverModel model)
 {
-    drive(true, false, false);
+    digitalWrite(leftEngineDIR, model.leftDir);
+    analogWrite(leftEngineSPEED, model.speed);
+
+    digitalWrite(rightEngineDIR, model.rightDir);
+    analogWrite(rightEngineSPEED, model.speed);
+}
+
+void drive_towards(DirectionsEnum direction, DriverSpeedEnum speed)
+{
+    uint8_t speedValue = getSpeedValue(speed);
+    DriverModel model = getModel(direction, speed);
+    applyModel(model);
+}
+
+void drive_stop(){
+    drive_towards(DirectionsEnum::straight, DriverSpeedEnum::stop);
 }

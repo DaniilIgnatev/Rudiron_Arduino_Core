@@ -9,10 +9,17 @@
 //Миллисекунд движения в одном метре
 #define METER_MS 1000 
 
+enum DriverSpeedEnum{
+    stop,
+    first,
+    second,
+    third
+};
+
 //API управление движением
 
 void setup_driver();
 
-void drive_towards(DirectionsEnum direction);
+void drive_towards(DirectionsEnum direction, DriverSpeedEnum speed);
 
-void driver_stop();
+void drive_stop();
