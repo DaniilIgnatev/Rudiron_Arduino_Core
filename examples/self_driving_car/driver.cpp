@@ -1,9 +1,9 @@
 #include "driver.h"
 
-#define leftEngineDIR 12
-#define leftEngineSPEED 13
-#define rightEngineDIR 14
-#define rightEngineSPEED 15
+#define leftEngineDIR 16
+#define leftEngineSPEED 12
+#define rightEngineDIR 21
+#define rightEngineSPEED 20
 
 void setup_driver()
 {
@@ -68,16 +68,18 @@ DriverModel getModel(DirectionsEnum direction, uint8_t speed)
 void applyModel(DriverModel model)
 {
     digitalWrite(leftEngineDIR, model.leftDir);
+    // digitalWrite(leftEngineSPEED, model.speed);
     analogWrite(leftEngineSPEED, model.speed);
 
     digitalWrite(rightEngineDIR, model.rightDir);
+    // digitalWrite(rightEngineSPEED, model.speed);
     analogWrite(rightEngineSPEED, model.speed);
 }
 
 void drive_towards(DirectionsEnum direction, DriverSpeedEnum speed)
 {
     uint8_t speedValue = getSpeedValue(speed);
-    DriverModel model = getModel(direction, speed);
+    DriverModel model = getModel(direction, speedValue);
     applyModel(model);
 }
 

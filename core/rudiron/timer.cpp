@@ -43,6 +43,13 @@ namespace Rudiron
 
     void Timer::PWM_setup(uint16_t frequency)
     {
+        if (this->frequency == frequency){
+            return;
+        }
+        else{
+            this->frequency = frequency;
+        }
+
         TIMER_DeInit(MDR_TIMER);
 
         RST_CLK_FreqTypeDef RST_CLK_Clocks;

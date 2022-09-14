@@ -3,13 +3,13 @@
 void test_driver()
 {
     drive_towards(DirectionsEnum::left, DriverSpeedEnum::first);
-    delay(200);
+    delay(500);
     drive_towards(DirectionsEnum::right, DriverSpeedEnum::first);
-    delay(200);
+    delay(500);
     drive_towards(DirectionsEnum::backwards, DriverSpeedEnum::second);
-    delay(200);
-    drive_towards(DirectionsEnum::straight, DriverSpeedEnum::first);
-    delay(200);
+    delay(500);
+    drive_towards(DirectionsEnum::straight, DriverSpeedEnum::third);
+    delay(500);
 
     drive_stop();
 }
@@ -23,6 +23,6 @@ void test_rangefinder()
 
 void run_tests()
 {
-    test_driver();
-    test_rangefinder();
+    // test_driver();
+    // test_rangefinder();
 }

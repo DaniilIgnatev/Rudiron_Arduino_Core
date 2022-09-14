@@ -19,5 +19,7 @@ void setup()
 
 void loop()
 {
+    #ifndef TESTS
     loop_navigation();
+    #endif
 }

@@ -40,6 +40,8 @@ namespace Rudiron
 
         uint16_t ARR;
 
+        uint16_t frequency = 0;
+
     public:
         explicit Timer(TimerName name, MDR_TIMER_TypeDef *MDR_TIMER, uint32_t RST_CLK_PCLK);
 
