@@ -36,7 +36,7 @@ void setup_sensor()
 //Серво двигатель установлен в обратную сторону
 #define SERVO_INVERSED true
 //Угол поворота по сторонам
-#define SERVO_ROTATION 45
+#define SERVO_ROTATION 70
 
 Servo servo;
 
@@ -54,6 +54,7 @@ void setup_rangefinder()
 void turnHead(DirectionsEnum direction)
 {
     int angle;
+    int currentAngle = servo.read();
 
     switch (direction)
     {
@@ -69,6 +70,18 @@ void turnHead(DirectionsEnum direction)
     }
 
     servo.write(angle);
+
+    //Дать время сервоприводу повернуться
+    int angleRange = angle - currentAngle;
+    if (angleRange != 0)
+    {
+        if (angleRange < 0)
+        {
+            angleRange = !angleRange;
+        }
+        int delay_ms = angleRange * DEGREE_MS;
+        delay(delay_ms);
+    }
 }
 
 float measureDistance()
@@ -94,4 +107,5 @@ void scan_range(DirectionsEnum direction)
     turnHead(direction);
     float distance = measureDistance();
     rangefinder_model.setDistance(direction, distance);
+    turnHead(DirectionsEnum::straight);
 }

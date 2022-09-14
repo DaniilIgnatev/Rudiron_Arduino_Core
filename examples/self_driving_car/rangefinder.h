@@ -3,6 +3,9 @@
 #include "Arduino.h"
 #include "directions.h"
 
+//Миллисекунд поворота в одном градусе
+#define DEGREE_MS 5
+
 //API определения расстояния
 
 void setup_rangefinder();

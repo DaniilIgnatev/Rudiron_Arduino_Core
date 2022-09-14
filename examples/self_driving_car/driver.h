@@ -3,11 +3,8 @@
 #include "Arduino.h"
 #include "directions.h"
 
-//Миллисекунд поворота в одном градусе
-#define DEGREE_MS 100
-
 //Миллисекунд движения в одном метре
-#define METER_MS 1000 
+#define METER_MS 5000 
 
 enum DriverSpeedEnum{
     stop,
