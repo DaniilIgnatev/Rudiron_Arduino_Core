@@ -10,7 +10,9 @@ void setup_navigation()
 /// @brief Определение свободного от препятствий направления движения
 /// @return left или right, если свободно, backwards, если нет
 DirectionsEnum findFreeDirection(){
-    DirectionsEnum direction = (DirectionsEnum)(rand() % 2);
+    DirectionsEnum direction;
+    bool randomSide = rand() % 2;
+    direction = randomSide ? DirectionsEnum::left : DirectionsEnum::right;
 
     scan_range(direction);
     if (isObstacle(direction)){
@@ -57,9 +59,14 @@ void loop_navigation()
     }
 
     DirectionsEnum freeDirection = findFreeDirection();
-    while (freeDirection == DirectionsEnum::backwards)
-    {
-        move(DirectionsEnum::backwards, METER_MS, false);
-        freeDirection = findFreeDirection();
+    if (freeDirection != DirectionsEnum::backwards){
+        move(freeDirection, METER_MS, false);
+    }
+    else{
+        while (freeDirection == DirectionsEnum::backwards)
+        {
+            move(DirectionsEnum::backwards, METER_MS, false);
+            freeDirection = findFreeDirection();
+        }
     }
 }

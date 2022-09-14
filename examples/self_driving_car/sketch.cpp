@@ -1,6 +1,6 @@
 #include "navigation.h"
 
-#define TESTS
+// #define TESTS
 
 #ifdef TESTS
 #include "tests.h"
@@ -9,7 +9,7 @@
 void setup()
 {
     Serial.begin(115200);
-    
+
     int seed = analogRead(0);
     randomSeed(seed);
     setup_navigation();

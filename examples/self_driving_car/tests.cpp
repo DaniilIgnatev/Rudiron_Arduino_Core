@@ -58,8 +58,8 @@ void run_tests()
 {
     Serial.println("Start run_tests");
 
-    // test_driver();
-    // test_MeasureDistance();
+    test_driver();
+    test_MeasureDistance();
     test_rangefinder();
 
     Serial.println("End run_tests");
