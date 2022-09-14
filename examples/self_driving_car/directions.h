@@ -5,8 +5,8 @@
 enum DirectionsEnum
 {
     left = 0,
-    right = 1,
-    straight = 2,
+    straight = 1,
+    right = 2,
     backwards = 3
 };
 

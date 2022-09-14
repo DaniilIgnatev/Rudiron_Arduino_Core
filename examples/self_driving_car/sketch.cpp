@@ -8,6 +8,8 @@
 
 void setup()
 {
+    Serial.begin(115200);
+    
     int seed = analogRead(0);
     randomSeed(seed);
     setup_navigation();

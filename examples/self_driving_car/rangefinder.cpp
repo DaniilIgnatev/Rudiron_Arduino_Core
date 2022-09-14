@@ -23,8 +23,8 @@ bool isObstacle(DirectionsEnum direction)
     return rangefinder_model.isObstacle(direction);
 }
 
-#define HCSR04_TRIG_PIN 9
-#define HCSR04_ECHO_PIN 10
+#define HCSR04_TRIG_PIN 14
+#define HCSR04_ECHO_PIN 15
 
 void setup_sensor()
 {
@@ -32,13 +32,17 @@ void setup_sensor()
     pinMode(HCSR04_ECHO_PIN, INPUT);
 }
 
-#define SERVO_PIN 9
+#define SERVO_PIN 5
+//Серво двигатель установлен в обратную сторону
+#define SERVO_INVERSED true
+//Угол поворота по сторонам
+#define SERVO_ROTATION 45
 
 Servo servo;
 
 void setup_servo()
 {
-    servo.attach(SERVO_PIN);
+    servo.attach(SERVO_PIN, 470, 2500);
 }
 
 void setup_rangefinder()
@@ -49,11 +53,25 @@ void setup_rangefinder()
 
 void turnHead(DirectionsEnum direction)
 {
-    int angle = (int)direction * 45;
+    int angle;
+
+    switch (direction)
+    {
+    case DirectionsEnum::left:
+        angle = SERVO_INVERSED ? 90 + SERVO_ROTATION : 90 - SERVO_ROTATION;
+        break;
+    case DirectionsEnum::right:
+        angle = SERVO_INVERSED ? 90 - SERVO_ROTATION : 90 + SERVO_ROTATION;
+        break;
+    default:
+        angle = 90;
+        break;
+    }
+
     servo.write(angle);
 }
 
-void updateDistance(DirectionsEnum direction)
+float measureDistance()
 {
     digitalWrite(HCSR04_TRIG_PIN, LOW);
     delayMicroseconds(5);
@@ -68,11 +86,12 @@ void updateDistance(DirectionsEnum direction)
 
     //Расстояние в сантиметрах
     float distance = (duration / 2) / 29.1;
-    rangefinder_model.setDistance(direction, distance);
+    return distance;
 }
 
 void scan_range(DirectionsEnum direction)
 {
     turnHead(direction);
-    updateDistance(direction);
+    float distance = measureDistance();
+    rangefinder_model.setDistance(direction, distance);
 }

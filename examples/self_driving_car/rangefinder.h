@@ -7,6 +7,8 @@
 
 void setup_rangefinder();
 
+float measureDistance();
+
 void scan_range(DirectionsEnum direction);
 
 bool isObstacle(DirectionsEnum direction);
