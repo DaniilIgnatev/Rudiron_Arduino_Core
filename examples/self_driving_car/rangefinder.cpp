@@ -1,8 +1,6 @@
 #include "rangefinder.h"
 #include "Servo.h"
 
-#pragma GCC push_options
-#pragma GCC optimize ("O0")
 struct RangefinderModel
 {
     float direction_distances[3] = {0};
@@ -20,9 +18,26 @@ struct RangefinderModel
 
 RangefinderModel rangefinder_model;
 
+#define OBSTACLE_TRUE_PIN 4
+#define OBSTACLE_FALSE_PIN 6
+
+void indicateObstacle(bool obstacle)
+{
+    digitalWrite(OBSTACLE_TRUE_PIN, obstacle);
+    digitalWrite(OBSTACLE_FALSE_PIN, !obstacle);
+}
+
+void setup_indicator()
+{
+    pinMode(OBSTACLE_TRUE_PIN, OUTPUT);
+    pinMode(OBSTACLE_FALSE_PIN, OUTPUT);
+}
+
 bool isObstacle(DirectionsEnum direction)
 {
-    return rangefinder_model.isObstacle(direction);
+    bool obstacle = rangefinder_model.isObstacle(direction);
+    indicateObstacle(obstacle);
+    return obstacle;
 }
 
 #define HCSR04_TRIG_PIN 14
@@ -49,6 +64,7 @@ void setup_servo()
 
 void setup_rangefinder()
 {
+    setup_indicator();
     setup_sensor();
     setup_servo();
 }
@@ -73,7 +89,8 @@ void turnHead(DirectionsEnum direction, bool wait)
 
     servo.write(angle);
 
-    if (wait){
+    if (wait)
+    {
         //Дать время сервоприводу повернуться
         int angleRange = angle - currentAngle;
         if (angleRange != 0)
@@ -109,14 +126,8 @@ float measureDistance()
 
 void scan_range(DirectionsEnum direction)
 {
-    volatile auto tp0 = millis();
     turnHead(direction, true);
-    volatile auto tp1 = millis();
     float distance = measureDistance();
-    Serial.print("Distance: ");
-    Serial.println(distance);
     rangefinder_model.setDistance(direction, distance);
     turnHead(DirectionsEnum::straight, false);
 }
-
-#pragma GCC pop_options
