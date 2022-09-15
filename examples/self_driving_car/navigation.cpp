@@ -1,6 +1,9 @@
 #include "navigation.h"
 #include "rudiron/tasks_timer.h"
 
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
+
 void setup_navigation()
 {
     setup_rangefinder();
@@ -42,7 +45,9 @@ void move(DirectionsEnum direction, int timeout, bool scanObstacle, DriverSpeedE
     while (millis() < time_end)
     {
         if (scanObstacle){
+            auto tp0 = millis();
             scan_range(DirectionsEnum::straight);
+            auto tp1 = millis();
             if (isObstacle(DirectionsEnum::straight)){
                 break;
             }
@@ -50,7 +55,6 @@ void move(DirectionsEnum direction, int timeout, bool scanObstacle, DriverSpeedE
     }
     
     drive_stop();
-    delay(100);
 }
 
 void loop_navigation()
@@ -72,3 +76,5 @@ void loop_navigation()
         }
     }
 }
+
+#pragma GCC pop_options

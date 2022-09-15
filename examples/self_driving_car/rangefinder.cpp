@@ -1,6 +1,8 @@
 #include "rangefinder.h"
 #include "Servo.h"
 
+#pragma GCC push_options
+#pragma GCC optimize ("O0")
 struct RangefinderModel
 {
     float direction_distances[3] = {0};
@@ -51,7 +53,7 @@ void setup_rangefinder()
     setup_servo();
 }
 
-void turnHead(DirectionsEnum direction)
+void turnHead(DirectionsEnum direction, bool wait)
 {
     int angle;
     int currentAngle = servo.read();
@@ -71,16 +73,19 @@ void turnHead(DirectionsEnum direction)
 
     servo.write(angle);
 
-    //Дать время сервоприводу повернуться
-    int angleRange = angle - currentAngle;
-    if (angleRange != 0)
-    {
-        if (angleRange < 0)
+    if (wait){
+        //Дать время сервоприводу повернуться
+        int angleRange = angle - currentAngle;
+        if (angleRange != 0)
         {
-            angleRange = !angleRange;
+            if (angleRange < 0)
+            {
+                angleRange = -angleRange;
+            }
+
+            int delay_ms = angleRange << 2;
+            delay(delay_ms);
         }
-        int delay_ms = angleRange * DEGREE_MS;
-        delay(delay_ms);
     }
 }
 
@@ -104,8 +109,14 @@ float measureDistance()
 
 void scan_range(DirectionsEnum direction)
 {
-    turnHead(direction);
+    volatile auto tp0 = millis();
+    turnHead(direction, true);
+    volatile auto tp1 = millis();
     float distance = measureDistance();
+    Serial.print("Distance: ");
+    Serial.println(distance);
     rangefinder_model.setDistance(direction, distance);
-    turnHead(DirectionsEnum::straight);
+    turnHead(DirectionsEnum::straight, false);
 }
+
+#pragma GCC pop_options

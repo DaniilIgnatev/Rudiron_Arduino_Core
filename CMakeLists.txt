@@ -70,8 +70,8 @@ file(GLOB_RECURSE sketch_sources
         # ${examples_path}/nrf24/tank/receiver/*
         # ${examples_path}/nrf24/tank/receiver_lm2-130/*
         # ${examples_path}/nrf24/tank/transmitter/*
-        # ${examples_path}/self_driving_car/*
-        ${examples_path}/servo/basic/*
+        ${examples_path}/self_driving_car/*
+        # ${examples_path}/servo/basic/*
 )
 
 set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
