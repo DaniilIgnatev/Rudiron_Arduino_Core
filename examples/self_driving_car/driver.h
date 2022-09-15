@@ -7,10 +7,10 @@
 #define METER_MS 5000 
 
 enum DriverSpeedEnum{
-    stop,
-    first,
-    second,
-    third
+    stop,//полная остановка
+    first,//при напряжении питания > 7В
+    second,//при напряжении питания 6.5В
+    third//при напряжении питания 6В 
 };
 
 //API управление движением

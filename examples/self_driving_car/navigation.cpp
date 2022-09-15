@@ -66,7 +66,7 @@ void loop_navigation()
     scan_range(DirectionsEnum::straight);
     if (!isObstacle(DirectionsEnum::straight))
     {
-        move(DirectionsEnum::straight, METER_MS / (int)DriverSpeedEnum::first, true, DriverSpeedEnum::first);
+        move(DirectionsEnum::straight, METER_MS / (int)DriverSpeedEnum::first, true, DriverSpeedEnum::second);
     }
 
     DirectionsEnum freeDirection = findFreeDirection();
@@ -78,7 +78,7 @@ void loop_navigation()
     {
         while (freeDirection == DirectionsEnum::backwards)
         {
-            move(DirectionsEnum::backwards, METER_MS / (int)DriverSpeedEnum::first, false, DriverSpeedEnum::first);
+            move(DirectionsEnum::backwards, METER_MS / (int)DriverSpeedEnum::first, false, DriverSpeedEnum::second);
             freeDirection = findFreeDirection();
         }
     }
