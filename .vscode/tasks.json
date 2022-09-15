@@ -166,6 +166,32 @@
                 "showReuseMessage": true,
                 "clear": true
             }
+        },
+        {
+            "type": "shell",
+            "label": "Запустить",
+            "command": "Rudiron Programmer",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "args": [
+                "bootloader_1986be92qi.hex",
+                "build/Arduino_Core_Rudiron.hex",
+                "--speed",
+                "16",
+                "--run",
+                "--english",
+            ],
+            "group": "none",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": true,
+                "clear": true
+            }
         }
     ]
 }
