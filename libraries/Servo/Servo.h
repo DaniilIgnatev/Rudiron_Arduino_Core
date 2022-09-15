@@ -201,7 +201,7 @@ private:
 
     Rudiron::PortPinName portPin;
     Rudiron::Timer *timer;
-    int pwmValue;
+    int currentUS;
 
     void resetFields(void);
 };

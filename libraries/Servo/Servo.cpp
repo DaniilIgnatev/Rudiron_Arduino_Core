@@ -110,7 +110,8 @@ void Servo::write(int degrees)
 
 int Servo::read() const
 {
-    int a = US_TO_ANGLE(this->readMicroseconds());
+    int us = this->readMicroseconds();
+    int a = US_TO_ANGLE(us);
     // map() round-trips in a weird way we mostly correct for here;
     // the round-trip is still sometimes off-by-one for write(1) and
     // write(179).
@@ -125,8 +126,8 @@ void Servo::writeMicroseconds(uint16_t pulseWidth)
         return;
     }
 
-    pulseWidth = constrain(pulseWidth, this->minPW, this->maxPW);
-    this->pwmValue = map(pulseWidth, this->minPW, this->maxPW, this->minPW / 20, this->maxPW / 20);
+    this->currentUS = constrain(pulseWidth, this->minPW, this->maxPW);
+    auto pwmValue = map(currentUS, this->minPW, this->maxPW, this->minPW / 20, this->maxPW / 20);
     timer->PWM_start(portPin, pwmValue);
 }
 
@@ -138,7 +139,7 @@ uint16_t Servo::readMicroseconds() const
         return 0;
     }
 
-    return this->pwmValue;
+    return this->currentUS;
 }
 
 void Servo::resetFields(void)
