@@ -5,6 +5,12 @@
 volatile uint64_t _micros = 0;
 
 
+//I2C
+
+void (*I2C_TX_Event)(void) = 0;
+void (*I2C_RX_Event)(uint8_t*, int) = 0;
+
+
 //UART
 //указывает на следуюую ячеку для записи
 UART_BUFFER_INDEX_T _uart1_rx_buffer_head = 0;

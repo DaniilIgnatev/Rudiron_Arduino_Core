@@ -15,18 +15,21 @@
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- 
+
   Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
   Modified 2017 by Chuck Todd (ctodd@cableone.net) to correct Unconfigured Slave Mode reboot
   Modified 2020 by Greyson Christoforo (grey@christoforo.net) to implement timeouts
 */
 
-extern "C" {
-  #include <stdlib.h>
-  #include <string.h>
-  #include <inttypes.h>
+extern "C"
+{
+#include <stdlib.h>
+#include <string.h>
+#include <inttypes.h>
   // #include "utility/twi.h"
 }
+
+#include "MDR_i2c.h"
 
 #include "Wire.h"
 
@@ -53,6 +56,7 @@ TwoWire::TwoWire()
 
 // Public Methods //////////////////////////////////////////////////////////////
 
+//Начало обмена данными через обработчики прерываний
 void TwoWire::begin(void)
 {
   rxBufferIndex = 0;
@@ -61,15 +65,17 @@ void TwoWire::begin(void)
   txBufferIndex = 0;
   txBufferLength = 0;
 
-  // twi_init();
-  // twi_attachSlaveTxEvent(onRequestService); // default callback must exist
-  // twi_attachSlaveRxEvent(onReceiveService); // default callback must exist
+  setClock(400000);
+
+  I2C_TX_Event = &onRequestService;
+  I2C_RX_Event = &onReceiveService;
+
+  I2C_Cmd(ENABLE);
 }
 
 void TwoWire::begin(uint8_t address)
 {
   begin();
-  // twi_setAddress(address);
 }
 
 void TwoWire::begin(int address)
@@ -77,14 +83,25 @@ void TwoWire::begin(int address)
   begin((uint8_t)address);
 }
 
+//Конец обмена данными через обработчики прерываний
 void TwoWire::end(void)
 {
-  // twi_disable();
+  I2C_Cmd(DISABLE);
 }
 
 void TwoWire::setClock(uint32_t clock)
 {
-  // twi_setFrequency(clock);
+  I2C_InitTypeDef initStruct;
+
+  if (clock <= 400000){
+    initStruct.I2C_Speed = I2C_SPEED_UP_TO_400KHz;
+  }
+  else {
+    initStruct.I2C_Speed = I2C_SPEED_UP_TO_1MHz;
+  }
+  
+  initStruct.I2C_Speed = (32 / (clock / 100000)) - 1;
+  I2C_Init(&initStruct);
 }
 
 /***
@@ -113,7 +130,8 @@ void TwoWire::setClock(uint32_t clock)
  *                           if false then TWI interface will not be reset on timeout
 
  */
-void TwoWire::setWireTimeout(uint32_t timeout, bool reset_with_timeout){
+void TwoWire::setWireTimeout(uint32_t timeout, bool reset_with_timeout)
+{
   // twi_setTimeoutInMicros(timeout, reset_with_timeout);
 }
 
@@ -122,62 +140,146 @@ void TwoWire::setWireTimeout(uint32_t timeout, bool reset_with_timeout){
  *
  * @return true if timeout has occured since the flag was last cleared.
  */
-bool TwoWire::getWireTimeoutFlag(void){
+bool TwoWire::getWireTimeoutFlag(void)
+{
   // return(twi_manageTimeoutFlag(false));
 }
 
 /***
  * Clears the TWI timeout flag.
  */
-void TwoWire::clearWireTimeoutFlag(void){
+void TwoWire::clearWireTimeoutFlag(void)
+{
   // twi_manageTimeoutFlag(true);
 }
 
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
 {
-  if (isize > 0) {
-  // send internal address; this mode allows sending a repeated start to access
-  // some devices' internal registers. This function is executed by the hardware
-  // TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
+  if (isize > 0)
+  {
+    // send internal address; this mode allows sending a repeated start to access
+    // some devices' internal registers. This function is executed by the hardware
+    // TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
 
-  beginTransmission(address);
+    beginTransmission(address);
 
-  // the maximum size of internal address is 3 bytes
-  if (isize > 3){
-    isize = 3;
-  }
+    // the maximum size of internal address is 3 bytes
+    if (isize > 3)
+    {
+      isize = 3;
+    }
 
-  // write internal register address - most significant byte first
-  while (isize-- > 0)
-    write((uint8_t)(iaddress >> (isize*8)));
-  endTransmission(false);
+    // write internal register address - most significant byte first
+    while (isize-- > 0)
+      write((uint8_t)(iaddress >> (isize * 8)));
+    endTransmission(false);
   }
 
   // clamp to buffer length
-  if(quantity > BUFFER_LENGTH){
+  if (quantity > BUFFER_LENGTH)
+  {
     quantity = BUFFER_LENGTH;
   }
   // perform blocking read into buffer
-  // uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
+  uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
   // set rx buffer iterator vars
   rxBufferIndex = 0;
-  // rxBufferLength = read;
+  rxBufferLength = read;
 
-  // return read;
+  return read;
 }
 
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop) {
-	return requestFrom((uint8_t)address, (uint8_t)quantity, (uint32_t)0, (uint8_t)0, (uint8_t)sendStop);
+uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop)
+{
+  uint8_t i;
+
+  // // ensure data will fit into buffer
+  // if(TWI_BUFFER_LENGTH < length){
+  //   return 0;
+  // }
+
+  // // wait until twi is ready, become master receiver
+  // uint32_t startMicros = micros();
+  // while(TWI_READY != twi_state){
+  //   if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
+  //     twi_handleTimeout(twi_do_reset_on_timeout);
+  //     return 0;
+  //   }
+  // }
+  // twi_state = TWI_MRX;
+  // twi_sendStop = sendStop;
+  // // reset error state (0xFF.. no error occured)
+  // twi_error = 0xFF;
+
+  // // initialize buffer iteration vars
+  // twi_masterBufferIndex = 0;
+  // twi_masterBufferLength = length-1;  // This is not intuitive, read on...
+  // // On receive, the previously configured ACK/NACK setting is transmitted in
+  // // response to the received byte before the interrupt is signalled. 
+  // // Therefor we must actually set NACK when the _next_ to last byte is
+  // // received, causing that NACK to be sent in response to receiving the last
+  // // expected byte of data.
+
+  // // build sla+w, slave device address + w bit
+  // twi_slarw = TW_READ;
+  // twi_slarw |= address << 1;
+
+  // if (true == twi_inRepStart) {
+  //   // if we're in the repeated start state, then we've already sent the start,
+  //   // (@@@ we hope), and the TWI statemachine is just waiting for the address byte.
+  //   // We need to remove ourselves from the repeated start state before we enable interrupts,
+  //   // since the ISR is ASYNC, and we could get confused if we hit the ISR before cleaning
+  //   // up. Also, don't enable the START interrupt. There may be one pending from the 
+  //   // repeated start that we sent ourselves, and that would really confuse things.
+  //   twi_inRepStart = false;			// remember, we're dealing with an ASYNC ISR
+  //   startMicros = micros();
+  //   do {
+  //     TWDR = twi_slarw;
+  //     if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
+  //       twi_handleTimeout(twi_do_reset_on_timeout);
+  //       return 0;
+  //     }
+  //   } while(TWCR & _BV(TWWC));
+  //   TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE);	// enable INTs, but not START
+  // } else {
+  //   // send start condition
+  //   TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT) | _BV(TWSTA);
+  // }
+
+  // // wait for read operation to complete
+  // startMicros = micros();
+  // while(TWI_MRX == twi_state){
+  //   if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
+  //     twi_handleTimeout(twi_do_reset_on_timeout);
+  //     return 0;
+  //   }
+  // }
+
+  // if (twi_masterBufferIndex < length) {
+  //   length = twi_masterBufferIndex;
+  // }
+
+  // // copy twi buffer to data
+  // for(i = 0; i < length; ++i){
+  //   data[i] = twi_masterBuffer[i];
+  // }
+
+  // return length;
+}
+
+uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop)
+{
+  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint32_t)0, (uint8_t)0, (uint8_t)sendStop);
 }
 
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
 {
-  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)true);
+  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t) true);
 }
 
 uint8_t TwoWire::requestFrom(int address, int quantity)
 {
-  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t)true);
+  return requestFrom((uint8_t)address, (uint8_t)quantity, (uint8_t) true);
 }
 
 uint8_t TwoWire::requestFrom(int address, int quantity, int sendStop)
@@ -205,8 +307,8 @@ void TwoWire::beginTransmission(int address)
 //	Originally, 'endTransmission' was an f(void) function.
 //	It has been modified to take one parameter indicating
 //	whether or not a STOP should be performed on the bus.
-//	Calling endTransmission(false) allows a sketch to 
-//	perform a repeated start. 
+//	Calling endTransmission(false) allows a sketch to
+//	perform a repeated start.
 //
 //	WARNING: Nothing in the library keeps track of whether
 //	the bus tenure has been properly ended with a STOP. It
@@ -217,13 +319,92 @@ void TwoWire::beginTransmission(int address)
 uint8_t TwoWire::endTransmission(uint8_t sendStop)
 {
   // transmit buffer (blocking)
-  // uint8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
+  uint8_t ret = writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
   // reset tx buffer iterator vars
   txBufferIndex = 0;
   txBufferLength = 0;
   // indicate that we are done transmitting
   transmitting = 0;
-  // return ret;
+  return ret;
+}
+
+uint8_t writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
+{
+  uint8_t i;
+
+  // // ensure data will fit into buffer
+  // if(TWI_BUFFER_LENGTH < length){
+  //   return 1;
+  // }
+
+  // // wait until twi is ready, become master transmitter
+  // uint32_t startMicros = micros();
+  // while(TWI_READY != twi_state){
+  //   if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
+  //     twi_handleTimeout(twi_do_reset_on_timeout);
+  //     return (5);
+  //   }
+  // }
+  // twi_state = TWI_MTX;
+  // twi_sendStop = sendStop;
+  // // reset error state (0xFF.. no error occured)
+  // twi_error = 0xFF;
+
+  // // initialize buffer iteration vars
+  // twi_masterBufferIndex = 0;
+  // twi_masterBufferLength = length;
+  
+  // // copy data to twi buffer
+  // for(i = 0; i < length; ++i){
+  //   twi_masterBuffer[i] = data[i];
+  // }
+  
+  // // build sla+w, slave device address + w bit
+  // twi_slarw = TW_WRITE;
+  // twi_slarw |= address << 1;
+  
+  // // if we're in a repeated start, then we've already sent the START
+  // // in the ISR. Don't do it again.
+  // //
+  // if (true == twi_inRepStart) {
+  //   // if we're in the repeated start state, then we've already sent the start,
+  //   // (@@@ we hope), and the TWI statemachine is just waiting for the address byte.
+  //   // We need to remove ourselves from the repeated start state before we enable interrupts,
+  //   // since the ISR is ASYNC, and we could get confused if we hit the ISR before cleaning
+  //   // up. Also, don't enable the START interrupt. There may be one pending from the 
+  //   // repeated start that we sent outselves, and that would really confuse things.
+  //   twi_inRepStart = false;			// remember, we're dealing with an ASYNC ISR
+  //   startMicros = micros();
+  //   do {
+  //     TWDR = twi_slarw;
+  //     if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
+  //       twi_handleTimeout(twi_do_reset_on_timeout);
+  //       return (5);
+  //     }
+  //   } while(TWCR & _BV(TWWC));
+  //   TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE);	// enable INTs, but not START
+  // } else {
+  //   // send start condition
+  //   TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE) | _BV(TWSTA);	// enable INTs
+  // }
+
+  // // wait for write operation to complete
+  // startMicros = micros();
+  // while(wait && (TWI_MTX == twi_state)){
+  //   if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
+  //     twi_handleTimeout(twi_do_reset_on_timeout);
+  //     return (5);
+  //   }
+  // }
+  
+  // if (twi_error == 0xFF)
+  //   return 0;	// success
+  // else if (twi_error == TW_MT_SLA_NACK)
+  //   return 2;	// error: address send, nack received
+  // else if (twi_error == TW_MT_DATA_NACK)
+  //   return 3;	// error: data send, nack received
+  // else
+  //   return 4;	// other twi error
 }
 
 //	This provides backwards compatibility with the original
@@ -239,22 +420,26 @@ uint8_t TwoWire::endTransmission(void)
 // or after beginTransmission(address)
 size_t TwoWire::write(uint8_t data)
 {
-  if(transmitting){
-  // in master transmitter mode
+  if (transmitting)
+  {
+    // in master transmitter mode
     // don't bother if buffer is full
-    if(txBufferLength >= BUFFER_LENGTH){
+    if (txBufferLength >= BUFFER_LENGTH)
+    {
       setWriteError();
       return 0;
     }
     // put byte in tx buffer
     txBuffer[txBufferIndex] = data;
     ++txBufferIndex;
-    // update amount in buffer   
+    // update amount in buffer
     txBufferLength = txBufferIndex;
-  }else{
-  // in slave send mode
+  }
+  else
+  {
+    // in slave send mode
     // reply to master
-    // twi_transmit(&data, 1);
+    twi_transmit(&data, 1);
   }
   return 1;
 }
@@ -264,15 +449,19 @@ size_t TwoWire::write(uint8_t data)
 // or after beginTransmission(address)
 size_t TwoWire::write(const uint8_t *data, size_t quantity)
 {
-  if(transmitting){
-  // in master transmitter mode
-    for(size_t i = 0; i < quantity; ++i){
+  if (transmitting)
+  {
+    // in master transmitter mode
+    for (size_t i = 0; i < quantity; ++i)
+    {
       write(data[i]);
     }
-  }else{
-  // in slave send mode
+  }
+  else
+  {
+    // in slave send mode
     // reply to master
-    // twi_transmit(data, quantity);
+    twi_transmit(data, quantity);
   }
   return quantity;
 }
@@ -291,9 +480,10 @@ int TwoWire::available(void)
 int TwoWire::read(void)
 {
   int value = -1;
-  
+
   // get each successive byte on each call
-  if(rxBufferIndex < rxBufferLength){
+  if (rxBufferIndex < rxBufferLength)
+  {
     value = rxBuffer[rxBufferIndex];
     ++rxBufferIndex;
   }
@@ -307,8 +497,9 @@ int TwoWire::read(void)
 int TwoWire::peek(void)
 {
   int value = -1;
-  
-  if(rxBufferIndex < rxBufferLength){
+
+  if (rxBufferIndex < rxBufferLength)
+  {
     value = rxBuffer[rxBufferIndex];
   }
 
@@ -320,23 +511,27 @@ void TwoWire::flush(void)
   // XXX: to be implemented.
 }
 
+//Обработчик прерывания на прием данных
 // behind the scenes function that is called when data is received
-void TwoWire::onReceiveService(uint8_t* inBytes, int numBytes)
+void TwoWire::onReceiveService(uint8_t *inBytes, int numBytes)
 {
   // don't bother if user hasn't registered a callback
-  if(!user_onReceive){
+  if (!user_onReceive)
+  {
     return;
   }
   // don't bother if rx buffer is in use by a master requestFrom() op
   // i know this drops data, but it allows for slight stupidity
   // meaning, they may not have read all the master requestFrom() data yet
-  if(rxBufferIndex < rxBufferLength){
+  if (rxBufferIndex < rxBufferLength)
+  {
     return;
   }
   // copy twi rx buffer into local read buffer
   // this enables new reads to happen in parallel
-  for(uint8_t i = 0; i < numBytes; ++i){
-    rxBuffer[i] = inBytes[i];    
+  for (uint8_t i = 0; i < numBytes; ++i)
+  {
+    rxBuffer[i] = inBytes[i];
   }
   // set rx iterator vars
   rxBufferIndex = 0;
@@ -345,11 +540,13 @@ void TwoWire::onReceiveService(uint8_t* inBytes, int numBytes)
   user_onReceive(numBytes);
 }
 
+//Обработчик прерывания на отправку данных
 // behind the scenes function that is called when data is requested
 void TwoWire::onRequestService(void)
 {
   // don't bother if user hasn't registered a callback
-  if(!user_onRequest){
+  if (!user_onRequest)
+  {
     return;
   }
   // reset tx buffer iterator vars
@@ -361,13 +558,13 @@ void TwoWire::onRequestService(void)
 }
 
 // sets function called on slave write
-void TwoWire::onReceive( void (*function)(int) )
+void TwoWire::onReceive(void (*function)(int))
 {
   user_onReceive = function;
 }
 
 // sets function called on slave read
-void TwoWire::onRequest( void (*function)(void) )
+void TwoWire::onRequest(void (*function)(void))
 {
   user_onRequest = function;
 }
@@ -375,4 +572,3 @@ void TwoWire::onRequest( void (*function)(void) )
 // Preinstantiate Objects //////////////////////////////////////////////////////
 
 TwoWire Wire = TwoWire();
-

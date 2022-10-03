@@ -16,6 +16,11 @@ extern volatile uint64_t _micros;
 // TASKS
 #define TASKS_TIMER_ENABLED
 
+// I2C
+
+extern void (*I2C_TX_Event)(void);
+extern void (*I2C_RX_Event)(uint8_t*, int);
+
 // UART
 ///Фактически на 1 байт меньше, чтобы не переполнить буфер
 #define SERIAL_RX_BUFFER_LENGTH 64
