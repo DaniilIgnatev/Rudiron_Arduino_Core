@@ -156,41 +156,6 @@ void TwoWire::clearWireTimeoutFlag(void)
   // twi_manageTimeoutFlag(true);
 }
 
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
-{
-  if (isize > 0)
-  {
-    // send internal address; this mode allows sending a repeated start to access
-    // some devices' internal registers. This function is executed by the hardware
-    // TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
-
-    beginTransmission(address);
-
-    // the maximum size of internal address is 3 bytes
-    if (isize > 3)
-    {
-      isize = 3;
-    }
-
-    // write internal register address - most significant byte first
-    while (isize-- > 0)
-      write((uint8_t)(iaddress >> (isize * 8)));
-    endTransmission(false);
-  }
-
-  // clamp to buffer length
-  if (quantity > BUFFER_LENGTH)
-  {
-    quantity = BUFFER_LENGTH;
-  }
-  // perform blocking read into buffer
-  uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
-  // set rx buffer iterator vars
-  rxBufferIndex = 0;
-  rxBufferLength = read;
-
-  return read;
-}
 
 uint8_t twi_readFrom(uint8_t address, uint8_t *data, uint8_t length, uint8_t sendStop)
 {
@@ -270,6 +235,42 @@ uint8_t twi_readFrom(uint8_t address, uint8_t *data, uint8_t length, uint8_t sen
   // return length;
 }
 
+uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddress, uint8_t isize, uint8_t sendStop)
+{
+  if (isize > 0)
+  {
+    // send internal address; this mode allows sending a repeated start to access
+    // some devices' internal registers. This function is executed by the hardware
+    // TWI module on other processors (for example Due's TWI_IADR and TWI_MMR registers)
+
+    beginTransmission(address);
+
+    // the maximum size of internal address is 3 bytes
+    if (isize > 3)
+    {
+      isize = 3;
+    }
+
+    // write internal register address - most significant byte first
+    while (isize-- > 0)
+      write((uint8_t)(iaddress >> (isize * 8)));
+    endTransmission(false);
+  }
+
+  // clamp to buffer length
+  if (quantity > BUFFER_LENGTH)
+  {
+    quantity = BUFFER_LENGTH;
+  }
+  // perform blocking read into buffer
+  uint8_t read = twi_readFrom(address, rxBuffer, quantity, sendStop);
+  // set rx buffer iterator vars
+  rxBufferIndex = 0;
+  rxBufferLength = read;
+
+  return read;
+}
+
 uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint8_t sendStop)
 {
   return requestFrom((uint8_t)address, (uint8_t)quantity, (uint32_t)0, (uint8_t)0, (uint8_t)sendStop);
@@ -304,31 +305,6 @@ void TwoWire::beginTransmission(uint8_t address)
 void TwoWire::beginTransmission(int address)
 {
   beginTransmission((uint8_t)address);
-}
-
-//
-//	Originally, 'endTransmission' was an f(void) function.
-//	It has been modified to take one parameter indicating
-//	whether or not a STOP should be performed on the bus.
-//	Calling endTransmission(false) allows a sketch to
-//	perform a repeated start.
-//
-//	WARNING: Nothing in the library keeps track of whether
-//	the bus tenure has been properly ended with a STOP. It
-//	is very possible to leave the bus in a hung state if
-//	no call to endTransmission(true) is made. Some I2C
-//	devices will behave oddly if they do not see a STOP.
-//
-uint8_t TwoWire::endTransmission(uint8_t sendStop)
-{
-  // transmit buffer (blocking)
-  uint8_t ret = writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
-  // reset tx buffer iterator vars
-  txBufferIndex = 0;
-  txBufferLength = 0;
-  // indicate that we are done transmitting
-  transmitting = 0;
-  return ret;
 }
 
 bool check_BUS_FREE(int timeout_us)
@@ -412,6 +388,31 @@ bool writeTo(uint8_t address, uint8_t *data, uint8_t length, uint8_t wait, uint8
   I2C_SendSTOP();
 
   return true;
+}
+
+//
+//	Originally, 'endTransmission' was an f(void) function.
+//	It has been modified to take one parameter indicating
+//	whether or not a STOP should be performed on the bus.
+//	Calling endTransmission(false) allows a sketch to
+//	perform a repeated start.
+//
+//	WARNING: Nothing in the library keeps track of whether
+//	the bus tenure has been properly ended with a STOP. It
+//	is very possible to leave the bus in a hung state if
+//	no call to endTransmission(true) is made. Some I2C
+//	devices will behave oddly if they do not see a STOP.
+//
+uint8_t TwoWire::endTransmission(uint8_t sendStop)
+{
+  // transmit buffer (blocking)
+  uint8_t ret = writeTo(txAddress, txBuffer, txBufferLength, 1, sendStop);
+  // reset tx buffer iterator vars
+  txBufferIndex = 0;
+  txBufferLength = 0;
+  // indicate that we are done transmitting
+  transmitting = 0;
+  return ret;
 }
 
 //	This provides backwards compatibility with the original
