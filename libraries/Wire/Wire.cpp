@@ -21,17 +21,16 @@
   Modified 2020 by Greyson Christoforo (grey@christoforo.net) to implement timeouts
 */
 
-extern "C"
-{
 #include <stdlib.h>
 #include <string.h>
 #include <inttypes.h>
   // #include "utility/twi.h"
-}
 
+#include "rudiron/gpio.h"
 #include "MDR_i2c.h"
-
 #include "Wire.h"
+
+using namespace Rudiron;
 
 // Initialize Class Variables //////////////////////////////////////////////////
 
@@ -47,6 +46,25 @@ uint8_t TwoWire::txBufferLength = 0;
 uint8_t TwoWire::transmitting = 0;
 void (*TwoWire::user_onRequest)(void);
 void (*TwoWire::user_onReceive)(int);
+
+void configGPIO(bool SDA_output)
+{
+  PORT_InitTypeDef PORT_InitStructure;
+  PORT_StructInit(&PORT_InitStructure);
+
+  PORT_InitStructure.PORT_PD = PORT_PD_OPEN;
+  PORT_InitStructure.PORT_FUNC = PORT_FUNC_ALTER;
+  PORT_InitStructure.PORT_MODE = PORT_MODE_DIGITAL;
+  PORT_InitStructure.PORT_SPEED = PORT_SPEED_MAXFAST;
+
+  // SDA
+  PORT_InitStructure.PORT_OE = (PORT_OE_TypeDef)SDA_output;
+  GPIO::configPin(PORT_PIN_C1, PORT_InitStructure);
+
+  // SCL
+  PORT_InitStructure.PORT_OE = PORT_OE_OUT;
+  GPIO::configPin(PORT_PIN_C0, PORT_InitStructure);
+}
 
 // Constructors ////////////////////////////////////////////////////////////////
 
@@ -65,13 +83,16 @@ void TwoWire::begin(void)
   txBufferIndex = 0;
   txBufferLength = 0;
 
-  setClock(400000);
-
   I2C_TX_Event = &onRequestService;
   I2C_RX_Event = &onReceiveService;
 
-  I2C_Cmd(ENABLE);
+  configGPIO(true);
+
+  RST_CLK_PCLKcmd(RST_CLK_PCLK_I2C, ENABLE);
+  setClock(100 * 1000);
+
   I2C_ITConfig(ENABLE);
+  I2C_Cmd(ENABLE);
 }
 
 void TwoWire::begin(uint8_t address)
@@ -88,13 +109,15 @@ void TwoWire::begin(int address)
 void TwoWire::end(void)
 {
   I2C_Cmd(DISABLE);
+  I2C_ITConfig(DISABLE);
+  RST_CLK_PCLKcmd(RST_CLK_PCLK_I2C, DISABLE);
 }
 
 void TwoWire::setClock(uint32_t clock)
 {
   I2C_InitTypeDef initStruct;
 
-  if (clock <= 400000)
+  if (clock < 400000)
   {
     initStruct.I2C_Speed = I2C_SPEED_UP_TO_400KHz;
   }
@@ -103,7 +126,12 @@ void TwoWire::setClock(uint32_t clock)
     initStruct.I2C_Speed = I2C_SPEED_UP_TO_1MHz;
   }
 
-  initStruct.I2C_Speed = (32 / (clock / 100000)) - 1;
+  //добавить адаптацию к частоте цпу!
+  initStruct.I2C_ClkDiv = (32 / (clock / 100000)) - 1;
+  if (!IS_I2C_CLKDIV(initStruct.I2C_ClkDiv))
+  {
+    return;
+  }
   I2C_Init(&initStruct);
 }
 
@@ -155,7 +183,6 @@ void TwoWire::clearWireTimeoutFlag(void)
 {
   // twi_manageTimeoutFlag(true);
 }
-
 
 uint8_t twi_readFrom(uint8_t address, uint8_t *data, uint8_t length, uint8_t sendStop)
 {
@@ -353,8 +380,6 @@ bool check_ACK_FOUND(int timeout_us)
       return true;
     case I2C_EVENT_NACK_FOUND:
       return false;
-    case I2C_EVENT_LOST_ARB_FOUND:
-      return false;
     }
   }
 
@@ -368,7 +393,8 @@ bool writeTo(uint8_t address, uint8_t *data, uint8_t length, uint8_t wait, uint8
 
   I2C_Send7bitAddress(address, I2C_Direction_Transmitter);
   check_TRANSFER_ENABLED(10 * 1000);
-  if (!check_ACK_FOUND)
+
+  if (!check_ACK_FOUND(10 * 1000))
   {
     I2C_SendSTOP();
     return false;
@@ -378,7 +404,7 @@ bool writeTo(uint8_t address, uint8_t *data, uint8_t length, uint8_t wait, uint8
   for (int i = 0; i < length; ++i)
   {
     I2C_SendByte(data[i]);
-    if (!check_ACK_FOUND)
+    if (!check_ACK_FOUND(10 * 1000))
     {
       I2C_SendSTOP();
       return false;
