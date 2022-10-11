@@ -230,22 +230,22 @@
 //   return length;
 // }
 
-// /* 
-//  * Function twi_writeTo
-//  * Desc     attempts to become twi bus master and write a
-//  *          series of bytes to a device on the bus
-//  * Input    address: 7bit i2c device address
-//  *          data: pointer to byte array
-//  *          length: number of bytes in array
-//  *          wait: boolean indicating to wait for write or not
-//  *          sendStop: boolean indicating whether or not to send a stop at the end
-//  * Output   0 .. success
-//  *          1 .. length to long for buffer
-//  *          2 .. address send, NACK received
-//  *          3 .. data send, NACK received
-//  *          4 .. other twi error (lost bus arbitration, bus error, ..)
-//  *          5 .. timeout
-//  */
+/* 
+ * Function twi_writeTo
+ * Desc     attempts to become twi bus master and write a
+ *          series of bytes to a device on the bus
+ * Input    address: 7bit i2c device address
+ *          data: pointer to byte array
+ *          length: number of bytes in array
+ *          wait: boolean indicating to wait for write or not
+ *          sendStop: boolean indicating whether or not to send a stop at the end
+ * Output   0 .. success
+ *          1 .. length to long for buffer
+ *          2 .. address send, NACK received
+ *          3 .. data send, NACK received
+ *          4 .. other twi error (lost bus arbitration, bus error, ..)
+ *          5 .. timeout
+ */
 // uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
 // {
 //   uint8_t i;

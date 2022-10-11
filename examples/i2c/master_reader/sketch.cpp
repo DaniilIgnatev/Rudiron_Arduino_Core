@@ -1,9 +1,9 @@
-// Wire Controller Reader
+// Wire Master Reader
 // by Nicholas Zambetti <http://www.zambetti.com>
 
 // Demonstrates use of the Wire library
-// Reads data from an I2C/TWI peripheral device
-// Refer to the "Wire Peripheral Sender" example for use with this
+// Reads data from an I2C/TWI slave device
+// Refer to the "Wire Slave Sender" example for use with this
 
 // Created 29 March 2006
 
@@ -18,9 +18,9 @@ void setup() {
 }
 
 void loop() {
-  Wire.requestFrom(8, 6);    // request 6 bytes from peripheral device #8
+  Wire.requestFrom(8, 6);    // request 6 bytes from slave device #8
 
-  while (Wire.available()) { // peripheral may send less than requested
+  while (Wire.available()) { // slave may send less than requested
     char c = Wire.read(); // receive a byte as character
     Serial.print(c);         // print the character
   }

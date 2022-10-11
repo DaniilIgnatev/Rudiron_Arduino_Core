@@ -71,6 +71,7 @@ void TwoWire::begin(void)
   I2C_RX_Event = &onReceiveService;
 
   I2C_Cmd(ENABLE);
+  I2C_ITConfig(ENABLE);
 }
 
 void TwoWire::begin(uint8_t address)
@@ -93,13 +94,15 @@ void TwoWire::setClock(uint32_t clock)
 {
   I2C_InitTypeDef initStruct;
 
-  if (clock <= 400000){
+  if (clock <= 400000)
+  {
     initStruct.I2C_Speed = I2C_SPEED_UP_TO_400KHz;
   }
-  else {
+  else
+  {
     initStruct.I2C_Speed = I2C_SPEED_UP_TO_1MHz;
   }
-  
+
   initStruct.I2C_Speed = (32 / (clock / 100000)) - 1;
   I2C_Init(&initStruct);
 }
@@ -189,7 +192,7 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity, uint32_t iaddres
   return read;
 }
 
-uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop)
+uint8_t twi_readFrom(uint8_t address, uint8_t *data, uint8_t length, uint8_t sendStop)
 {
   uint8_t i;
 
@@ -215,7 +218,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
   // twi_masterBufferIndex = 0;
   // twi_masterBufferLength = length-1;  // This is not intuitive, read on...
   // // On receive, the previously configured ACK/NACK setting is transmitted in
-  // // response to the received byte before the interrupt is signalled. 
+  // // response to the received byte before the interrupt is signalled.
   // // Therefor we must actually set NACK when the _next_ to last byte is
   // // received, causing that NACK to be sent in response to receiving the last
   // // expected byte of data.
@@ -229,7 +232,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
   //   // (@@@ we hope), and the TWI statemachine is just waiting for the address byte.
   //   // We need to remove ourselves from the repeated start state before we enable interrupts,
   //   // since the ISR is ASYNC, and we could get confused if we hit the ISR before cleaning
-  //   // up. Also, don't enable the START interrupt. There may be one pending from the 
+  //   // up. Also, don't enable the START interrupt. There may be one pending from the
   //   // repeated start that we sent ourselves, and that would really confuse things.
   //   twi_inRepStart = false;			// remember, we're dealing with an ASYNC ISR
   //   startMicros = micros();
@@ -328,83 +331,87 @@ uint8_t TwoWire::endTransmission(uint8_t sendStop)
   return ret;
 }
 
-uint8_t writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop)
+bool check_BUS_FREE(int timeout_us)
 {
-  uint8_t i;
+  uint32_t startMicros = micros();
+  while (I2C_CheckEvent(I2C_EVENT_BUS_FREE) != SUCCESS)
+  {
+    if ((micros() - startMicros) > timeout_us)
+    {
+      return false;
+    }
+  }
 
-  // // ensure data will fit into buffer
-  // if(TWI_BUFFER_LENGTH < length){
-  //   return 1;
-  // }
+  return true;
+}
 
-  // // wait until twi is ready, become master transmitter
-  // uint32_t startMicros = micros();
-  // while(TWI_READY != twi_state){
-  //   if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
-  //     twi_handleTimeout(twi_do_reset_on_timeout);
-  //     return (5);
-  //   }
-  // }
-  // twi_state = TWI_MTX;
-  // twi_sendStop = sendStop;
-  // // reset error state (0xFF.. no error occured)
-  // twi_error = 0xFF;
+bool check_TRANSFER_ENABLED(int timeout_us)
+{
+  uint32_t startMicros = micros();
 
-  // // initialize buffer iteration vars
-  // twi_masterBufferIndex = 0;
-  // twi_masterBufferLength = length;
-  
-  // // copy data to twi buffer
-  // for(i = 0; i < length; ++i){
-  //   twi_masterBuffer[i] = data[i];
-  // }
-  
-  // // build sla+w, slave device address + w bit
-  // twi_slarw = TW_WRITE;
-  // twi_slarw |= address << 1;
-  
-  // // if we're in a repeated start, then we've already sent the START
-  // // in the ISR. Don't do it again.
-  // //
-  // if (true == twi_inRepStart) {
-  //   // if we're in the repeated start state, then we've already sent the start,
-  //   // (@@@ we hope), and the TWI statemachine is just waiting for the address byte.
-  //   // We need to remove ourselves from the repeated start state before we enable interrupts,
-  //   // since the ISR is ASYNC, and we could get confused if we hit the ISR before cleaning
-  //   // up. Also, don't enable the START interrupt. There may be one pending from the 
-  //   // repeated start that we sent outselves, and that would really confuse things.
-  //   twi_inRepStart = false;			// remember, we're dealing with an ASYNC ISR
-  //   startMicros = micros();
-  //   do {
-  //     TWDR = twi_slarw;
-  //     if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
-  //       twi_handleTimeout(twi_do_reset_on_timeout);
-  //       return (5);
-  //     }
-  //   } while(TWCR & _BV(TWWC));
-  //   TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE);	// enable INTs, but not START
-  // } else {
-  //   // send start condition
-  //   TWCR = _BV(TWINT) | _BV(TWEA) | _BV(TWEN) | _BV(TWIE) | _BV(TWSTA);	// enable INTs
-  // }
+  while (I2C_CheckEvent(I2C_EVENT_TRANSFER_ENABLED) != SUCCESS)
+  {
+    if (micros() - startMicros > timeout_us)
+    {
+      return false;
+    }
+  }
 
-  // // wait for write operation to complete
-  // startMicros = micros();
-  // while(wait && (TWI_MTX == twi_state)){
-  //   if((twi_timeout_us > 0ul) && ((micros() - startMicros) > twi_timeout_us)) {
-  //     twi_handleTimeout(twi_do_reset_on_timeout);
-  //     return (5);
-  //   }
-  // }
-  
-  // if (twi_error == 0xFF)
-  //   return 0;	// success
-  // else if (twi_error == TW_MT_SLA_NACK)
-  //   return 2;	// error: address send, nack received
-  // else if (twi_error == TW_MT_DATA_NACK)
-  //   return 3;	// error: data send, nack received
-  // else
-  //   return 4;	// other twi error
+  return true;
+}
+
+bool check_ACK_FOUND(int timeout_us)
+{
+  uint32_t startMicros = micros();
+
+  while (true)
+  {
+    if (micros() - startMicros > timeout_us)
+    {
+      return false;
+    }
+
+    switch (I2C_GetLastEvent())
+    {
+    case I2C_EVENT_ACK_FOUND:
+      return true;
+    case I2C_EVENT_NACK_FOUND:
+      return false;
+    case I2C_EVENT_LOST_ARB_FOUND:
+      return false;
+    }
+  }
+
+  return false;
+}
+
+bool writeTo(uint8_t address, uint8_t *data, uint8_t length, uint8_t wait, uint8_t sendStop)
+{
+  // wait until can become master transmitter
+  check_BUS_FREE(10 * 1000);
+
+  I2C_Send7bitAddress(address, I2C_Direction_Transmitter);
+  check_TRANSFER_ENABLED(10 * 1000);
+  if (!check_ACK_FOUND)
+  {
+    I2C_SendSTOP();
+    return false;
+  }
+
+  // send data
+  for (int i = 0; i < length; ++i)
+  {
+    I2C_SendByte(data[i]);
+    if (!check_ACK_FOUND)
+    {
+      I2C_SendSTOP();
+      return false;
+    }
+  }
+
+  I2C_SendSTOP();
+
+  return true;
 }
 
 //	This provides backwards compatibility with the original
@@ -439,7 +446,7 @@ size_t TwoWire::write(uint8_t data)
   {
     // in slave send mode
     // reply to master
-    twi_transmit(&data, 1);
+    // twi_transmit(&data, 1);
   }
   return 1;
 }
@@ -461,10 +468,34 @@ size_t TwoWire::write(const uint8_t *data, size_t quantity)
   {
     // in slave send mode
     // reply to master
-    twi_transmit(data, quantity);
+    // twi_transmit(data, quantity);
   }
   return quantity;
 }
+
+// Отправка по прерыванию
+// uint8_t twi_transmit(const uint8_t* data, uint8_t length)
+// {
+//   uint8_t i;
+
+// // ensure data will fit into buffer
+// if(TWI_BUFFER_LENGTH < (twi_txBufferLength+length)){
+//   return 1;
+// }
+
+// // ensure we are currently a slave transmitter
+// if(TWI_STX != twi_state){
+//   return 2;
+// }
+
+// // set length and copy data into tx buffer
+// for(i = 0; i < length; ++i){
+//   twi_txBuffer[twi_txBufferLength+i] = data[i];
+// }
+// twi_txBufferLength += length;
+
+//   return 0;
+// }
 
 // must be called in:
 // slave rx event callback

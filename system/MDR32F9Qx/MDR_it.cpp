@@ -30,6 +30,8 @@
 
 #include "MDR_uart.h"
 #include "MDR_can.h"
+#include "MDR_i2c.h"
+
 #include "nrf24l01.h"
 
 #include "Arduino.h"
@@ -343,17 +345,9 @@ void SSP1_IRQHandler(void)
  *******************************************************************************/
 void I2C_IRQHandler(void)
 {
+    //нужен для асинхронного получения данных
 
-    //свитч статуса прерывания
-
-    if (I2C_TX_Event){
-        I2C_TX_Event();
-    }
-    
-    if (I2C_RX_Event){
-        I2C_RX_Event(0, 0);
-    }
-    
+    I2C_ClearITPendingBit();
 }
 
 /*******************************************************************************
