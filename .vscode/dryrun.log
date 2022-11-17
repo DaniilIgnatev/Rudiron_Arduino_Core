@@ -1,6 +1,0 @@
-make --dry-run --always-make --keep-going --print-directory
-make: Entering directory `/Users/daniilignatev/GitHub/Arduino_Core_Rudiron'
-make: Leaving directory `/Users/daniilignatev/GitHub/Arduino_Core_Rudiron'
- 
-make: *** No targets specified and no makefile found.  Stop.
-

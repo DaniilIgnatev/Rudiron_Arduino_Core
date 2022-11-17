@@ -14,37 +14,13 @@
 # along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 cmake_minimum_required(VERSION 3.15.3)
-
-# Optional: print out extra messages to see what is going on. Comment it to have less verbose messages
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
-# Path to toolchain file. This one has to be before 'project()' below
-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_SOURCE_DIR}/arm-none-eabi-gcc.cmake")
-
-
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS OFF)
-enable_language(C ASM)
-
-# Setup project
+# Название проекта
 project(Arduino_Core_Rudiron)
 
-if(NOT CMAKE_BUILD_TYPE)
-        set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose Release or Debug" FORCE)
-else()
-        message("Build type = ${CMAKE_BUILD_TYPE}")
-endif()
-
-set(core M3)
-set(cpu_name "MDR32F9Qx")
-set(board_name "Rudiron_Buterbrod")
-
-# Optional: issue a message to be sure it uses the correct toolchain file.
-message(STATUS "CMAKE_TOOLCHAIN_FILE is: ${CMAKE_TOOLCHAIN_FILE}")
-
 # Sources
-set(core_path "${CMAKE_SOURCE_DIR}/core")
+set(core_path "${PROJECT_SOURCE_DIR}/core")
 set(core_avr_path "${core_path}/avr")
 set(core_rudiron_path "${core_path}/rudiron")
 file(GLOB_RECURSE core_sources
@@ -53,31 +29,12 @@ file(GLOB_RECURSE core_sources
         ${core_rudiron_path}/*
 )
 
-set(libraries_path "${CMAKE_SOURCE_DIR}/libraries")
+set(libraries_path "${PROJECT_SOURCE_DIR}/libraries")
 file(GLOB_RECURSE libraries_sources
         ${libraries_path}/*
 )
 
-set(sketch_path "${CMAKE_SOURCE_DIR}/sketch")
-set(examples_path "${CMAKE_SOURCE_DIR}/examples")
-file(GLOB_RECURSE sketch_sources
-        # ${sketch_path}/*
-        ${examples_path}/i2c/master_writer/*
-        # ${examples_path}/i2c/master_reader/*
-        # ${examples_path}/display/basic/*
-        # ${examples_path}/display/flag/*
-        # ${examples_path}/esp01/HTTPGET/*
-        # ${examples_path}/esp01/TCPServer/*
-        # ${examples_path}/sd/CardInfo/*
-        # ${examples_path}/nrf24/tank/receiver/*
-        # ${examples_path}/nrf24/tank/receiver_lm2-130/*
-        # ${examples_path}/nrf24/tank/transmitter/*
-        # ${examples_path}/self_driving_car/*
-        # ${examples_path}/servo/basic/*
-)
-
-set(cmsis_path "${CMAKE_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
-
+set(cmsis_path "${PROJECT_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
 set(cmsis_include_path "${cmsis_path}/Include")
 file(GLOB_RECURSE cmsis_include_sources
         ${cmsis_include_path}/*
@@ -95,8 +52,7 @@ file(GLOB_RECURSE cmsis_startup_sources
         ${cmsis_startup_path}/*.S
 )
 
-set(std_periph_driver_path "${CMAKE_SOURCE_DIR}/system/Drivers/${cpu_name}_StdPeriph_Driver")
-
+set(std_periph_driver_path "${PROJECT_SOURCE_DIR}/system/Drivers/${cpu_name}_StdPeriph_Driver")
 set(std_periph_driver_inc_path "${std_periph_driver_path}/inc")
 set(std_periph_driver_inc_usb_path "${std_periph_driver_inc_path}/USB_Library")
 set(std_periph_driver_src_path "${std_periph_driver_path}/src")
@@ -108,38 +64,34 @@ file(GLOB_RECURSE std_periph_driver_sources
         ${std_periph_driver_src_usb_path}/*
 )
 
-set(system_path "${CMAKE_SOURCE_DIR}/system/${cpu_name}")
+set(system_path "${PROJECT_SOURCE_DIR}/system/${cpu_name}")
 file(GLOB_RECURSE system_sources
         ${system_path}/*
 )
 
-set(variants_path "${CMAKE_SOURCE_DIR}/variants/${cpu_name}/${board_name}")
+set(variants_path "${PROJECT_SOURCE_DIR}/variants/${cpu_name}/${board_name}")
 file(GLOB_RECURSE variants_sources
         ${variants_path}/*
 )
 
 # Путь до скрипта линковщика
-set(LINKER_FILE "${cmsis_startup_path}/${cpu_name}.ld")
+set(ARDUINO_CORE_RUDIRON_LINKER_FILE "${cmsis_startup_path}/${cpu_name}.ld" PARENT_SCOPE)
 
-# Конфигурация исполняемого файла
-set(EXECUTABLE "${PROJECT_NAME}.elf")
-add_executable(${EXECUTABLE}
-        ${sketch_sources}
-        ${cmsis_startup_sources}
+# Перечень путей к файлам исходного кода
+set(ARDUIRON_CORE_RUDIRON_SOURCES
         ${system_sources}
         ${core_sources}
-        ${cmsis_include_sources}
         ${cmsis_source_sources}
+        ${cmsis_startup_sources}
+        ${cmsis_include_sources}
         ${std_periph_driver_sources}
         ${variants_sources}
         ${libraries_sources}
-)
+        PARENT_SCOPE)
 
-# Относительные пути
-target_include_directories(${EXECUTABLE} PRIVATE
+# Перечень путей к файлам заголовков
+set(ARDUIRON_CORE_RUDIRON_INCLUDES
         ${core_path}
-        ${sketch_path}
-        ${examples_path}
         ${cmsis_include_path}
         ${cmsis_source_path}
         ${cmsis_source_templates_path}
@@ -162,60 +114,5 @@ target_include_directories(${EXECUTABLE} PRIVATE
         ${libraries_path}/Adafruit_GFX_Library/Fonts
         ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
         ${libraries_path}/Servo
-)
-
-# Объявления
-target_compile_definitions(${EXECUTABLE} PRIVATE
-        ${board_name}
-
-        # USB_IRQ -- включает обработчик прерывания USB
-        # HCLK_DISABLE -- работа от внутреннего кварцевого резонатора
-)
-
-# Аргументы копилятору
-target_compile_options(${EXECUTABLE} PRIVATE
-        "-mcpu=cortex-${core}"
-        "-DUSE_${cpu_name}"
-        "-D__STARTUP_CLEAR_BSS"
-        "-D_start=main"
-        "-pipe"
-        "-mthumb"
-        "-ffunction-sections"
-        "-fdata-sections"
-        "-flto" # включает оптимизацию линковщика
-        "-fno-rtti" # отключает динамическую идентификацию типов данных
-        "-fno-exceptions" # отключает обработку исключений с++
-)
-
-if(${CMAKE_BUILD_TYPE} MATCHES "Debug")
-        target_compile_options(${EXECUTABLE} PRIVATE
-                "-Og"
-                "-g"
+        PARENT_SCOPE
         )
-else()
-        target_compile_options(${EXECUTABLE} PRIVATE
-                "-O2"
-        )
-endif()
-
-# Аргументы линковщику
-target_link_options(${EXECUTABLE} PRIVATE
-        "-T${LINKER_FILE}"
-        "-mcpu=cortex-${core}"
-        "-Wl,--gc-sections"
-        "-specs=nano.specs"
-        "-ffreestanding"#Не делать предположений о значениях имен функций из стандартной библиотеки
-        # "-nostartfiles"#Предотвращает использование компилятором стандартных файлов запуска при компоновке
-        "-Wl,--print-memory-usage"
-)
-
-add_custom_command(TARGET ${EXECUTABLE}
-        POST_BUILD
-        COMMAND ${CMAKE_OBJCOPY} -O srec --srec-len=64 ${EXECUTABLE} ${PROJECT_NAME}.s19
-        COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE} ${PROJECT_NAME}.hex
-        COMMAND ${CMAKE_OBJCOPY} -O binary ${EXECUTABLE} ${PROJECT_NAME}.bin)
-
-# Вывод информации о размере памяти для продвинутых пользователей
-# add_custom_command(TARGET ${EXECUTABLE}
-# POST_BUILD
-# COMMAND ${CMAKE_SIZE_UTIL} ${EXECUTABLE})
