@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.15.3)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # Название проекта
-project(Arduino_Core_Rudiron)
+project(Arduino_Core_Rudiron VERSION 1.0.0)
 
 # Sources
 set(core_path "${PROJECT_SOURCE_DIR}/core")
