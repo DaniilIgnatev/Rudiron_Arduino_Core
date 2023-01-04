@@ -179,7 +179,7 @@ void CAN1_IRQHandler(void)
     int last_used_buffer_for_id = -1;
     int last_free_buffer = -1;
 
-    //сканирование буферов
+    // сканирование буферов
     for (int i = CAN_RX_BUFFER_LENGTH - 1; i >= 0; i--)
     {
         if (_can_rx_buffer[i].ID == can_rx.Rx_Header.ID)
@@ -196,7 +196,7 @@ void CAN1_IRQHandler(void)
     if (last_used_buffer_for_id != -1 && ((_can_rx_buffer[last_used_buffer_for_id].Mask & (1 << 7)) == 0))
     {
         int last_free_byte = -1;
-        //поиск последнего свободного байта в использованном буфере
+        // поиск последнего свободного байта в использованном буфере
         for (int i = 7; i > 0; i--)
         {
             if (((1 << i) & (_can_rx_buffer[last_used_buffer_for_id].Mask)) != 0)
@@ -209,14 +209,14 @@ void CAN1_IRQHandler(void)
             }
         }
 
-        //запись в использованный буфер
+        // запись в использованный буфер
         for (int i = last_free_byte; i < 8; i++)
         {
             _can_rx_buffer[last_used_buffer_for_id].Data[i] = bytes_to_write_pointer[bytes_to_write_index];
             _can_rx_buffer[last_used_buffer_for_id].Mask |= (1 << i);
             bytes_to_write_index++;
 
-            //есть ли еще байты на запись
+            // есть ли еще байты на запись
             if (bytes_to_write_index == can_rx.Rx_Header.DLC)
             {
                 break;
@@ -226,11 +226,11 @@ void CAN1_IRQHandler(void)
 
     if ((last_free_buffer != -1) && (bytes_to_write_index != can_rx.Rx_Header.DLC))
     {
-        //подготовка нового буфера
+        // подготовка нового буфера
         _can_rx_buffer[last_free_buffer].ID = can_rx.Rx_Header.ID;
         _can_rx_buffer[last_free_buffer].Mask = 0;
 
-        //запись оставшихся байт в свободный буфер
+        // запись оставшихся байт в свободный буфер
         int i = 0;
         do
         {
@@ -345,7 +345,7 @@ void SSP1_IRQHandler(void)
  *******************************************************************************/
 void I2C_IRQHandler(void)
 {
-    //нужен для асинхронного получения данных
+    // нужен для асинхронного получения данных
 
     I2C_ClearITPendingBit();
 }
@@ -479,42 +479,7 @@ void EXT_INT2_IRQHandler(void)
 #ifdef NRF24_USE_INTERRUPT
     NVIC_ClearPendingIRQ(EXT_INT2_IRQn);
 
-    uint8_t nRF24_payload[NRF24_PAYLOAD_LENGTH];
-    nRF24_RXResult pipe = nRF24_RX_EMPTY;
-
-    // Length of received payload
-    uint8_t payload_length;
-    if (nRF24_GetStatus_RXFIFO() != nRF24_STATUS_RXFIFO_EMPTY)
-    {
-        // Get a payload from the transceiver
-        pipe = nRF24_ReadPayload(nRF24_payload, &payload_length);
-    }
-
-    if (payload_length != NRF24_PAYLOAD_LENGTH)
-    {
-        //ошибка!
-        return;
-    }
-
-    //Заполнение кольцевого буфера
-    uint8_t package_length = nRF24_payload[0];
-
-    for (uint8_t i = 1; i < package_length + 1; i++)
-    {
-        uint8_t data = nRF24_payload[i];
-
-        NRF24_BUFFER_INDEX_T next_head = _nrf24_rx_buffer_head + 1;
-        if (next_head == NRF24_RX_BUFFER_LENGTH)
-        {
-            next_head = 0;
-        }
-
-        if (next_head != _nrf24_rx_buffer_tail)
-        {
-            _nrf24_rx_buffer[_nrf24_rx_buffer_head] = data;
-            _nrf24_rx_buffer_head = next_head;
-        }
-    }
+    nRF24_bufferPayload();
 
     nRF24_ClearIRQFlags();
     nRF24_maskIRQ(0, 0, 0);

@@ -80,10 +80,6 @@ THE SOFTWARE.
 // -----------------------------------------------------------------------------
 //#define I2CDEV_SERIAL_DEBUG
 
-#ifndef ARDUINO
-#define ARDUINO 101
-#endif
-
 #ifdef ARDUINO
     #if ARDUINO < 100
         #include "WProgram.h"

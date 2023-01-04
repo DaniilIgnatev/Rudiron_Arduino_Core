@@ -30,6 +30,36 @@
 
 // Public Methods //////////////////////////////////////////////////////////////
 
+size_t Print::printf(const char *format, ...)
+{
+    char loc_buf[64];
+    char * temp = loc_buf;
+    va_list arg;
+    va_list copy;
+    __builtin_va_start(arg,format);
+    __builtin_va_copy(copy, arg);
+    int len = vsnprintf(temp, sizeof(loc_buf), format, copy);
+    __builtin_va_end(copy);
+    if(len < 0) {
+        __builtin_va_end(arg);
+        return 0;
+    };
+    if(len >= (int)sizeof(loc_buf)){  // comparation of same sign type for the compiler
+        temp = (char*) malloc(len+1);
+        if(temp == NULL) {
+            __builtin_va_end(arg);
+            return 0;
+        }
+        len = vsnprintf(temp, len+1, format, arg);
+    }
+    __builtin_va_end(arg);
+    len = write((uint8_t*)temp, len);
+    if(temp != loc_buf){
+        free(temp);
+    }
+    return len;
+}
+
 size_t Print::print(const __FlashStringHelper *ifsh)
 {
   char* p = (char*)ifsh;

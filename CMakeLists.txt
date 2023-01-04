@@ -113,6 +113,8 @@ set(ARDUIRON_CORE_RUDIRON_INCLUDES
         ${libraries_path}/Adafruit_GFX_Library
         ${libraries_path}/Adafruit_GFX_Library/Fonts
         ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
+        ${libraries_path}/Adafruit_MPU6050
+        ${libraries_path}/Adafruit_Unified_Sensor
         ${libraries_path}/Servo
         PARENT_SCOPE
         )

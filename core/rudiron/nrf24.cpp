@@ -2,18 +2,30 @@
 
 namespace Rudiron
 {
+    const uint8_t nRF24::nRF24_DEFAULT_ADDR[] = {0xF0, 0xF0, 0xF0, 0xF0, 0xF0};
+
     nRF24::nRF24() : Stream()
     {
-        _timeout = 100; //надежный таймаут чтения сообщений неопределенной длины
+        _timeout = 100; // надежный таймаут чтения сообщений неопределенной длины
     }
 
-    bool nRF24::begin(bool receiver)
+    bool nRF24::begin(bool receiver, uint8_t RFChannel, uint8_t nRF24_TXPWR, const uint8_t address[5], uint8_t nRF24_DR, uint8_t nRF24_CRC, uint8_t nRF24_ARD, uint8_t nRF24_ARC)
     {
-        nRF24_GPIO_Init();
+        if (RFChannel > 124)
+        {
+            return false;
+        }
 
-//работа через прерывания
+        isReceiver = receiver;
+        nRF24_GPIO_Init();
+        Rudiron::SPI::getSPI2().begin(4000000, SSP_SPH_1Edge, SSP_SPO_Low, SSP_WordLength8b, SSP_FRF_SPI_Motorola, SSP_HardwareFlowControl_SSE);
+
+// работа через прерывания
 #ifdef NRF24_USE_INTERRUPT
-        nRF24_InitIRQ();
+        if (isReceiver)
+        {
+            nRF24_InitIRQ();
+        }
 #endif
 
         // RX/TX disabled
@@ -35,28 +47,27 @@ namespace Rudiron
         // Initialize the nRF24L01 to its default state
         nRF24_Init();
 
-        nRF24_SetRFChannel(40);
+        nRF24_SetRFChannel(RFChannel);
 
         // Set data rate
-        nRF24_SetDataRate(nRF24_DR_250kbps);
+        nRF24_SetDataRate(nRF24_DR);
 
         // Set CRC scheme
-        nRF24_SetCRCScheme(nRF24_CRC_2byte);
+        nRF24_SetCRCScheme(nRF24_CRC);
 
         // Set address width, its common for all pipes (RX and TX)
         nRF24_SetAddrWidth(5);
 
-        // Configure RX PIPE
-        static const uint8_t nRF24_ADDR[] = {0xF0, 0xF0, 0xF0, 0xF0, 0xF0};
-
-        //Адрес трубы приемника
-        nRF24_SetAddr(nRF24_PIPE0, nRF24_ADDR);
-
-        if (receiver)
+        if (isReceiver)
         {
+            // Адрес приемника
+            nRF24_SetAddr(nRF24_PIPE0, nRF24_DEFAULT_ADDR);
+
+            // Параметры приемника
             nRF24_SetRXPipe(nRF24_PIPE0, nRF24_AA_ON, NRF24_PAYLOAD_LENGTH);
 
-            nRF24_SetTXPower(nRF24_TXPWR_12dBm);
+            // Set TX power
+            nRF24_SetTXPower(nRF24_TXPWR);
 
             // Set operational mode (PRX == receiver)
             nRF24_SetOperationalMode(nRF24_MODE_RX);
@@ -72,17 +83,14 @@ namespace Rudiron
         }
         else
         {
-            //Адрес трубы передатчика
-            nRF24_SetAddr(nRF24_PIPETX, nRF24_ADDR);
+            // Адрес получателя
+            nRF24_SetAddr(nRF24_PIPETX, nRF24_DEFAULT_ADDR);
 
-            // Set TX power (maximum)
-            nRF24_SetTXPower(nRF24_TXPWR_0dBm);
+            // Set TX power
+            nRF24_SetTXPower(nRF24_TXPWR);
 
-            // Configure auto retransmit: 10 retransmissions with pause of 250us in between
-            nRF24_SetAutoRetr(nRF24_ARD_250us, 10);
-
-            // Enable Auto-ACK for pipe#0 (for ACK packets)
-            nRF24_EnableAA(nRF24_PIPE0);
+            // Configure auto retransmit: nRF24_ARC retransmissions with pause of nRF24_ARD in between
+            nRF24_SetAutoRetr(nRF24_ARD, nRF24_ARC);
 
             /// Set operational mode (PTX == transmitter)
             nRF24_SetOperationalMode(nRF24_MODE_TX);
@@ -106,6 +114,11 @@ namespace Rudiron
 
     int nRF24::available()
     {
+        if (!isReceiver)
+        {
+            return 0;
+        }
+
 #if NRF24_RX_BUFFER_LENGTH > 0
         bool endofstream = _nrf24_rx_buffer_tail == _nrf24_rx_buffer_head;
 
@@ -134,50 +147,13 @@ namespace Rudiron
     int nRF24::read(void)
     {
 #ifndef NRF24_USE_INTERRUPT
-        uint8_t nRF24_payload[NRF24_PAYLOAD_LENGTH];
-        nRF24_RXResult pipe = nRF24_RX_EMPTY;
-
-        // Length of received payload
-        uint8_t payload_length;
-        if (nRF24_GetStatus_RXFIFO() != nRF24_STATUS_RXFIFO_EMPTY)
-        {
-            // Get a payload from the transceiver
-            pipe = nRF24_ReadPayload(nRF24_payload, &payload_length);
-        }
-
-        if (payload_length != NRF24_PAYLOAD_LENGTH)
-        {
-            //ошибка!
-            return EndOfStream;
-        }
-
-        if (pipe != nRF24_RX_EMPTY)
-        {
-            //Заполнение кольцевого буфера
-            uint8_t package_length = nRF24_payload[0];
-
-            for (uint8_t i = 1; i < package_length + 1; i++)
-            {
-                uint8_t data = nRF24_payload[i];
-
-                NRF24_BUFFER_INDEX_T next_head = _nrf24_rx_buffer_head + 1;
-                if (next_head == NRF24_RX_BUFFER_LENGTH)
-                {
-                    next_head = 0;
-                }
-
-                if (next_head != _nrf24_rx_buffer_tail)
-                {
-                    _nrf24_rx_buffer[_nrf24_rx_buffer_head] = data;
-                    _nrf24_rx_buffer_head = next_head;
-                }
-            }
-        }
+        nRF24_bufferPayload();
 #endif
-        //Чтение кольцевого буфера
+
+        // Чтение кольцевого буфера
         if (_nrf24_rx_buffer_tail == _nrf24_rx_buffer_head)
         {
-            //нет данных для чтения
+            // нет данных для чтения
             return EndOfStream;
         }
 
@@ -193,6 +169,11 @@ namespace Rudiron
 
     int nRF24::availableForWrite()
     {
+        if (isReceiver)
+        {
+            return 0;
+        }
+
         nRF24_FlushTX();
         return nRF24_GetStatus_TXFIFO() == nRF24_STATUS_TXFIFO_EMPTY;
     }
@@ -210,6 +191,10 @@ namespace Rudiron
         return transmit(&byte, 1);
     }
 
+    /// @brief Возвращает число отправленных байт
+    /// @param buffer
+    /// @param size
+    /// @return
     size_t nRF24::write(const uint8_t *buffer, size_t size)
     {
         const int integer_length = NRF24_PAYLOAD_LENGTH - 1;
@@ -245,34 +230,26 @@ namespace Rudiron
         {
             *(((uint8_t *)&nRF24_payload) + i + 1) = buffer[i];
         }
-        nRF24_TXResult tx_res = nRF24_TransmitPacket(nRF24_payload, NRF24_PAYLOAD_LENGTH);
 
-        // uint8_t otx = nRF24_GetRetransmitCounters();
-        // uint8_t otx_plos_cnt = (otx & nRF24_MASK_PLOS_CNT) >> 4; // packets lost counter
-        // uint8_t otx_arc_cnt  = (otx & nRF24_MASK_ARC_CNT); // auto retransmissions counter
+        const nRF24_TXResult tx_res = nRF24_TransmitPacket(nRF24_payload, NRF24_PAYLOAD_LENGTH);
 
         switch (tx_res)
         {
         case nRF24_TX_SUCCESS:
-            // UART_SendStr("OK");
             return length;
         case nRF24_TX_TIMEOUT:
-            // UART_SendStr("TIMEOUT");
             break;
         case nRF24_TX_MAXRT:
-            // UART_SendStr("MAX RETRANSMIT");
-            // packets_lost += otx_plos_cnt;
             nRF24_ResetPLOS();
-            break;
+            return length;
         default:
-            // UART_SendStr("ERROR");
             break;
         }
 
-        return false;
+        return 0;
     }
+}
 
 #if NRF24_RX_BUFFER_LENGTH > 0
-    nRF24 nrf24;
+Rudiron::nRF24 nrf24;
 #endif
-}

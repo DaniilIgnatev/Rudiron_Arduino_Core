@@ -17,10 +17,12 @@ namespace Rudiron
     {
         //Сброс настроек контроллера SPI1
         SSP_DeInit(MDR_SSP);
+        RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP, ENABLE);
 
         //Установка делителя тактовой частоты SPI1
         //Частота тактирования модуля = 16Mhz
-        SSP_BRGInit(MDR_SSP, CLK::getHCLKdiv());
+        auto div = CLK::getHCLKdiv();
+        SSP_BRGInit(MDR_SSP, div);
 
         speed /= 1000;//частота кратна тысячи герц
         if (speed == 0){
@@ -45,14 +47,12 @@ namespace Rudiron
         SPI_InitStructure.SSP_HardwareFlowControl = SSP_HardwareFlowControl;
         SSP_Init(MDR_SSP, &SPI_InitStructure);
 
-        RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP, ENABLE);
-
-        SSP_Cmd(MDR_SSP, ENABLE);
-
         if (SSP_Mode == SSP_ModeMaster)
         {
             InitSPIPortMaster();
         }
+
+        SSP_Cmd(MDR_SSP, ENABLE);
 
         return true;
     }
