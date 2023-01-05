@@ -776,12 +776,12 @@ bool ESP8266::eATRST(void)
 bool ESP8266::eATGMR(String &version)
 {
   rx_empty();
-  delay(3000);
+  delay(100);
   m_puart->println(F("AT+GMR"));
 
   AT_LIB_LOGDEBUG(F("AT+GMR"));
 
-  return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", version, 10000);
+  return recvFindAndFilter("OK", "\r\r\n", "\r\n\r\nOK", version, 1000);
 }
 
 // Enters Deep-sleep Mode in time
