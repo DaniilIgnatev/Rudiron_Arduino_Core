@@ -46,7 +46,7 @@
 
 #define EspSerial Serial
 #define ESP_AT_BAUD 115200
-#define BOARD_NAME "RUDIRON BUTERBROD"
+#define BOARD_NAME "Rudiron_Buterbrod"
 
 #ifndef ESP_AT_LIB_DEBUG_OUTPUT
   #define ESP_AT_LIB_DEBUG_OUTPUT       Serial1
