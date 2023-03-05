@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.15.3)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # Название проекта
-project(Arduino_Core_Rudiron VERSION 1.0.0)
+project(Arduino_Core_Rudiron VERSION 1.0.1)
 
 # Sources
 set(core_path "${PROJECT_SOURCE_DIR}/core")
@@ -27,11 +27,6 @@ file(GLOB_RECURSE core_sources
         ${core_path}/*
         ${core_avr_path}/*
         ${core_rudiron_path}/*
-)
-
-set(libraries_path "${PROJECT_SOURCE_DIR}/libraries")
-file(GLOB_RECURSE libraries_sources
-        ${libraries_path}/*
 )
 
 set(cmsis_path "${PROJECT_SOURCE_DIR}/system/Drivers/CMSIS/Device/MILANDR/${cpu_name}")
@@ -77,6 +72,55 @@ file(GLOB_RECURSE variants_sources
 # Путь до скрипта линковщика
 set(ARDUINO_CORE_RUDIRON_LINKER_FILE "${cmsis_startup_path}/${cpu_name}.ld" PARENT_SCOPE)
 
+# Путь до корневой папки библиотек
+set(libraries_path "${PROJECT_SOURCE_DIR}/libraries")
+
+# Файлы исходного кода библиотек
+file(GLOB_RECURSE SPI_sources_ ${libraries_path}/SPI/*)
+set(SPI_sources ${SPI_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Wire_sources_ ${libraries_path}/Wire/*)
+set(Wire_sources ${Wire_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE nrf24l01_sources_ ${libraries_path}/nrf24l01/*)
+set(nrf24l01_sources ${nrf24l01_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE ESP_AT_Lib_sources_ ${libraries_path}/ESP_AT_Lib/*)
+set(ESP_AT_Lib_sources ${ESP_AT_Lib_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE MPU6050_sources_ ${libraries_path}/MPU6050/*)
+set(MPU6050_sources ${MPU6050_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE SD_sources_ ${libraries_path}/SD/*)
+set(SD_sources ${SD_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Adafruit_BusIO_sources_ ${libraries_path}/Adafruit_BusIO/*)
+set(Adafruit_BusIO_sources ${Adafruit_BusIO_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Adafruit_Unified_Sensor_sources_ ${libraries_path}/Adafruit_Unified_Sensor/*)
+set(Adafruit_Unified_Sensor_sources ${Adafruit_Unified_Sensor_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Adafruit_GFX_Library_sources_ ${libraries_path}/Adafruit_GFX_Library/*)
+set(Adafruit_GFX_Library_sources ${Adafruit_GFX_Library_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Adafruit_ST7735_and_ST7789_Library_sources_ ${libraries_path}/Adafruit_ST7735_and_ST7789_Library/*)
+set(Adafruit_ST7735_and_ST7789_Library_sources ${Adafruit_ST7735_and_ST7789_Library_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Adafruit_MPU6050_sources_ ${libraries_path}/Adafruit_MPU6050/*)
+set(Adafruit_MPU6050_sources ${Adafruit_MPU6050_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Servo_sources_ ${libraries_path}/Servo/*)
+set(Servo_sources ${Servo_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE Dynamixel_sources_ ${libraries_path}/Dynamixel/*)
+set(Dynamixel_sources ${Dynamixel_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE FastLED_sources_ ${libraries_path}/FastLED/*)
+set(FastLED_sources ${FastLED_sources_} PARENT_SCOPE)
+
+# Пути к заголовочным файлам библиотек
+set(SPI_includes ${libraries_path}/SPI PARENT_SCOPE)
+set(Wire_includes ${libraries_path}/Wire PARENT_SCOPE)
+set(nrf24l01_includes ${libraries_path}/nrf24l01 PARENT_SCOPE)
+set(ESP_AT_Lib_includes ${libraries_path}/ESP_AT_Lib PARENT_SCOPE)
+set(MPU6050_includes ${libraries_path}/MPU6050 PARENT_SCOPE)
+set(SD_includes ${libraries_path}/SD PARENT_SCOPE)
+set(Adafruit_BusIO_includes ${libraries_path}/Adafruit_BusIO PARENT_SCOPE)
+set(Adafruit_Unified_Sensor_includes ${libraries_path}/Adafruit_Unified_Sensor PARENT_SCOPE)
+set(Adafruit_GFX_Library_includes ${libraries_path}/Adafruit_GFX_Library ${libraries_path}/Adafruit_GFX_Library/Fonts PARENT_SCOPE)
+set(Adafruit_ST7735_and_ST7789_Library_includes ${libraries_path}/Adafruit_ST7735_and_ST7789_Library PARENT_SCOPE)
+set(Adafruit_MPU6050_includes ${libraries_path}/Adafruit_MPU6050 PARENT_SCOPE)
+set(Servo_includes ${libraries_path}/Servo PARENT_SCOPE)
+set(Dynamixel_includes ${libraries_path}/Dynamixel PARENT_SCOPE)
+set(FastLED_includes ${libraries_path}/FastLED ${libraries_path}/FastLED/lib8tion ${libraries_path}/FastLED/platforms ${libraries_path}/FastLED/platforms/arm/common ${libraries_path}/FastLED/platforms/arm/MDR32F9Qx PARENT_SCOPE)
+
 # Перечень путей к файлам исходного кода
 set(ARDUIRON_CORE_RUDIRON_SOURCES
         ${system_sources}
@@ -86,7 +130,7 @@ set(ARDUIRON_CORE_RUDIRON_SOURCES
         ${cmsis_include_sources}
         ${std_periph_driver_sources}
         ${variants_sources}
-        ${libraries_sources}
+
         PARENT_SCOPE)
 
 # Перечень путей к файлам заголовков
@@ -102,19 +146,5 @@ set(ARDUIRON_CORE_RUDIRON_INCLUDES
         ${std_periph_driver_src_usb_path}
         ${system_path}
         ${variants_path}
-        ${libraries_path}
-        ${libraries_path}/SPI
-        ${libraries_path}/nrf24l01
-        ${libraries_path}/ESP_AT_Lib
-        ${libraries_path}/Wire
-        ${libraries_path}/MPU6050
-        ${libraries_path}/SD
-        ${libraries_path}/Adafruit_BusIO
-        ${libraries_path}/Adafruit_GFX_Library
-        ${libraries_path}/Adafruit_GFX_Library/Fonts
-        ${libraries_path}/Adafruit_ST7735_and_ST7789_Library
-        ${libraries_path}/Adafruit_MPU6050
-        ${libraries_path}/Adafruit_Unified_Sensor
-        ${libraries_path}/Servo
-        PARENT_SCOPE
-        )
+
+        PARENT_SCOPE)

@@ -46,12 +46,9 @@ int analogRead(uint8_t pin)
   }
 
   return result.value;
-  // combine the two bytes
-  // return (high << 8) | low;
 }
 
-// Right now, PWM output only works on the pins with
-// hardware support.
+// Вывод на пин ШИМ
 // pin -- номер вывода
 // val -- степень заполнения ШИМ от 0 до 255
 void analogWrite(uint8_t pin, int val)
@@ -63,7 +60,6 @@ void analogWrite(uint8_t pin, int val)
   if (timer != nullptr)
   {
     pinMode(pin, OUTPUT);
-    timer->start();
     timer->PWM_setup(analogWrite_Frequency);
     long pwm_val = map(val, 0, 255, 0, 1000);
     timer->PWM_start(pinName, pwm_val);

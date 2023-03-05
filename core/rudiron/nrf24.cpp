@@ -1,3 +1,5 @@
+#ifdef NRF24_USE
+
 #include "nrf24.h"
 
 namespace Rudiron
@@ -252,4 +254,6 @@ namespace Rudiron
 
 #if NRF24_RX_BUFFER_LENGTH > 0
 Rudiron::nRF24 nrf24;
+#endif
+
 #endif

@@ -183,7 +183,7 @@ extern "C"
   //#define TIMER5B 17
   //#define TIMER5C 18
 
-  void yield(void);
+  void yield(void) __attribute__((weak));
 
   typedef unsigned int word;
 

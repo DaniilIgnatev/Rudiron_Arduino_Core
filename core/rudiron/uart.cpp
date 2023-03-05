@@ -56,8 +56,8 @@ namespace Rudiron
                 _rx_buffer[i] = EndOfStream;
             }
 
-            NVIC_EnableIRQ(UART_IRQn);
             UART_ITConfig(MDR_UART, UART_IT_RX, ENABLE);
+            NVIC_EnableIRQ(UART_IRQn);
         }
 
         /* Initialize UART_InitStructure */

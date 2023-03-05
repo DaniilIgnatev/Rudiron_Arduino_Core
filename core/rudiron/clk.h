@@ -41,7 +41,7 @@ namespace Rudiron
     class CLK
     {
     private:
-        ///Получить дескриптор тактирования
+        /// Получить дескриптор тактирования
         static inline RST_CLK_FreqTypeDef getCLKDescriptor()
         {
             RST_CLK_FreqTypeDef RST_CLK_Clocks;
@@ -51,70 +51,79 @@ namespace Rudiron
 
         static void updateHighSpeedConfig();
 
-        ///Запуск на частоте внешнего генератора
+        /// Запуск на частоте внешнего генератора
         static void runHSE(uint32_t RST_CLK_CPU_PLLmul);
 
-        ///Запуск на частоте внутреннего генератора
+        /// Запуск на частоте внутреннего генератора
         static void runHSI(uint32_t RST_CLK_CPU_PLLmul);
 
-        ///Установление задержки памяти
+        /// Установление задержки памяти
         static void updateEEPROMLatency(bool external, uint32_t RST_CLK_CPU_PLLmul);
 
-        ///Инициализация системного таймера
+        /// Инициализация системного таймера
         static void init_delay();
 
     public:
+        static void pause_delay();
 
-        static inline void initialize(){
+        static void resume_delay();
+
+    public:
+        static inline void initialize()
+        {
             updateHighSpeedConfig();
+            setCPUSpeed(high);
         }
 
-        ///Копия значения _CLK_Speed
+        /// Копия значения _CLK_Speed
         static inline CLK_Speed getSpeed()
         {
             return _CLK_Speed;
         }
 
-        ///Установка частоты микропроцессора
+        /// Установка частоты микропроцессора
         static void setCPUSpeed(CLK_Speed newValue = CLK_Speed::low);
 
-        ///Частота микропроцессора в герцах
+        /// Частота микропроцессора в герцах
         static inline uint32_t getCPUFrequency()
         {
             return getCLKDescriptor().CPU_CLK_Frequency;
         }
 
-        ///Коэффициент умножения тактовой частоты микропроцессора
-        static inline uint32_t getCPU_PLLmul(){
+        /// Коэффициент умножения тактовой частоты микропроцессора
+        static inline uint32_t getCPU_PLLmul()
+        {
             return _CPU_PLLmul;
         }
 
-        ///Коэффициент деления тактирования блоков микроконтроллера
-        static inline uint32_t getHCLKdiv(){
+        /// Коэффициент деления тактирования блоков микроконтроллера
+        static inline uint32_t getHCLKdiv()
+        {
             return _HCLKdiv;
         }
 
-        ///Во сколько раз установленная частота процессора выше базовой
-        static inline uint8_t getCPU_Multiplier(){
+        /// Во сколько раз установленная частота процессора выше базовой
+        static inline uint8_t getCPU_Multiplier()
+        {
             return 1 << _HCLKdiv;
         }
 
-        ///Копия значения _millis
+        /// Копия значения _millis
         static inline uint32_t millis(void)
         {
             return _micros / 1000;
         }
 
-        ///Копия значения _micros
+        /// Копия значения _micros
         static inline uint32_t micros(void)
         {
             return _micros;
         }
 
-        ///Выставление задержки в миллисекундах
+        /// Выставление задержки в миллисекундах
         static void delay_millis(uint32_t ms);
 
-        ///Выставление задержки в микросекундах
+        /// Выставление задержки в микросекундах
         static void delay_micros(uint32_t us);
     };
 }

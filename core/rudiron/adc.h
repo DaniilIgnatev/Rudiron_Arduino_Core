@@ -27,31 +27,8 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #include "MDR_config.h"
 #include "gpio.h"
 
-
 namespace Rudiron
 {
-    typedef enum
-    {
-        ADC_Channel0,
-        ADC_Channel1,
-        ADC_Channel2,
-        ADC_Channel3,
-        ADC_Channel4,
-        ADC_Channel5,
-        ADC_Channel6,
-        ADC_Channel7
-    } ADCChannelName;
-
-
-    struct ADCResult
-    {
-        bool valid = false;
-        bool override = false;
-        uint16_t value = 0;
-        ADCChannelName channel = ADC_Channel0;
-    };
-
-
     class ADC
     {
     private:
@@ -62,14 +39,16 @@ namespace Rudiron
         static void initPinADC(PortPinName pinName);
 
     public:
-        static void configureDefault();
+        // Запуск
+        static void begin();
 
+        // Остановка
+        static void end();
+
+        // Включает/выключает канал
         static bool configurePin(PortPinName pinName, bool enable);
 
-        static void start();
-
-        static void stop();
-
+        // Возвращает последнее значение с канала
         static ADCResult readPin(PortPinName pinName);
     };
 }

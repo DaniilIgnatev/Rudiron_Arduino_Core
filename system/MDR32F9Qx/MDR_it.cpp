@@ -25,14 +25,19 @@
 #include "MDR_it.h"
 
 #include "config.h"
+
 #include "MDR_port.h"
 #include "MDR_bkp.h"
-
 #include "MDR_uart.h"
 #include "MDR_can.h"
 #include "MDR_i2c.h"
+#include "MDR_adc.h"
+#include "MDR_timer.h"
+#include "MDR_dma.h"
 
+#ifdef NRF24_USE
 #include "nrf24l01.h"
+#endif
 
 #include "Arduino.h"
 
@@ -381,6 +386,18 @@ void WWDG_IRQHandler(void)
  *******************************************************************************/
 void Timer1_IRQHandler(void)
 {
+    if (MDR_TIMER1->IE & MDR_TIMER1->STATUS & TIMER_STATUS_CNT_ARR)
+    {
+        if (MDR_DMA->STATUS & DMA_STATUS_MASTER_ENABLE)
+        {
+            while (MDR_DMA->CHNL_ENABLE_SET & (1 << DMA_Channel_TIM1))
+            {
+            }
+
+            MDR_TIMER1->CNTRL &= ~TIMER_CNTRL_CNT_EN;
+        }
+    }
+    MDR_TIMER1->STATUS = 0;
 }
 
 /*******************************************************************************
@@ -392,6 +409,18 @@ void Timer1_IRQHandler(void)
  *******************************************************************************/
 void Timer2_IRQHandler(void)
 {
+    if (MDR_TIMER2->IE & MDR_TIMER2->STATUS & TIMER_STATUS_CNT_ARR)
+    {
+        if (MDR_DMA->STATUS & DMA_STATUS_MASTER_ENABLE)
+        {
+            while (MDR_DMA->CHNL_ENABLE_SET & (1 << DMA_Channel_TIM2))
+            {
+            }
+
+            MDR_TIMER2->CNTRL &= ~TIMER_CNTRL_CNT_EN;
+        }
+    }
+    MDR_TIMER2->STATUS = 0;
 }
 
 /*******************************************************************************
@@ -403,7 +432,23 @@ void Timer2_IRQHandler(void)
  *******************************************************************************/
 void Timer3_IRQHandler(void)
 {
+    if (MDR_TIMER3->IE & MDR_TIMER3->STATUS & TIMER_STATUS_CNT_ARR)
+    {
+        if (MDR_DMA->STATUS & DMA_STATUS_MASTER_ENABLE)
+        {
+            while (MDR_DMA->CHNL_ENABLE_SET & (1 << DMA_Channel_TIM3))
+            {
+            }
+
+            MDR_TIMER3->CNTRL &= ~TIMER_CNTRL_CNT_EN;
+        }
+    }
+    MDR_TIMER3->STATUS = 0;
 }
+
+ADCResult *result;
+uint32_t resultReg;
+ADCChannelName readChannel;
 
 /*******************************************************************************
  * Function Name  : ADC_IRQHandler
@@ -414,6 +459,17 @@ void Timer3_IRQHandler(void)
  *******************************************************************************/
 void ADC_IRQHandler(void)
 {
+    resultReg = ADC1_GetResult();
+    readChannel = (ADCChannelName)(resultReg >> 16);
+
+    result = _adc_buffer + (uint8_t)readChannel;
+    result->channel = readChannel;
+    result->override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
+    result->value = resultReg & 0xFFF;
+    result->valid = true;
+
+    ADC1_ClearOverwriteFlag();
+    ADC1_Start();
 }
 
 /*******************************************************************************

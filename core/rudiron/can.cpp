@@ -51,9 +51,9 @@ namespace Rudiron
         sCAN.CAN_BRP = 7; // f=500кбит/с (t=10us)
         CAN_Init(MDR_CAN, &sCAN);
 
-        NVIC_EnableIRQ(CAN_IRQn);
-
         CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_ERROVERINTEN, ENABLE);
+        NVIC_EnableIRQ(CAN_IRQn);
+        
         CAN_Cmd(MDR_CAN, ENABLE);
 
         // configure buffer read

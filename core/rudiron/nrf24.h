@@ -15,6 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifdef NRF24_USE
+
 #ifndef NRF24_H
 #define NRF24_H
 
@@ -73,6 +75,8 @@ namespace Rudiron
 
 #if NRF24_RX_BUFFER_LENGTH > 0
 extern Rudiron::nRF24 nrf24;
+#endif
+
 #endif
 
 #endif

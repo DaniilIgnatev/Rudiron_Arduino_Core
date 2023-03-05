@@ -19,6 +19,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define TIMER_H
 
 #include "timerutility.h"
+#include "MDR_dma.h"
 
 namespace Rudiron
 {
@@ -36,28 +37,42 @@ namespace Rudiron
 
         uint32_t RST_CLK_PCLK;
 
+        IRQn TIMER_IRQn;
+
         uint16_t prescaler;
 
         uint16_t ARR;
 
-        uint16_t frequency = 0;
+        uint32_t frequency = 0;
 
     public:
-        explicit Timer(TimerName name, MDR_TIMER_TypeDef *MDR_TIMER, uint32_t RST_CLK_PCLK);
+        inline uint16_t getARR(){
+            return ARR;
+        }
 
-        void start();
+        explicit Timer(TimerName name);
 
-        void stop();
+        inline void start(){
+            TIMER_Cmd(this->MDR_TIMER, ENABLE);
+            NVIC_EnableIRQ(TIMER_IRQn);
+        }
+
+        inline void stop(){
+            NVIC_DisableIRQ(TIMER_IRQn);
+            TIMER_Cmd(this->MDR_TIMER, DISABLE);
+        }
 
     protected:
+        inline bool isHighFrequency();
+
         PORT_InitTypeDef PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDef func);
 
         void PWM_initPin(PortPinName pinName);
 
-        void PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative);
+        int PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative, bool ignoreCompare = false);
 
     public:
-        void PWM_setup(uint16_t frequency = 500);
+        void PWM_setup(uint32_t frequency = 500);
 
         void PWM_start(PortPinName pinName, uint16_t ppm);
 
@@ -65,6 +80,32 @@ namespace Rudiron
 
         void PWM_stop(PortPinName pinName);
 
+    protected:
+        DMA_ChannelInitTypeDef DMA_InitStr;
+        DMA_CtrlDataInitTypeDef DMA_PriCtrlStr;
+
+        uint32_t DMA_TIMER_CHANNEL;
+
+        uint8_t DMA_Channel;
+
+        uint8_t *BUF_DMA;
+        uint16_t BUF_DMA_LENGTH;
+
+        void PWM_DMA_init(uint32_t channel_number, uint16_t *buffer, uint16_t buffer_length);
+
+    public:
+        void PWM_DMA_setup(PortPinName pinName, uint16_t *buffer, uint16_t buffer_length);
+
+        void PWM_DMA_setup(PortPinName pinName, PortPinName invertedPinName, uint16_t *buffer, uint16_t buffer_length);
+
+        void PWM_DMA_setBuffer(uint16_t *buffer, uint16_t buffer_length);
+
+        void PWM_DMA_start_single();
+
+        void PWM_DMA_start_single(uint16_t *buffer, uint16_t buffer_length);
+
+        void PWM_DMA_stop();
+    public:
         static Timer *getTimerForPinName(PortPinName name);
 
         static Timer *getTimer1();

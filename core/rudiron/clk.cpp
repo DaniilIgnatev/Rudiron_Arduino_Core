@@ -8,6 +8,7 @@ namespace Rudiron
 
     uint32_t _HCLKdiv = (uint32_t)0x00000000;
 
+    // Перед вызовом этой функции нужно обязательно вызвать end() для всей ранее включенной переферии. После вызова этой функции вызвать еще раз для нужной переферии функцию begin()
     void CLK::setCPUSpeed(CLK_Speed newValue)
     {
         _CLK_Speed = newValue;
@@ -46,7 +47,7 @@ namespace Rudiron
 #endif
     }
 
-    ///Выбор внешнего источника тактирования и коэффициента умножения частоты
+    /// Выбор внешнего источника тактирования и коэффициента умножения частоты
     void CLK::runHSE(uint32_t RST_CLK_CPU_PLLmul)
     {
         RST_CLK_HSEconfig(RST_CLK_HSE_ON);
@@ -65,7 +66,7 @@ namespace Rudiron
         init_delay();
     }
 
-    ///Выбор внутреннего источника тактирования и коэффициента умножения частоты
+    /// Выбор внутреннего источника тактирования и коэффициента умножения частоты
     void CLK::runHSI(uint32_t RST_CLK_CPU_PLLmul)
     {
         RST_CLK_HSIcmd(ENABLE);
@@ -135,6 +136,16 @@ namespace Rudiron
         SysTick->VAL = 0UL;
 
         // Configure SysTick source and enable counter
+        SysTick->CTRL = (SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_TICKINT_Msk);
+    }
+
+    void CLK::pause_delay()
+    {
+        SysTick->CTRL = (SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk);
+    }
+
+    void CLK::resume_delay()
+    {
         SysTick->CTRL = (SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_TICKINT_Msk);
     }
 
