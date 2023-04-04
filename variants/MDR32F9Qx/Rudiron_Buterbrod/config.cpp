@@ -31,6 +31,3 @@ NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head = 0;
 NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail = 0;
 
 uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
-
-// ADC
-ADCResult _adc_buffer[ADC_BUFFER_LENGTH];

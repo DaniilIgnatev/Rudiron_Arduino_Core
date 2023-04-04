@@ -185,6 +185,11 @@ void ADC1_Init(const ADCx_InitTypeDef* ADCx_InitStruct)
   assert_param(IS_ADC_CLK_div_VALUE(ADCx_InitStruct->ADC_Prescaler));
   assert_param(IS_ADC_DELAY_GO_VALUE(ADCx_InitStruct->ADC_DelayGo));
 
+  //Were at the end of the function
+  MDR_ADC->ADC1_L_LEVEL = ADCx_InitStruct->ADC_LowLevel;
+  MDR_ADC->ADC1_H_LEVEL = ADCx_InitStruct->ADC_HighLevel;
+  MDR_ADC->ADC1_CHSEL   = ADCx_InitStruct->ADC_Channels;
+
   tmpreg_CFG1 = MDR_ADC->ADC1_CFG;
 
   tmpreg_CFG1 &= ~(ADC1_CFG_REG_CLKS
@@ -212,9 +217,9 @@ void ADC1_Init(const ADCx_InitTypeDef* ADCx_InitStruct)
   MDR_ADC->ADC1_CFG = tmpreg_CFG1;
   MDR_ADC->ADC2_CFG = tmpreg_CFG2;
 
-  MDR_ADC->ADC1_L_LEVEL = ADCx_InitStruct->ADC_LowLevel;
-  MDR_ADC->ADC1_H_LEVEL = ADCx_InitStruct->ADC_HighLevel;
-  MDR_ADC->ADC1_CHSEL   = ADCx_InitStruct->ADC_Channels;
+  // MDR_ADC->ADC1_L_LEVEL = ADCx_InitStruct->ADC_LowLevel;
+  // MDR_ADC->ADC1_H_LEVEL = ADCx_InitStruct->ADC_HighLevel;
+  // MDR_ADC->ADC1_CHSEL   = ADCx_InitStruct->ADC_Channels;
 }
 
 #if defined  (USE_MDR1986VE9x) || defined (USE_MDR1901VC1T)

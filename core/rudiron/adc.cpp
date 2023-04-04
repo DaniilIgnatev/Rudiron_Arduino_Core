@@ -1,80 +1,23 @@
 #include "adc.h"
 #include "gpio.h"
+#include "clk.h"
 
 namespace Rudiron
 {
-    void ADC::begin()
+    void ADC::enable()
     {
         RST_CLK_PCLKcmd(RST_CLK_PCLK_ADC, ENABLE);
-
-        /* Reset all ADC settings */
-        ADC_DeInit();
-        ADC_InitTypeDef sADC;
-        ADC_StructInit(&sADC);
-        ADC_Init(&sADC);
-
-        ADCx_InitTypeDef sADCx;
-        ADCx_StructInit(&sADCx);
-        sADCx.ADC_ClockSource = ADC_CLOCK_SOURCE_CPU;
-        sADCx.ADC_SamplingMode = ADC_SAMPLING_MODE_SINGLE_CONV;
-        sADCx.ADC_ChannelSwitching = ADC_CH_SWITCHING_Enable;
-        sADCx.ADC_ChannelNumber = 0;
-        sADCx.ADC_Channels = 0;
-        sADCx.ADC_LevelControl = ADC_LEVEL_CONTROL_Disable;
-        sADCx.ADC_LowLevel = 0;
-        sADCx.ADC_HighLevel = 0;
-        sADCx.ADC_VRefSource = ADC_VREF_SOURCE_INTERNAL;
-        sADCx.ADC_IntVRefSource = ADC_INT_VREF_SOURCE_INEXACT;
-        sADCx.ADC_Prescaler = ADC_CLK_div_2048; // уменьшить для увеличения скорости выборки
-        sADCx.ADC_DelayGo = 7;
-
-        ADC1_Init(&sADCx);
-
-        /* EOCIF and AWOIFEN interupts */
         ADC1_ITConfig((ADCx_IT_OUT_OF_RANGE), DISABLE);
-        ADC1_ITConfig((ADCx_IT_END_OF_CONVERSION), ENABLE);
+        ADC1_ITConfig((ADCx_IT_END_OF_CONVERSION), DISABLE);
         NVIC_EnableIRQ(ADC_IRQn);
+        ADC1_Cmd(ENABLE);
     }
 
-    void ADC::end()
+    void ADC::disable()
     {
         ADC1_Cmd(DISABLE);
+        NVIC_DisableIRQ(ADC_IRQn);
         RST_CLK_PCLKcmd(RST_CLK_PCLK_ADC, DISABLE);
-    }
-
-    uint32_t ADC::channelMask = 0;
-
-    bool ADC::configurePin(PortPinName pinName, bool enable)
-    {
-        uint32_t old_channelMask = channelMask;
-
-        PortName portName = GPIO::getPortName(pinName);
-        if (portName != PORT_D)
-        {
-            return false;
-        }
-
-        ADC::initPinADC(pinName);
-
-        ADCChannelName channelName = (ADCChannelName)(pinName - PORT_PIN_D0);
-        if (enable)
-        {
-            ADC::channelMask |= (1 << channelName);
-        }
-        else
-        {
-            ADC::channelMask &= ~(1 << channelName);
-        }
-
-        if (old_channelMask != channelMask)
-        {
-            ADC1_Cmd(DISABLE);
-            ADC1_SetChannels(ADC::channelMask);
-            ADC1_Cmd(ENABLE);
-            ADC1_Start();
-        }
-
-        return true;
     }
 
     void ADC::initPinADC(PortPinName pinName)
@@ -97,6 +40,8 @@ namespace Rudiron
         GPIO::configPin(pinName, PORT_InitStructure);
     }
 
+    ADCResult ADC::lastResult;
+
     ADCResult ADC::readPin(PortPinName pinName)
     {
         ADCResult result;
@@ -108,38 +53,49 @@ namespace Rudiron
             return result;
         }
 
-        ADCChannelName channelName;
+        ADCChannelName channelName = (ADCChannelName)(pinName - PORT_PIN_D0);
+        ADC::initPinADC(pinName);
 
-        switch (pinName)
-        {
-        case PORT_PIN_D2: // A3
-            channelName = ADC_Channel2;
-            break;
-        case PORT_PIN_D3: // A2
-            channelName = ADC_Channel3;
-            break;
-        case PORT_PIN_D4: // A4
-            channelName = ADC_Channel4;
-            break;
-        case PORT_PIN_D5: // A1
-            channelName = ADC_Channel5;
-            break;
-        case PORT_PIN_D6: // A0
-            channelName = ADC_Channel6;
-            break;
-        case PORT_PIN_D7: // A5
-            channelName = ADC_Channel7;
-            break;
-        default:
-            return result;
-        }
+        enable();
 
-        result.channel = channelName;
+        ADC1_Cmd(DISABLE);
+        /* Reset all ADC settings */
+        ADC_DeInit();
+        ADC_InitTypeDef sADC;
+        ADC_StructInit(&sADC);
+        ADC_Init(&sADC);
 
-        result.override = (_adc_buffer + (uint8_t)channelName)->override;
-        result.value = (_adc_buffer + (uint8_t)channelName)->value;
-        result.valid = (_adc_buffer + (uint8_t)channelName)->valid;
-        (_adc_buffer + (uint8_t)channelName)->valid = false;
+        ADCx_InitTypeDef sADCx;
+        ADCx_StructInit(&sADCx);
+        sADCx.ADC_ClockSource = ADC_CLOCK_SOURCE_ADC;
+        sADCx.ADC_SamplingMode = ADC_SAMPLING_MODE_SINGLE_CONV;
+        sADCx.ADC_ChannelSwitching = ADC_CH_SWITCHING_Disable;
+        sADCx.ADC_ChannelNumber = (uint32_t)channelName;
+        sADCx.ADC_Channels = 0;
+        sADCx.ADC_LevelControl = ADC_LEVEL_CONTROL_Disable;
+        sADCx.ADC_LowLevel = 0;
+        sADCx.ADC_HighLevel = 0;
+        sADCx.ADC_VRefSource = ADC_VREF_SOURCE_INTERNAL;
+        sADCx.ADC_IntVRefSource = ADC_INT_VREF_SOURCE_INEXACT;
+        sADCx.ADC_Prescaler = ADC_CLK_div_None; // уменьшить для увеличения скорости выборки
+        sADCx.ADC_DelayGo = 7;
+        ADC1_Init(&sADCx);
+
+        ADC1_Cmd(ENABLE);
+
+        ADC1_Start();
+        Rudiron::CLK::delay_micros(10);
+        int resultReg = ADC1_GetResult();
+        result.channel = (ADCChannelName)(resultReg >> 16);
+        result.value = (uint16_t)(resultReg & 0xFFF);
+
+        result.override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
+        result.valid = true;
+
+        ADC::lastResult = result;
+        ADC1_ClearOverwriteFlag();
+
+        disable();
 
         return result;
     }

@@ -446,10 +446,6 @@ void Timer3_IRQHandler(void)
     MDR_TIMER3->STATUS = 0;
 }
 
-ADCResult *result;
-uint32_t resultReg;
-ADCChannelName readChannel;
-
 /*******************************************************************************
  * Function Name  : ADC_IRQHandler
  * Description    : This function handles ADC global interrupt request.
@@ -459,17 +455,6 @@ ADCChannelName readChannel;
  *******************************************************************************/
 void ADC_IRQHandler(void)
 {
-    resultReg = ADC1_GetResult();
-    readChannel = (ADCChannelName)(resultReg >> 16);
-
-    result = _adc_buffer + (uint8_t)readChannel;
-    result->channel = readChannel;
-    result->override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
-    result->value = resultReg & 0xFFF;
-    result->valid = true;
-
-    ADC1_ClearOverwriteFlag();
-    ADC1_Start();
 }
 
 /*******************************************************************************

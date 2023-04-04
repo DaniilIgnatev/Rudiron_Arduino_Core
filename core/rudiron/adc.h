@@ -32,23 +32,16 @@ namespace Rudiron
     class ADC
     {
     private:
-        static uint32_t channelMask;
-
-        static ADCResult readValues[7];
-
         static void initPinADC(PortPinName pinName);
 
+        static void enable();
+
+        static void disable();
+
+        static ADCResult lastResult;
+
     public:
-        // Запуск
-        static void begin();
-
-        // Остановка
-        static void end();
-
-        // Включает/выключает канал
-        static bool configurePin(PortPinName pinName, bool enable);
-
-        // Возвращает последнее значение с канала
+        // Возвращает последнее значение, считанное с внешнего вывода pinName
         static ADCResult readPin(PortPinName pinName);
     };
 }

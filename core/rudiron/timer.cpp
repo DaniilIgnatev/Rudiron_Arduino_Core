@@ -116,7 +116,7 @@ namespace Rudiron
     {
         PWM_initPin(pinName);
         PWM_activateChannel(pinName, ppm, false);
-        start();
+        enable();
     }
 
     void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t ppm)
@@ -124,7 +124,7 @@ namespace Rudiron
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
         PWM_activateChannel(pinName, ppm, true);
-        start();
+        disable();
     }
 
     void Timer::PWM_initPin(PortPinName pinName)
@@ -312,7 +312,7 @@ namespace Rudiron
         }
 
         DMA_Init(DMA_Channel, &DMA_InitStr);
-        start();
+        enable();
     }
 
     void Timer::PWM_DMA_start_single(uint16_t *buffer, uint16_t buffer_length)
@@ -323,7 +323,7 @@ namespace Rudiron
 
         PWM_DMA_setBuffer(buffer, buffer_length);
         DMA_Init(DMA_Channel, &DMA_InitStr);
-        start();
+        enable();
     }
 
     void Timer::PWM_DMA_stop()

@@ -74,13 +74,10 @@ typedef enum
 
 struct ADCResult
 {
-    bool valid = false;                    // является действительным значением
-    bool override = false;                 // было перезаписано
-    uint16_t value = 0;                    // 0-4095
-    ADCChannelName channel = ADC_Channel0; // номер канала
+    bool valid;                    // является действительным значением
+    bool override;                 // было перезаписано
+    uint16_t value;                    // 0-4095
+    ADCChannelName channel; // номер канала
 };
-
-#define ADC_BUFFER_LENGTH 8
-extern ADCResult _adc_buffer[ADC_BUFFER_LENGTH];
 
 #endif

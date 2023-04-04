@@ -32,13 +32,6 @@ void initVariant()
     {
         _can_rx_buffer[i] = emptyPackage;
     }
-
-    for (uint8_t i = 0; i < ADC_BUFFER_LENGTH; i++)
-    {
-        _adc_buffer[i].valid = false;
-    }
-
-    Rudiron::ADC::begin();
 }
 
 void setupUSB()

@@ -72,7 +72,8 @@ namespace Rudiron
         static inline void initialize()
         {
             updateHighSpeedConfig();
-            setCPUSpeed(high);
+            setCPUSpeed(CLK_Speed::high);
+            enable_ADC_clock();
         }
 
         /// Копия значения _CLK_Speed
@@ -125,6 +126,9 @@ namespace Rudiron
 
         /// Выставление задержки в микросекундах
         static void delay_micros(uint32_t us);
+
+        /// Активация тактовой частоты АЦП
+        static void enable_ADC_clock();
     };
 }
 

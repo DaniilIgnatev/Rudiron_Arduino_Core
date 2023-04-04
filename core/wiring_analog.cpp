@@ -20,7 +20,7 @@
   Boston, MA  02111-1307  USA
 
   Modified 28 September 2010 by Mark Sproul
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 04.04.2023
 */
 
 #include "wiring_private.h"
@@ -28,17 +28,12 @@
 
 void analogReference(uint8_t mode)
 {
-  // can't actually set the register here because the default setting
-  // will connect AVCC and the AREF pin, which would cause a short if
-  // there's something connected to AREF.
 }
 
 int analogRead(uint8_t pin)
 {
-  // uint8_t low, high;
   Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::ADC::configurePin(pinName, true);
-  auto result = Rudiron::ADC::readPin(pinName);
+  ADCResult result = Rudiron::ADC::readPin(pinName);
 
   if (!result.valid)
   {
@@ -54,7 +49,6 @@ int analogRead(uint8_t pin)
 void analogWrite(uint8_t pin, int val)
 {
   Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::ADC::configurePin(pinName, false);
   Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
 
   if (timer != nullptr)

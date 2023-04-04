@@ -50,7 +50,6 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
   {
     pinMode(pin, OUTPUT);
     
-    timer->start();
     timer->PWM_setup(frequency);
     timer->PWM_start(pinName, 500);
 

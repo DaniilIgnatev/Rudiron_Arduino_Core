@@ -31,7 +31,7 @@
 void pinMode(uint8_t pin, uint8_t mode)
 {
   Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::ADC::configurePin(pinName, false);
+  // Rudiron::ADC::configurePin(pinName, false);
 
   switch (mode)
   {

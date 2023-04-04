@@ -164,4 +164,11 @@ namespace Rudiron
         {
         }
     }
+
+    void CLK::enable_ADC_clock()
+    {
+        RST_CLK_ADCclkSelection(RST_CLK_ADCclkCPU_C1);
+        RST_CLK_ADCclkPrescaler(RST_CLK_ADCclkDIV1);
+        RST_CLK_ADCclkEnable(ENABLE);
+    }
 }

@@ -52,12 +52,12 @@ namespace Rudiron
 
         explicit Timer(TimerName name);
 
-        inline void start(){
+        inline void enable(){
             TIMER_Cmd(this->MDR_TIMER, ENABLE);
             NVIC_EnableIRQ(TIMER_IRQn);
         }
 
-        inline void stop(){
+        inline void disable(){
             NVIC_DisableIRQ(TIMER_IRQn);
             TIMER_Cmd(this->MDR_TIMER, DISABLE);
         }
