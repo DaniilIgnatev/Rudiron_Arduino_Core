@@ -41,8 +41,14 @@ namespace Rudiron
         static ADCResult lastResult;
 
     public:
-        // Возвращает последнее значение, считанное с внешнего вывода pinName
-        static ADCResult readPin(PortPinName pinName);
+        // Возвращает значение, считанное с внешнего вывода pinName
+        static ADCResult read_pin(PortPinName pinName);
+
+        // Возвращает значение, считанное с встроенного датчика температуры
+        static ADCResult read_temperature_sensor();
+
+        // Возвращает значение, считанное с внутреннего источника опорного напряжения
+        static ADCResult read_internal_reference_voltage_source();
     };
 }
 

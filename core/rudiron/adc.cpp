@@ -42,7 +42,7 @@ namespace Rudiron
 
     ADCResult ADC::lastResult;
 
-    ADCResult ADC::readPin(PortPinName pinName)
+    ADCResult ADC::read_pin(PortPinName pinName)
     {
         ADCResult result;
         result.valid = false;
@@ -59,7 +59,6 @@ namespace Rudiron
         enable();
 
         ADC1_Cmd(DISABLE);
-        /* Reset all ADC settings */
         ADC_DeInit();
         ADC_InitTypeDef sADC;
         ADC_StructInit(&sADC);
@@ -77,7 +76,114 @@ namespace Rudiron
         sADCx.ADC_HighLevel = 0;
         sADCx.ADC_VRefSource = ADC_VREF_SOURCE_INTERNAL;
         sADCx.ADC_IntVRefSource = ADC_INT_VREF_SOURCE_INEXACT;
-        sADCx.ADC_Prescaler = ADC_CLK_div_None; // уменьшить для увеличения скорости выборки
+        sADCx.ADC_Prescaler = ADC_CLK_div_None;
+        sADCx.ADC_DelayGo = 7;
+        ADC1_Init(&sADCx);
+
+        ADC1_Cmd(ENABLE);
+
+        ADC1_Start();
+        Rudiron::CLK::delay_micros(10);
+        int resultReg = ADC1_GetResult();
+        result.channel = (ADCChannelName)(resultReg >> 16);
+        result.value = (uint16_t)(resultReg & 0xFFF);
+
+        result.override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
+        result.valid = true;
+
+        ADC::lastResult = result;
+        ADC1_ClearOverwriteFlag();
+
+        disable();
+
+        return result;
+    }
+
+    ADCResult ADC::read_temperature_sensor()
+    {
+        ADCResult result;
+        result.valid = false;
+
+        ADCChannelName channelName = ADCChannelName::ADC_Channel31;
+
+        enable();
+
+        ADC1_Cmd(DISABLE);
+        ADC_DeInit();
+        ADC_InitTypeDef sADC;
+        ADC_StructInit(&sADC);
+        sADC.ADC_TempSensor = ADC_TEMP_SENSOR_Enable;
+        sADC.ADC_TempSensorAmplifier = ADC_TEMP_SENSOR_AMPLIFIER_Enable;
+        sADC.ADC_TempSensorConversion = ADC_TEMP_SENSOR_CONVERSION_Enable;
+        ADC_Init(&sADC);
+
+        ADCx_InitTypeDef sADCx;
+        ADCx_StructInit(&sADCx);
+        sADCx.ADC_ClockSource = ADC_CLOCK_SOURCE_ADC;
+        sADCx.ADC_SamplingMode = ADC_SAMPLING_MODE_SINGLE_CONV;
+        sADCx.ADC_ChannelSwitching = ADC_CH_SWITCHING_Disable;
+        sADCx.ADC_ChannelNumber = (uint32_t)channelName;
+        sADCx.ADC_Channels = 0;
+        sADCx.ADC_LevelControl = ADC_LEVEL_CONTROL_Disable;
+        sADCx.ADC_LowLevel = 0;
+        sADCx.ADC_HighLevel = 0;
+        sADCx.ADC_VRefSource = ADC_VREF_SOURCE_INTERNAL;
+        sADCx.ADC_IntVRefSource = ADC_INT_VREF_SOURCE_INEXACT;
+        sADCx.ADC_Prescaler = ADC_CLK_div_None;
+        sADCx.ADC_DelayGo = 7;
+        ADC1_Init(&sADCx);
+
+        ADC1_Cmd(ENABLE);
+
+        ADC1_Start();
+        Rudiron::CLK::delay_micros(10);
+        int resultReg = ADC1_GetResult();
+        result.channel = (ADCChannelName)(resultReg >> 16);
+        result.value = (uint16_t)(resultReg & 0xFFF);
+
+        result.override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
+        result.valid = true;
+
+        ADC::lastResult = result;
+        ADC1_ClearOverwriteFlag();
+
+        disable();
+
+        return result;
+    }
+
+    
+    ADCResult ADC::read_internal_reference_voltage_source()
+    {
+        ADCResult result;
+        result.valid = false;
+
+        ADCChannelName channelName = ADCChannelName::ADC_Channel30;
+
+        enable();
+
+        ADC1_Cmd(DISABLE);
+        ADC_DeInit();
+        ADC_InitTypeDef sADC;
+        ADC_StructInit(&sADC);
+        sADC.ADC_TempSensor = ADC_TEMP_SENSOR_Enable;
+        sADC.ADC_TempSensorAmplifier = ADC_TEMP_SENSOR_AMPLIFIER_Enable;
+        sADC.ADC_IntVRefConversion = ADC_VREF_CONVERSION_Enable;
+        ADC_Init(&sADC);
+
+        ADCx_InitTypeDef sADCx;
+        ADCx_StructInit(&sADCx);
+        sADCx.ADC_ClockSource = ADC_CLOCK_SOURCE_ADC;
+        sADCx.ADC_SamplingMode = ADC_SAMPLING_MODE_SINGLE_CONV;
+        sADCx.ADC_ChannelSwitching = ADC_CH_SWITCHING_Disable;
+        sADCx.ADC_ChannelNumber = (uint32_t)channelName;
+        sADCx.ADC_Channels = 0;
+        sADCx.ADC_LevelControl = ADC_LEVEL_CONTROL_Disable;
+        sADCx.ADC_LowLevel = 0;
+        sADCx.ADC_HighLevel = 0;
+        sADCx.ADC_VRefSource = ADC_VREF_SOURCE_INTERNAL;
+        sADCx.ADC_IntVRefSource = ADC_INT_VREF_SOURCE_INEXACT;
+        sADCx.ADC_Prescaler = ADC_CLK_div_None;
         sADCx.ADC_DelayGo = 7;
         ADC1_Init(&sADCx);
 

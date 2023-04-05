@@ -70,13 +70,37 @@ typedef enum
     ADC_Channel5,
     ADC_Channel6,
     ADC_Channel7,
+    ADC_Channel8,
+    ADC_Channel9,
+    ADC_Channel10,
+    ADC_Channel11,
+    ADC_Channel12,
+    ADC_Channel13,
+    ADC_Channel14,
+    ADC_Channel15,
+    ADC_Channel16,
+    ADC_Channel17,
+    ADC_Channel18,
+    ADC_Channel19,
+    ADC_Channel20,
+    ADC_Channel21,
+    ADC_Channel22,
+    ADC_Channel23,
+    ADC_Channel24,
+    ADC_Channel25,
+    ADC_Channel26,
+    ADC_Channel27,
+    ADC_Channel28,
+    ADC_Channel29,
+    ADC_Channel30,
+    ADC_Channel31,
 } ADCChannelName;
 
 struct ADCResult
 {
-    bool valid;                    // является действительным значением
-    bool override;                 // было перезаписано
-    uint16_t value;                    // 0-4095
+    bool valid;             // является действительным значением
+    bool override;          // было перезаписано
+    uint16_t value;         // 0-4095
     ADCChannelName channel; // номер канала
 };
 
