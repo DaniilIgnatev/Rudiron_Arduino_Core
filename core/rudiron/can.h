@@ -18,18 +18,13 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef CAN_H
 #define CAN_H
 
-#include "config.h"
 #include "Stream.h"
-#include "MDR32Fx.h"
-#include "MDR_config.h"
-#include "MDR_can.h"
-#include "MDR_rst_clk.h"
+#include "can_utility.h"
 #include "gpio.h"
-
 
 namespace Rudiron
 {
-    ///Потоко-ориентированный интерфейс для работы с CAN
+    /// Потоко-ориентированный интерфейс для работы с CAN
     class CAN : public Stream
     {
     private:
@@ -67,10 +62,10 @@ namespace Rudiron
 
         void end();
 
-        ///Переключение ID для чтения и для записи. Позволяет установить стандартный ID (11 бит) с возможностью расширения (до 28 бит). Тип пакета определяется автоматически. Возвращается статус изменения активного ID
+        /// Переключение ID для чтения и для записи. Позволяет установить стандартный ID (11 бит) с возможностью расширения (до 28 бит). Тип пакета определяется автоматически. Возвращается статус изменения активного ID
         bool setActiveID(uint32_t standart, uint32_t extended);
 
-        ///Переключение ID для чтения и для записи. Позволяет установить расширенный идентификатор пакета
+        /// Переключение ID для чтения и для записи. Позволяет установить расширенный идентификатор пакета
         bool setActiveID(uint32_t extendedID);
 
         virtual int available(void) override;

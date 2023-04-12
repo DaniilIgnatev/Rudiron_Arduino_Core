@@ -1,5 +1,12 @@
 #include "adc.h"
-#include "gpio.h"
+
+#include "MDR_config.h"
+#include "MDR32Fx.h"
+#include "MDR_port.h"
+#include "MDR_rst_clk.h"
+#include "MDR_adc.h"
+#include "MDR_dma.h"
+#include "MDR_config.h"
 #include "clk.h"
 
 namespace Rudiron
@@ -53,7 +60,7 @@ namespace Rudiron
             return result;
         }
 
-        ADCChannelName channelName = (ADCChannelName)(pinName - PORT_PIN_D0);
+        ADC_ChannelName channelName = ADC_Utility::getChannelName(pinName);
         ADC::initPinADC(pinName);
 
         enable();
@@ -85,7 +92,7 @@ namespace Rudiron
         ADC1_Start();
         Rudiron::CLK::delay_micros(10);
         int resultReg = ADC1_GetResult();
-        result.channel = (ADCChannelName)(resultReg >> 16);
+        result.channel = (ADC_ChannelName)(resultReg >> 16);
         result.value = (uint16_t)(resultReg & 0xFFF);
 
         result.override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
@@ -104,7 +111,7 @@ namespace Rudiron
         ADCResult result;
         result.valid = false;
 
-        ADCChannelName channelName = ADCChannelName::ADC_Channel31;
+        ADC_ChannelName channelName = ADC_ChannelName::ADC_Channel_31;
 
         enable();
 
@@ -138,7 +145,7 @@ namespace Rudiron
         ADC1_Start();
         Rudiron::CLK::delay_micros(10);
         int resultReg = ADC1_GetResult();
-        result.channel = (ADCChannelName)(resultReg >> 16);
+        result.channel = (ADC_ChannelName)(resultReg >> 16);
         result.value = (uint16_t)(resultReg & 0xFFF);
 
         result.override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);
@@ -152,13 +159,12 @@ namespace Rudiron
         return result;
     }
 
-    
     ADCResult ADC::read_internal_reference_voltage_source()
     {
         ADCResult result;
         result.valid = false;
 
-        ADCChannelName channelName = ADCChannelName::ADC_Channel30;
+        ADC_ChannelName channelName = ADC_ChannelName::ADC_Channel_30;
 
         enable();
 
@@ -190,9 +196,9 @@ namespace Rudiron
         ADC1_Cmd(ENABLE);
 
         ADC1_Start();
-        Rudiron::CLK::delay_micros(10);
+        Rudiron::CLK::delay_micros(10); // пауза с расчетом на рабочую частоту 16Мгц
         int resultReg = ADC1_GetResult();
-        result.channel = (ADCChannelName)(resultReg >> 16);
+        result.channel = (ADC_ChannelName)(resultReg >> 16);
         result.value = (uint16_t)(resultReg & 0xFFF);
 
         result.override = (bool)ADC1_GetFlagStatus(ADC1_FLAG_OVERWRITE);

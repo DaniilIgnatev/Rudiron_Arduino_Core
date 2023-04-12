@@ -22,7 +22,7 @@ UART_BUFFER_INDEX_T _uart2_rx_buffer_tail = 0;
 uint8_t _uart2_rx_buffer[SERIAL_RX_BUFFER_LENGTH];
 
 // CAN
-CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_LENGTH];
+Rudiron::CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_LENGTH];
 
 // NRF24
 // указывает на следуюую ячеку для записи

@@ -24,7 +24,7 @@ int atexit(void (* /*func*/)()) { return 0; }
 
 void initVariant()
 {
-    CAN_RX_Package emptyPackage;
+    Rudiron::CAN_RX_Package emptyPackage;
     emptyPackage.ID = 0;
     emptyPackage.Mask = 0;
 

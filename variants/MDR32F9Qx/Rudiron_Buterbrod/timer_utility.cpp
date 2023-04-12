@@ -1,4 +1,4 @@
-#include "timerutility.h"
+#include "timer_utility.h"
 
 
 namespace Rudiron {
@@ -10,73 +10,74 @@ namespace Rudiron {
 
         switch (pinName) {
             case PORT_PIN_A1:
-                res.channelName = Timer1_Channel1;
+                res.channelName = Timer1_Channel_1;
                 break;
             case PORT_PIN_A2:
-                res.channelName = Timer1_Channel1;//negative
+                res.channelName = Timer1_Channel_1;//negative
                 break;
             case PORT_PIN_A3:
-                res.channelName = Timer1_Channel2;
+                res.channelName = Timer1_Channel_2;
                 break;
             case PORT_PIN_A4:
-                res.channelName = Timer1_Channel2;//negative
+                res.channelName = Timer1_Channel_2;//negative
                 break;
             case PORT_PIN_A5:
-                res.channelName = Timer1_Channel3;
+                res.channelName = Timer1_Channel_3;
                 break;
             case PORT_PIN_B0:
-                res.channelName = Timer3_Channel1;
+                res.channelName = Timer3_Channel_1;
                 break;
             case PORT_PIN_B1:
-                res.channelName = Timer3_Channel1;//negative
+                res.channelName = Timer3_Channel_1;//negative
                 break;
             case PORT_PIN_B5:
-                res.channelName = Timer3_Channel3;
+                res.channelName = Timer3_Channel_3;
                 break;
             case PORT_PIN_B6:
-                res.channelName = Timer3_Channel3;//negative
+                res.channelName = Timer3_Channel_3;//negative
                 break;
             case PORT_PIN_B7:
-                res.channelName = Timer3_Channel4;
+                res.channelName = Timer3_Channel_4;
                 break;
             case PORT_PIN_B8:
-                res.channelName = Timer3_Channel4;//negative
+                res.channelName = Timer3_Channel_4;//negative
                 break;
             case PORT_PIN_C2:
-                res.channelName = Timer3_Channel1;
+                res.channelName = Timer3_Channel_1;
                 break;
             case PORT_PIN_D0:
-                res.channelName = Timer1_Channel1;
+                res.channelName = Timer1_Channel_1;
                 break;
             case PORT_PIN_D1:
-                res.channelName = Timer1_Channel1;//negative
+                res.channelName = Timer1_Channel_1;//negative
                 break;
             case PORT_PIN_D2:
-                res.channelName = Timer3_Channel2;
+                res.channelName = Timer3_Channel_2;
                 break;
             case PORT_PIN_D3:
-                res.channelName = Timer3_Channel2;//negative
+                res.channelName = Timer3_Channel_2;//negative
                 break;
             case PORT_PIN_E0:
-                res.channelName = Timer2_Channel1;
+                res.channelName = Timer2_Channel_1;
                 break;
             case PORT_PIN_E1:
-                res.channelName = Timer2_Channel1;//negative
+                res.channelName = Timer2_Channel_1;//negative
                 break;
             case PORT_PIN_E2:
-                res.channelName = Timer2_Channel3;
+                res.channelName = Timer2_Channel_3;
                 break;
             case PORT_PIN_E3:
-                res.channelName = Timer2_Channel3;//negative
+                res.channelName = Timer2_Channel_3;//negative
                 break;
             case PORT_PIN_E6:
-                res.channelName = Timer3_Channel3;
+                res.channelName = Timer3_Channel_3;
                 break;
             case PORT_PIN_E7:
-                res.channelName = Timer3_Channel3;//negative
+                res.channelName = Timer3_Channel_3;//negative
                 break;
             default:
                 res.has = false;
+                res.channelName = Timer_Channel_None;
                 break;
         }
 

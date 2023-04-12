@@ -18,7 +18,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "timerutility.h"
+#include "timer_utility.h"
 #include "MDR_dma.h"
 
 namespace Rudiron

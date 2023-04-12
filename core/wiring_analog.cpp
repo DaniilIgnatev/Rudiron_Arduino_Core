@@ -33,7 +33,7 @@ void analogReference(uint8_t mode)
 int analogRead(uint8_t pin)
 {
   Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  ADCResult result = Rudiron::ADC::read_pin(pinName);
+  Rudiron::ADCResult result = Rudiron::ADC::read_pin(pinName);
 
   if (!result.valid)
   {

@@ -16,7 +16,7 @@ namespace Rudiron
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has)
         {
-            return None;
+            return Timer_None;
         }
         else
         {
@@ -30,19 +30,19 @@ namespace Rudiron
 
         switch (this->name)
         {
-        case Timer1:
+        case Timer_1:
             this->MDR_TIMER = MDR_TIMER1;
             this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER1;
             this->TIMER_IRQn = TIMER1_IRQn;
             this->DMA_Channel = DMA_Channel_TIM1;
             break;
-        case Timer2:
+        case Timer_2:
             this->MDR_TIMER = MDR_TIMER2;
             this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER2;
             this->TIMER_IRQn = TIMER2_IRQn;
             this->DMA_Channel = DMA_Channel_TIM2;
             break;
-        case Timer3:
+        case Timer_3:
             this->MDR_TIMER = MDR_TIMER3;
             this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER3;
             this->TIMER_IRQn = TIMER3_IRQn;
@@ -337,11 +337,11 @@ namespace Rudiron
 
         switch (descriptor.timer)
         {
-        case TimerName::Timer1:
+        case TimerName::Timer_1:
             return Timer::getTimer1();
-        case TimerName::Timer2:
+        case TimerName::Timer_2:
             return Timer::getTimer2();
-        case TimerName::Timer3:
+        case TimerName::Timer_3:
             return Timer::getTimer3();
         default:
             return nullptr;
@@ -350,19 +350,19 @@ namespace Rudiron
 
     Timer *Timer::getTimer1()
     {
-        static Timer timer = Timer(TimerName::Timer1);
+        static Timer timer = Timer(TimerName::Timer_1);
         return &timer;
     }
 
     Timer *Timer::getTimer2()
     {
-        static Timer timer = Timer(TimerName::Timer2);
+        static Timer timer = Timer(TimerName::Timer_2);
         return &timer;
     }
 
     Timer *Timer::getTimer3()
     {
-        static Timer timer = Timer(TimerName::Timer3);
+        static Timer timer = Timer(TimerName::Timer_3);
         return &timer;
     }
 }

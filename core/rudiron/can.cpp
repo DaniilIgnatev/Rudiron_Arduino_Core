@@ -1,4 +1,10 @@
 #include "can.h"
+
+#include "MDR32Fx.h"
+#include "MDR_config.h"
+#include "MDR_can.h"
+#include "MDR_rst_clk.h"
+#include "config.h"
 #include "clk.h"
 
 namespace Rudiron

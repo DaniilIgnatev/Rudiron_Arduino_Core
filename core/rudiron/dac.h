@@ -15,35 +15,27 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef ADC_H
-#define ADC_H
+#ifndef DAC_H
+#define DAC_H
 
-#include "adc_utility.h"
+#include "dac_utility.h"
 #include "gpio.h"
 
 namespace Rudiron
 {
-    class ADC
+    class DAC
     {
     private:
-        static void initPinADC(PortPinName pinName);
+        static void initPinDAC(PortPinName pinName);
 
         static void enable();
 
         static void disable();
 
-        static ADCResult lastResult;
-
     public:
-        // Возвращает значение, считанное с внешнего вывода pinName
-        static ADCResult read_pin(PortPinName pinName);
-
-        // Возвращает значение, считанное с встроенного датчика температуры
-        static ADCResult read_temperature_sensor();
-
-        // Возвращает значение, считанное с внутреннего источника опорного напряжения
-        static ADCResult read_internal_reference_voltage_source();
+        // Формирует на выводе pinName уровень напряжения, соответствующий значению value
+        static void write_pin(PortPinName pinName, uint16_t value);
     };
 }
 
-#endif // ADC_H
+#endif // DAC_H
