@@ -19,18 +19,14 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define TIMER_H
 
 #include "timer_utility.h"
-#include "MDR_dma.h"
+#include "MDR32F9Qx_dma.h"
 
 namespace Rudiron
 {
+    /// Не использовать с переменными типа auto, будет ошибка
     class Timer
     {
-    public:
-        static bool hasTimerForPin(PortPinName pinName);
-
-        static TimerName getTimerNameForPin(PortPinName pinName);
-
-    protected:
+    private:
         TimerName name;
 
         MDR_TIMER_TypeDef *MDR_TIMER;
@@ -46,73 +42,132 @@ namespace Rudiron
         uint32_t frequency = 0;
 
     public:
-        inline uint16_t getARR(){
-            return ARR;
-        }
+        MDR_TIMER_TypeDef *get_MDR_TIMER() const;
+
+        uint16_t get_ARR() const;
 
         explicit Timer(TimerName name);
 
-        inline void enable(){
-            TIMER_Cmd(this->MDR_TIMER, ENABLE);
-            NVIC_EnableIRQ(TIMER_IRQn);
-        }
+        ~Timer();
 
-        inline void disable(){
-            NVIC_DisableIRQ(TIMER_IRQn);
-            TIMER_Cmd(this->MDR_TIMER, DISABLE);
-        }
+    public:
+        // Включает тактирование
+        void enable_unit();
 
-    protected:
+        // Отключает тактирование
+        void disable_unit();
+
+        // Разрешает работу
+        void enable();
+
+        // Запрещает работу
+        void disable();
+
+    private:
         inline bool isHighFrequency();
 
+    public:
+        void setup(uint32_t frequency = 500);
+
+    private:
         PORT_InitTypeDef PWM_getInitTypeDef(PortPinName pinName, PORT_FUNC_TypeDef func);
 
         void PWM_initPin(PortPinName pinName);
 
+    public:
+        static const uint16_t PPM_MIN;
+
+        static const uint16_t PPM_MAX;
+
+        static const uint16_t PPM_MEAN;
+
+    private:
         int PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative, bool ignoreCompare = false);
 
     public:
-        void PWM_setup(uint32_t frequency = 500);
-
+        // Запустить генерацию ШИМ на выводе pinName и с заполнением ppm, между PPM_MAX (1000) и PPM_MIN (0)
         void PWM_start(PortPinName pinName, uint16_t ppm);
 
+        // Запустить генерацию ШИМ на выводах pinName и invertedPinName и с заполнением ppm, между PPM_MAX (1000) и PPM_MIN (0)
         void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t ppm);
 
+        // Остановить генерацию ШИМ на выводе pinName
         void PWM_stop(PortPinName pinName);
 
-    protected:
+    private:
         DMA_ChannelInitTypeDef DMA_InitStr;
         DMA_CtrlDataInitTypeDef DMA_PriCtrlStr;
 
-        uint32_t DMA_TIMER_CHANNEL;
-
         uint8_t DMA_Channel;
 
-        uint8_t *BUF_DMA;
-        uint16_t BUF_DMA_LENGTH;
+    public:
+        // Возвращает канал DMA, соответствующий данному таймеру
+        uint8_t getDmaChannel() const;
 
-        void PWM_DMA_init(uint32_t channel_number, uint16_t *buffer, uint16_t buffer_length);
+    private:
+        // Пользовательский обработчик прерывания DMA, вызыванный (CNT == ARR) и разрешенным DMA
+        void (*dma_interrupt_handler)(Timer &timer) = nullptr;
+
+        // Глобальный обработчик прерывания, вызыванный (CNT == ARR) и разрешенным DMA
+        static void DMA_Interrupt_Handler_1();
+
+        // Глобальный обработчик прерывания, вызыванный (CNT == ARR) и разрешенным DMA
+        static void DMA_Interrupt_Handler_2();
+
+        // Глобальный обработчик прерывания, вызыванный (CNT == ARR) и разрешенным DMA
+        static void DMA_Interrupt_Handler_3();
+
+        void PWM_DMA_init(uint32_t channel_number, uint16_t *buffer, uint16_t buffer_length,
+                          void (*dma_interrupt_handler)(Timer &timer));
 
     public:
-        void PWM_DMA_setup(PortPinName pinName, uint16_t *buffer, uint16_t buffer_length);
+        // Настроить и запустить DMA с заданными параметрами
+        // pinName - вывод GPIO для ШИМ
+        // buffer - источник данных
+        // buffer_length - длина источника данных
+        // dma_interrupt_handler - обработчик, вызываемый после каждого полного периода таймера
+        void PWM_DMA_setup(PortPinName pinName,
+                           uint16_t *buffer,
+                           uint16_t buffer_length,
+                           void (*dma_interrupt_handler)(Timer &timer));
 
-        void PWM_DMA_setup(PortPinName pinName, PortPinName invertedPinName, uint16_t *buffer, uint16_t buffer_length);
+        // Настроить и запустить DMA с заданными параметрами
+        // pinName - вывод GPIO для ШИМ
+        // invertedPinName - вывод GPIO для инвертированного ШИМ
+        // buffer - источник данных
+        // buffer_length - длина источника данных
+        // dma_interrupt_handler - обработчик, вызываемый после каждого полного периода таймера
+        void PWM_DMA_setup(PortPinName pinName,
+                           PortPinName invertedPinName,
+                           uint16_t *buffer,
+                           uint16_t buffer_length,
+                           void (*dma_interrupt_handler)(Timer &timer));
 
-        void PWM_DMA_setBuffer(uint16_t *buffer, uint16_t buffer_length);
+        bool PWM_DMA_done();
 
-        void PWM_DMA_start_single();
+        void PWM_DMA_wait_done();
 
-        void PWM_DMA_start_single(uint16_t *buffer, uint16_t buffer_length);
+        void PWM_DMA_repeat();
 
+        void PWM_DMA_update(uint16_t *buffer, uint16_t buffer_length);
+
+        // Останавливает цикл DMA
         void PWM_DMA_stop();
+
     public:
-        static Timer *getTimerForPinName(PortPinName name);
+        static TimerName getTimerNameForPin(PortPinName pinName);
 
-        static Timer *getTimer1();
+        static Timer &getTimer_by_name(TimerName name);
+        
+        static bool hasTimer_for_pinName(PortPinName pinName);
 
-        static Timer *getTimer2();
+        static Timer &getTimer_by_pinName(PortPinName name);
 
-        static Timer *getTimer3();
+        static Timer &getTimer1();
+
+        static Timer &getTimer2();
+
+        static Timer &getTimer3();
     };
 }
 

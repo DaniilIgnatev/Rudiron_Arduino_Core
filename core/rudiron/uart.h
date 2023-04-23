@@ -18,20 +18,22 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef UART_H
 #define UART_H
 
-
 #include "config.h"
-#include "MDR_uart.h"
-#include "MDR_port.h"
-#include "MDR_rst_clk.h"
+#include "MDR32F9Qx_uart.h"
+#include "MDR32F9Qx_port.h"
+#include "MDR32F9Qx_rst_clk.h"
 
 #include "rudiron/gpio.h"
+#include "uart_types.h"
 #include "Stream.h"
 
-namespace Rudiron {
-
-    class UART : public Stream {
+namespace Rudiron
+{
+    /// Не использовать с переменными типа auto, будет ошибка
+    class UART : public Stream
+    {
     private:
-        MDR_UART_TypeDef* MDR_UART;
+        MDR_UART_TypeDef *MDR_UART;
 
         uint32_t RST_CLK_PCLK_UART;
 
@@ -53,7 +55,7 @@ namespace Rudiron {
 
     public:
         explicit UART(
-            MDR_UART_TypeDef* MDR_UART,
+            MDR_UART_TypeDef *MDR_UART,
             uint32_t RST_CLK_PCLK_UART,
             PortPinName RX_PIN,
             PORT_InitTypeDef RX_PortInit,
@@ -62,49 +64,35 @@ namespace Rudiron {
             IRQn_Type UART_IRQn = IRQn_Type::SysTick_IRQn,
             UART_BUFFER_INDEX_T *_rx_buffer_head = nullptr,
             UART_BUFFER_INDEX_T *_rx_buffer_tail = nullptr,
-            uint8_t *_rx_buffer = nullptr
-            );
-
+            uint8_t *_rx_buffer = nullptr);
 
         bool begin(
-                uint32_t baudRate = 9600,
-                uint16_t UART_WordLength = UART_WordLength8b,
-                uint16_t UART_Parity = UART_Parity_No,
-                uint16_t UART_StopBits = UART_StopBits1
-                );
-
+            uint32_t baudRate = 9600,
+            uint16_t UART_WordLength = UART_WordLength8b,
+            uint16_t UART_Parity = UART_Parity_No,
+            uint16_t UART_StopBits = UART_StopBits1);
 
         void end();
 
-
         virtual int available(void) override;
-
 
         virtual int peek(void) override;
 
-
         virtual int read(void) override;
-
 
         virtual int availableForWrite() override;
 
-
         virtual void flush() override;
-
 
         virtual size_t write(uint8_t byte) override;
 
-
         using Print::write;
-
 
         operator bool() { return true; }
 
+        static UART &getUART1();
 
-        static UART* getUART1();
-
-
-        static UART* getUART2();
+        static UART &getUART2();
     };
 }
 

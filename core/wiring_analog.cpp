@@ -24,23 +24,23 @@
 */
 
 #include "wiring_private.h"
-#include "pins_arduino.h"
+#include "rudiron/adc.h"
 
 void analogReference(uint8_t mode)
 {
 }
 
-int analogRead(uint8_t pin)
+int __attribute__((optimize("O0"))) analogRead(uint8_t pin)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::ADCResult result = Rudiron::ADC::read_pin(pinName);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
+    Rudiron::ADCResult result = Rudiron::ADC::getADC2().read_pin_single(pinName);
 
-  if (!result.valid)
-  {
-    return -1;
-  }
+    if (!result.valid)
+    {
+        return -1;
+    }
 
-  return result.value;
+    return result.value;
 }
 
 // Вывод на пин ШИМ
@@ -48,14 +48,14 @@ int analogRead(uint8_t pin)
 // val -- степень заполнения ШИМ от 0 до 255
 void analogWrite(uint8_t pin, int val)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
 
-  if (timer != nullptr)
-  {
-    pinMode(pin, OUTPUT);
-    timer->PWM_setup(analogWrite_Frequency);
-    long pwm_val = map(val, 0, 255, 0, 1000);
-    timer->PWM_start(pinName, pwm_val);
-  }
+    if (Rudiron::Timer::hasTimer_for_pinName(pinName))
+    {
+        Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(pinName);
+        pinMode(pin, OUTPUT);
+        timer.setup(analogWrite_Frequency);
+        long pwm_val = map(val, 0, 255, 0, 1000);
+        timer.PWM_start(pinName, pwm_val);
+    }
 }

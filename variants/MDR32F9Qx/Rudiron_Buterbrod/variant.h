@@ -15,8 +15,6 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-
 #ifndef ARDUINO_CORE_RUDIRON_VARIANT_H
 #define ARDUINO_CORE_RUDIRON_VARIANT_H
 
@@ -25,9 +23,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 extern HardwareSerial Serial;
 #define HAVE_HWSERIAL0
 
-
 extern HardwareSerial Serial1;
 #define HAVE_HWSERIAL1
 
-
-#endif //ARDUINO_CORE_RUDIRON_VARIANT_H
+#endif // ARDUINO_CORE_RUDIRON_VARIANT_H

@@ -23,26 +23,68 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace Rudiron
 {
+    /// Не использовать с переменными типа auto, будет ошибка
     class ADC
     {
     private:
+        ADC_Name adc_name;
+
+    public:
+        ADC(ADC_Name adc_name);
+
+        ~ADC();
+
+    public:
+        // Включает тактирование
+        void enable_unit();
+
+        // Отключает тактирование
+        void disable_unit();
+
+        // Разрешает работу
+        void enable();
+
+        // Запрещает работу
+        void disable();
+
+    private:
         static void initPinADC(PortPinName pinName);
 
-        static void enable();
+        void start_single();
 
-        static void disable();
+        void init(const ADCx_InitTypeDef *ADCx_InitStruct);
 
-        static ADCResult lastResult;
+        uint32_t get_result_value();
+
+        FlagStatus get_overwrite_flag_status();
+
+        void clear_overwrite_flag();
+
+        void setup_channel(ADC_ChannelName channel_name);
+
+        ADCResult read_channel_single(ADC_ChannelName channel_name);
 
     public:
         // Возвращает значение, считанное с внешнего вывода pinName
-        static ADCResult read_pin(PortPinName pinName);
+        ADCResult read_pin_single(PortPinName pinName);
 
-        // Возвращает значение, считанное с встроенного датчика температуры
-        static ADCResult read_temperature_sensor();
+        // Возвращает значение, считанное с внутреннего источника опорного напряжения. Работает только для первого АЦП.
+        ADCResult read_internal_reference_voltage_source();
 
-        // Возвращает значение, считанное с внутреннего источника опорного напряжения
-        static ADCResult read_internal_reference_voltage_source();
+        // Возвращает значение, считанное с встроенного датчика температуры. Работает только для первого АЦП.
+        ADCResult read_temperature_sensor();
+
+        // Преобразование необработанного значения в температуру в градусах Цельсия
+        // raw - необработанное значение с ацп
+        // Vref - опорное напряжение в вольтах
+        static float temperature_raw_to_celsius(ADCResult raw, float Vref = 3.3);
+
+    public:
+        // Возвращает класс АЦП №1
+        static ADC &getADC1();
+
+        // Возвращает класс АЦП №2
+        static ADC &getADC2();
     };
 }
 

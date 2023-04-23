@@ -15,30 +15,32 @@ namespace Rudiron
         uint32_t speed, uint16_t SSP_SPH, uint16_t SSP_SPO,
         uint16_t SSP_WordLength, uint16_t SSP_FRF, uint16_t SSP_HardwareFlowControl)
     {
-        //Сброс настроек контроллера SPI1
+        // Сброс настроек контроллера SPI1
         SSP_DeInit(MDR_SSP);
         RST_CLK_PCLKcmd(RST_CLK_PCLK_SSP, ENABLE);
 
-        //Установка делителя тактовой частоты SPI1
-        //Частота тактирования модуля = 16Mhz
-        auto div = CLK::getHCLKdiv();
+        // Установка делителя тактовой частоты SPI1
+        // Частота тактирования модуля = 16Mhz
+        uint32_t div = CLK::getHCLKdiv();
         SSP_BRGInit(MDR_SSP, div);
 
-        speed /= 1000;//частота кратна тысячи герц
-        if (speed == 0){
+        speed /= 1000; // частота кратна тысячи герц
+        if (speed == 0)
+        {
             return false;
         }
 
-        const uint16_t SSP_CPSDVSR = 2;//делитель частоты от 2 до 254
-        const uint16_t SSP_SCR = (8000 / speed) - 1;//коэффициент скорости обмена от 1 до 255
+        const uint16_t SSP_CPSDVSR = 2;              // делитель частоты от 2 до 254
+        const uint16_t SSP_SCR = (8000 / speed) - 1; // коэффициент скорости обмена от 1 до 255
 
-        if ( SSP_CPSDVSR < 2 || SSP_CPSDVSR > 254 || SSP_SCR > 255){
+        if (SSP_CPSDVSR < 2 || SSP_CPSDVSR > 254 || SSP_SCR > 255)
+        {
             return false;
         }
 
-        SSP_StructInit(&SPI_InitStructure); //значения по умолчанию
+        SSP_StructInit(&SPI_InitStructure); // значения по умолчанию
         SPI_InitStructure.SSP_CPSDVSR = SSP_CPSDVSR;
-        SPI_InitStructure.SSP_SCR = SSP_SCR;    
+        SPI_InitStructure.SSP_SCR = SSP_SCR;
         SPI_InitStructure.SSP_Mode = SSP_Mode;
         SPI_InitStructure.SSP_WordLength = SSP_WordLength;
         SPI_InitStructure.SSP_SPH = SSP_SPH;
@@ -68,8 +70,8 @@ namespace Rudiron
 
         if (MDR_SSP == MDR_SSP2)
         {
-            //Конфигурация пинов SPI2
-            // RX
+            // Конфигурация пинов SPI2
+            //  RX
             PORT_InitStructure.PORT_OE = PORT_OE_IN;
             PORT_InitStructure.PORT_Pin = PORT_Pin_2;
             GPIO::configPin(PORT_PIN_D2, PORT_InitStructure);
@@ -82,8 +84,8 @@ namespace Rudiron
         }
         else
         {
-            //Конфигурация пинов SPI1
-            // RX
+            // Конфигурация пинов SPI1
+            //  RX
             PORT_InitStructure.PORT_OE = PORT_OE_IN;
             PORT_InitStructure.PORT_Pin = PORT_Pin_3;
             GPIO::configPin(PORT_PIN_F3, PORT_InitStructure);
@@ -98,7 +100,7 @@ namespace Rudiron
 
     void SPI::end()
     {
-        //ждем отправки оставшихся пакетов
+        // ждем отправки оставшихся пакетов
         while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
         {
         }
@@ -141,14 +143,14 @@ namespace Rudiron
 
     uint8_t SPI::read_write(uint8_t data)
     {
-        //Пока буфер FIFO передатчика не пуст
+        // Пока буфер FIFO передатчика не пуст
         while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
         {
         }
-        //Отправка данных
+        // Отправка данных
         SSP_SendData(MDR_SSP, data);
 
-        //Пока буфер FIFO приемника пуст
+        // Пока буфер FIFO приемника пуст
         while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET)
         {
         }
@@ -157,14 +159,14 @@ namespace Rudiron
 
     uint16_t SPI::read_write16(uint16_t data)
     {
-        //Пока буфер FIFO передатчика не пуст
+        // Пока буфер FIFO передатчика не пуст
         while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_TFE) == RESET)
         {
         }
-        //Отправка данных
+        // Отправка данных
         SSP_SendData(MDR_SSP, data);
 
-        //Пока буфер FIFO приемника пуст
+        // Пока буфер FIFO приемника пуст
         while (SSP_GetFlagStatus(MDR_SSP, SSP_FLAG_RNE) == RESET)
         {
         }

@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include "pins_arduino.h"
-#include "can_utility.h"
+#include "rudiron/can_types.h"
 
 #ifdef HCLK_DISABLE
 #define DEFAULT_RST_CLK_CPU_PLLmul RST_CLK_CPU_PLLmul2 // 8mhz * 2
@@ -14,6 +14,13 @@
 // CLK
 #define MICROS_STEP ((uint8_t)10)
 extern volatile uint64_t _micros;
+
+// Timer
+extern void (*Timer_1_DMA_Interrupt_Handler)(void);
+
+extern void (*Timer_2_DMA_Interrupt_Handler)(void);
+
+extern void (*Timer_3_DMA_Interrupt_Handler)(void);
 
 // TASKS
 #define TASKS_TIMER_ENABLED
@@ -53,5 +60,7 @@ extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail;
 /// Фактически на 1 байт меньше, чтобы не переполнить буфер
 #define NRF24_RX_BUFFER_LENGTH (NRF24_PAYLOAD_LENGTH - 1) * 2
 extern uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
+
+extern void (*DAC_DMA_Interrupt_Handler)(void);
 
 #endif

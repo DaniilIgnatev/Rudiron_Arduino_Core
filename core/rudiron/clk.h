@@ -19,9 +19,9 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define CLK_H
 
 #include "config.h"
-#include "MDR_port.h"
-#include "MDR_rst_clk.h"
-#include "MDR_eeprom.h"
+#include "MDR32F9Qx_port.h"
+#include "MDR32F9Qx_rst_clk.h"
+#include "MDR32F9Qx_eeprom.h"
 
 namespace Rudiron
 {
@@ -83,7 +83,7 @@ namespace Rudiron
         }
 
         /// Установка частоты микропроцессора
-        static void setCPUSpeed(CLK_Speed newValue = CLK_Speed::low);
+        static void setCPUSpeed(CLK_Speed newValue);
 
         /// Частота микропроцессора в герцах
         static inline uint32_t getCPUFrequency()

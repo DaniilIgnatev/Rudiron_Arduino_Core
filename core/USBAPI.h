@@ -19,47 +19,47 @@
 // Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
 //*/
 //
-//#ifndef __USBAPI__
-//#define __USBAPI__
+// #ifndef __USBAPI__
+// #define __USBAPI__
 //
-//#include <inttypes.h>
-//#include <avr/pgmspace.h>
-//#include <avr/eeprom.h>
-//#include <avr/interrupt.h>
-//#include <util/delay_millis.h>
+// #include <inttypes.h>
+// #include <avr/pgmspace.h>
+// #include <avr/eeprom.h>
+// #include <avr/interrupt.h>
+// #include <util/delay_millis.h>
 //
-//typedef unsigned char u8;
-//typedef unsigned short u16;
-//typedef unsigned long u32;
+// typedef unsigned char u8;
+// typedef unsigned short u16;
+// typedef unsigned long u32;
 //
-//#include "Arduino.h"
+// #include "Arduino.h"
 //
 //// This definitions is usefull if you want to reduce the EP_SIZE to 16
 //// at the moment only 64 and 16 as EP_SIZE for all EPs are supported except the control endpoint
-//#ifndef USB_EP_SIZE
-//#define USB_EP_SIZE 64
-//#endif
+// #ifndef USB_EP_SIZE
+// #define USB_EP_SIZE 64
+// #endif
 //
-//#if defined(USBCON)
+// #if defined(USBCON)
 //
-//#include "USBDesc.h"
-//#include "USBCore.h"
+// #include "USBDesc.h"
+// #include "USBCore.h"
 //
 ////================================================================================
 ////================================================================================
 ////	USB
 //
-//#define EP_TYPE_CONTROL				(0x00)
-//#define EP_TYPE_BULK_IN				((1<<EPTYPE1) | (1<<EPDIR))
-//#define EP_TYPE_BULK_OUT			(1<<EPTYPE1)
-//#define EP_TYPE_INTERRUPT_IN		((1<<EPTYPE1) | (1<<EPTYPE0) | (1<<EPDIR))
-//#define EP_TYPE_INTERRUPT_OUT		((1<<EPTYPE1) | (1<<EPTYPE0))
-//#define EP_TYPE_ISOCHRONOUS_IN		((1<<EPTYPE0) | (1<<EPDIR))
-//#define EP_TYPE_ISOCHRONOUS_OUT		(1<<EPTYPE0)
+// #define EP_TYPE_CONTROL				(0x00)
+// #define EP_TYPE_BULK_IN				((1<<EPTYPE1) | (1<<EPDIR))
+// #define EP_TYPE_BULK_OUT			(1<<EPTYPE1)
+// #define EP_TYPE_INTERRUPT_IN		((1<<EPTYPE1) | (1<<EPTYPE0) | (1<<EPDIR))
+// #define EP_TYPE_INTERRUPT_OUT		((1<<EPTYPE1) | (1<<EPTYPE0))
+// #define EP_TYPE_ISOCHRONOUS_IN		((1<<EPTYPE0) | (1<<EPDIR))
+// #define EP_TYPE_ISOCHRONOUS_OUT		(1<<EPTYPE0)
 //
-//class USBDevice_
+// class USBDevice_
 //{
-//public:
+// public:
 //	USBDevice_();
 //	bool configured();
 //
@@ -70,30 +70,30 @@
 //
 //	bool isSuspended();
 //};
-//extern USBDevice_ USBDevice;
+// extern USBDevice_ USBDevice;
 //
 ////================================================================================
 ////================================================================================
 ////	Serial over CDC (Serial1 is the physical port)
 //
-//struct ring_buffer;
+// struct ring_buffer;
 //
-//#ifndef SERIAL_BUFFER_SIZE
-//#if ((RAMEND - RAMSTART) < 1023)
-//#define SERIAL_BUFFER_SIZE 16
-//#else
-//#define SERIAL_BUFFER_SIZE 64
-//#endif
-//#endif
-//#if (SERIAL_BUFFER_SIZE>256)
-//#error Please lower the CDC Buffer size
-//#endif
+// #ifndef SERIAL_BUFFER_SIZE
+// #if ((RAMEND - RAMSTART) < 1023)
+// #define SERIAL_BUFFER_SIZE 16
+// #else
+// #define SERIAL_BUFFER_SIZE 64
+// #endif
+// #endif
+// #if (SERIAL_BUFFER_SIZE>256)
+// #error Please lower the CDC Buffer size
+// #endif
 //
-//class Serial_ : public Stream
+// class Serial_ : public Stream
 //{
-//private:
+// private:
 //	int peek_buffer;
-//public:
+// public:
 //	Serial_() { peek_buffer = -1; };
 //	void begin(unsigned long);
 //	void begin(unsigned long, uint8_t);
@@ -153,15 +153,15 @@
 //	};
 //
 //};
-//extern Serial_ Serial;
+// extern Serial_ Serial;
 //
-//#define HAVE_CDCSERIAL
+// #define HAVE_CDCSERIAL
 //
 ////================================================================================
 ////================================================================================
 ////  Low level API
 //
-//typedef struct
+// typedef struct
 //{
 //	uint8_t bmRequestType;
 //	uint8_t bRequest;
@@ -175,37 +175,37 @@
 ////================================================================================
 ////	MSC 'Driver'
 //
-//int		MSC_GetInterface(uint8_t* interfaceNum);
-//int		MSC_GetDescriptor(int i);
-//bool	MSC_Setup(USBSetup& setup);
-//bool	MSC_Data(uint8_t rx,uint8_t tx);
+// int		MSC_GetInterface(uint8_t* interfaceNum);
+// int		MSC_GetDescriptor(int i);
+// bool	MSC_Setup(USBSetup& setup);
+// bool	MSC_Data(uint8_t rx,uint8_t tx);
 //
 ////================================================================================
 ////================================================================================
 ////	CSC 'Driver'
 //
-//int		CDC_GetInterface(uint8_t* interfaceNum);
-//int		CDC_GetDescriptor(int i);
-//bool	CDC_Setup(USBSetup& setup);
+// int		CDC_GetInterface(uint8_t* interfaceNum);
+// int		CDC_GetDescriptor(int i);
+// bool	CDC_Setup(USBSetup& setup);
 //
 ////================================================================================
 ////================================================================================
 //
-//#define TRANSFER_PGM		0x80
-//#define TRANSFER_RELEASE	0x40
-//#define TRANSFER_ZERO		0x20
+// #define TRANSFER_PGM		0x80
+// #define TRANSFER_RELEASE	0x40
+// #define TRANSFER_ZERO		0x20
 //
-//int USB_SendControl(uint8_t flags, const void* d, int len);
-//int USB_RecvControl(void* d, int len);
-//int USB_RecvControlLong(void* d, int len);
+// int USB_SendControl(uint8_t flags, const void* d, int len);
+// int USB_RecvControl(void* d, int len);
+// int USB_RecvControlLong(void* d, int len);
 //
-//uint8_t	USB_Available(uint8_t ep);
-//uint8_t USB_SendSpace(uint8_t ep);
-//int USB_Send(uint8_t ep, const void* data, int len);	// blocking
-//int USB_Recv(uint8_t ep, void* data, int len);		// non-blocking
-//int USB_Recv(uint8_t ep);							// non-blocking
-//void USB_Flush(uint8_t ep);
+// uint8_t	USB_Available(uint8_t ep);
+// uint8_t USB_SendSpace(uint8_t ep);
+// int USB_Send(uint8_t ep, const void* data, int len);	// blocking
+// int USB_Recv(uint8_t ep, void* data, int len);		// non-blocking
+// int USB_Recv(uint8_t ep);							// non-blocking
+// void USB_Flush(uint8_t ep);
 //
-//#endif
+// #endif
 //
-//#endif /* if defined(USBCON) */
+// #endif /* if defined(USBCON) */

@@ -20,21 +20,17 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rudiron/gpio.h"
 #include "MDR32Fx.h"
+#include "rudiron/dac_types.h"
 
 namespace Rudiron
 {
-    // Канал ЦАП
-    typedef enum
-    {
-        DAC_Channel_None = -1,
-        DAC_Channel_0 = 0,
-        DAC_Channel_1,
-    } DAC_ChannelName;
-
+    // Вспомогательный класс ЦАП
     class DAC_Utility
     {
     public:
-        static DAC_ChannelName getChannelName(PortPinName pinName);
+        static DAC_ChannelName getDAC_ChannelName(PortPinName pinName);
+
+        static DAC_Name getDAC_Name(DAC_ChannelName channelName);
     };
 }
 

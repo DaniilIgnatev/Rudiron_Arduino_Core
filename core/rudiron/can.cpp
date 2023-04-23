@@ -1,9 +1,9 @@
 #include "can.h"
 
 #include "MDR32Fx.h"
-#include "MDR_config.h"
-#include "MDR_can.h"
-#include "MDR_rst_clk.h"
+#include "MDR32F9Qx_config.h"
+#include "MDR32F9Qx_can.h"
+#include "MDR32F9Qx_rst_clk.h"
 #include "config.h"
 #include "clk.h"
 
@@ -11,6 +11,7 @@ namespace Rudiron
 {
 
     CAN::CAN(
+        CAN_Name can_name,
         MDR_CAN_TypeDef *MDR_CAN,
         uint32_t RST_CLK_PCLK_CAN,
         IRQn CAN_IRQn,
@@ -21,6 +22,7 @@ namespace Rudiron
     {
         _timeout = 100;
 
+        this->can_name = can_name;
         this->MDR_CAN = MDR_CAN;
         this->RST_CLK_PCLK_CAN = RST_CLK_PCLK_CAN;
         this->CAN_IRQn = CAN_IRQn;
@@ -38,7 +40,7 @@ namespace Rudiron
         RST_CLK_PCLKcmd(this->RST_CLK_PCLK_CAN, ENABLE);
         CAN_BRGInit(MDR_CAN, CLK::getHCLKdiv());
 
-        //Задание скорости передачи и момента семплирования
+        // Задание скорости передачи и момента семплирования
         CAN_DeInit(MDR_CAN);
 
         CAN_InitTypeDef sCAN;
@@ -59,7 +61,7 @@ namespace Rudiron
 
         CAN_ITConfig(MDR_CAN, CAN_IT_GLBINTEN | CAN_IT_RXINTEN | CAN_IT_ERROVERINTEN, ENABLE);
         NVIC_EnableIRQ(CAN_IRQn);
-        
+
         CAN_Cmd(MDR_CAN, ENABLE);
 
         // configure buffer read
@@ -225,7 +227,7 @@ namespace Rudiron
         return sent_counter;
     }
 
-    CAN *CAN::getCAN1()
+    CAN &CAN::getCAN1()
     {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
@@ -249,11 +251,11 @@ namespace Rudiron
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static CAN can(MDR_CAN1, RST_CLK_PCLK_CAN1, IRQn::CAN1_IRQn, PORT_PIN_A7, RX_PortInit, PORT_PIN_A6, TX_PortInit);
-        return &can;
+        static CAN can(CAN_1, MDR_CAN1, RST_CLK_PCLK_CAN1, IRQn::CAN1_IRQn, PORT_PIN_A7, RX_PortInit, PORT_PIN_A6, TX_PortInit);
+        return can;
     }
 
-    CAN *CAN::getCAN2()
+    CAN &CAN::getCAN2()
     {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
@@ -277,7 +279,7 @@ namespace Rudiron
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static CAN can(MDR_CAN2, RST_CLK_PCLK_CAN2, IRQn::CAN2_IRQn, PORT_PIN_E6, RX_PortInit, PORT_PIN_E7, TX_PortInit);
-        return &can;
+        static CAN can(CAN_2, MDR_CAN2, RST_CLK_PCLK_CAN2, IRQn::CAN2_IRQn, PORT_PIN_E6, RX_PortInit, PORT_PIN_E7, TX_PortInit);
+        return can;
     }
 }

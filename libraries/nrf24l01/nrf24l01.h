@@ -22,11 +22,11 @@ extern "C"
 #endif
 
 #include "config.h"
-#include "MDR_config.h"
+#include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
-#include "MDR_rst_clk.h"
-#include "MDR_dma.h"
-#include "MDR_port.h"
+#include "MDR32F9Qx_rst_clk.h"
+#include "MDR32F9Qx_dma.h"
+#include "MDR32F9Qx_port.h"
 
 #include "rudiron/spi.h"
 #include "rudiron/clk.h"

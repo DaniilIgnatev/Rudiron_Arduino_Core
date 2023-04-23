@@ -20,7 +20,7 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef NRF24_H
 #define NRF24_H
 
-#include "MDR_config.h"
+#include "MDR32F9Qx_config.h"
 #include "Stream.h"
 #include "nrf24l01.h"
 
@@ -39,7 +39,7 @@ namespace Rudiron
     public:
         explicit nRF24();
 
-        //Пробует инициализировать радиомодуль, не на всех радиочастотных каналах может получиться с первой попытки. Предпочтительно использовать значения по умолчанию
+        // Пробует инициализировать радиомодуль, не на всех радиочастотных каналах может получиться с первой попытки. Предпочтительно использовать значения по умолчанию
         bool begin(
             bool receiver,                                 // режим приемника или передатчика
             uint8_t RFChannel = 124,                       // радиочастотный канал

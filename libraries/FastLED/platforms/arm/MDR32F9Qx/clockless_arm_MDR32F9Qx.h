@@ -15,7 +15,7 @@ template <int DATA_PIN, int T1, int T2, int T3, EOrder RGB_ORDER = RGB, int XTRA
 class ClocklessController : public CPixelLEDController<RGB_ORDER>
 {
 protected:
-    Rudiron::Timer *timer;
+    Rudiron::PortPinName pinName;
 
     uint16_t BUF_DMA_FIRST[BUF_DMA_LENGTH];
 
@@ -27,19 +27,25 @@ protected:
 
     uint16_t PWM_HIGH;
 
+    static void DMA_Interrupt_Handler(Rudiron::Timer &timer)
+    {
+        timer.PWM_DMA_wait_done(); // без ожидания происходит рассинхронизация
+        timer.disable();           // без остановки таймера, шим продолжает работу
+    }
+
 public:
     virtual void init()
     {
         // Serial.begin(115200);
-        Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[DATA_PIN];
-        timer = Rudiron::Timer::getTimerForPinName(pinName);
+        this->pinName = Rudiron::GPIO::get_rudiron_gpio(DATA_PIN);
+        Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(this->pinName);
         uint32_t frequency = 1000000000 / (T1 + T2 + T3);
         // Serial.print("Frequency = ");
         // Serial.println(frequency);
 
-        timer->PWM_setup(frequency);
+        timer.setup(frequency);
 
-        uint16_t ARR = timer->getARR();
+        uint16_t ARR = timer.get_ARR();
         // Serial.print("ARR = ");
         // Serial.println(ARR);
 
@@ -55,7 +61,7 @@ public:
         // Serial.print("PWM_HIGH = ");
         // Serial.println(PWM_HIGH);
 
-        timer->PWM_DMA_setup(pinName, BUF_DMA_FIRST, BUF_DMA_LENGTH);
+        timer.PWM_DMA_setup(pinName, BUF_DMA_FIRST, BUF_DMA_LENGTH, &DMA_Interrupt_Handler);
     }
 
     virtual uint16_t getMaxRefreshRate() const { return 400; }
@@ -110,7 +116,8 @@ protected:
                 }
             }
 
-            timer->PWM_DMA_start_single(BUF_DMA, BUF_DMA_LENGTH);
+            Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(this->pinName);
+            timer.PWM_DMA_update(BUF_DMA, BUF_DMA_LENGTH);
             BUF_DMA = (BUF_DMA == BUF_DMA_FIRST) ? BUF_DMA_SECOND : BUF_DMA_FIRST;
 
             pixels.advanceData();

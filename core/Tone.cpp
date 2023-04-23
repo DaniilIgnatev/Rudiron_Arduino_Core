@@ -43,31 +43,32 @@ Version Modified By Date     Comments
 // frequency (in hertz) and duration (in milliseconds).
 void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
 
-  if (timer != nullptr)
-  {
-    pinMode(pin, OUTPUT);
-    
-    timer->PWM_setup(frequency);
-    timer->PWM_start(pinName, 500);
-
-    if (duration)
+    if (Rudiron::Timer::hasTimer_for_pinName(pinName))
     {
-      delay(duration);
-      noTone(pin);
+        Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(pinName);
+
+        pinMode(pin, OUTPUT);
+
+        timer.setup(frequency);
+        timer.PWM_start(pinName, 500);
+
+        if (duration)
+        {
+            delay(duration);
+            noTone(pin);
+        }
     }
-  }
 }
 
 void noTone(uint8_t pin)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(pinName);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
 
-  if (timer != nullptr)
-  {
-    timer->PWM_stop(pinName);
-  }
+    if (Rudiron::Timer::hasTimer_for_pinName(pinName))
+    {
+        Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(pinName);
+        timer.PWM_stop(pinName);
+    }
 }

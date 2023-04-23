@@ -55,7 +55,7 @@ public:
   }
   SPISettings()
   {
-    this->clock = 4000000;
+    this->clock = 8000000;
     this->bitOrder = MSBFIRST;
     this->dataMode = SPI_MODE0;
   }

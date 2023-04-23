@@ -25,31 +25,31 @@
 
 int main(void)
 {
-  init();
+    init();
 
-  initVariant();
+    initVariant();
 
 #if defined(USBCON)
-  USBDevice.attach();
+    USBDevice.attach();
 #endif
 
-  setup();
+    setup();
 
-  for (;;)
-  {
-    loop();
-    if (serialEventRun)
+    for (;;)
     {
-      serialEventRun();
-    }
+        loop();
+        if (serialEventRun)
+        {
+            serialEventRun();
+        }
 
 #ifdef TASKS_TIMER_ENABLED
-    if (!tasksTimer.empty())
-    {
-      tasksTimer.tick();
-    }
+        if (!tasksTimer.empty())
+        {
+            tasksTimer.tick();
+        }
 #endif
-  }
+    }
 
-  return 0;
+    return 0;
 }

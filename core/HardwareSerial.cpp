@@ -42,13 +42,19 @@
 // but we can refer to it weakly so we don't pull in the entire
 // HardwareSerial instance if the user doesn't also refer to it.
 #if defined(HAVE_HWSERIAL0)
+
 void serialEvent() __attribute__((weak));
+
 bool Serial0_available() __attribute__((weak));
+
 #endif
 
 #if defined(HAVE_HWSERIAL1)
+
 void serialEvent1() __attribute__((weak));
+
 bool Serial1_available() __attribute__((weak));
+
 #endif
 
 #if defined(HAVE_HWSERIAL2)
@@ -138,42 +144,42 @@ void HardwareSerial::begin(unsigned long baud, uint8_t config)
 
     UART_WordLength = ((config - UART_WordLength)) << 4;
 
-    uart->begin(baud, UART_WordLength, UART_Parity, UART_StopBits);
+    uart.begin(baud, UART_WordLength, UART_Parity, UART_StopBits);
 }
 
 void HardwareSerial::end()
 {
-    uart->end();
+    uart.end();
 }
 
 int HardwareSerial::available(void)
 {
-    return uart->available();
+    return uart.available();
 }
 
 int HardwareSerial::peek(void)
 {
-    return uart->peek();
+    return uart.peek();
 }
 
 int HardwareSerial::read(void)
 {
-    return uart->read();
+    return uart.read();
 }
 
 int HardwareSerial::availableForWrite(void)
 {
-    return uart->availableForWrite();
+    return uart.availableForWrite();
 }
 
 void HardwareSerial::flush(void)
 {
-    uart->flush();
+    uart.flush();
 }
 
 size_t HardwareSerial::write(uint8_t byte)
 {
-    return uart->write(byte);
+    return uart.write(byte);
 }
 
 #endif // whole file

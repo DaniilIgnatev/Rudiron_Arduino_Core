@@ -18,7 +18,7 @@
   Public License along with this library; if not, write to the
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
-  
+
   Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
 */
 
@@ -36,9 +36,9 @@
 #include "rudiron/can.h"
 
 #ifdef __cplusplus
-extern "C"{
+extern "C"
+{
 #endif
-
 
 #ifdef __cplusplus
 } // extern "C"

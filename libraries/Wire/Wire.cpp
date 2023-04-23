@@ -27,7 +27,7 @@
 // #include "utility/twi.h"
 
 #include "rudiron/gpio.h"
-#include "MDR_i2c.h"
+#include "MDR32F9Qx_i2c.h"
 #include "Wire.h"
 
 using namespace Rudiron;

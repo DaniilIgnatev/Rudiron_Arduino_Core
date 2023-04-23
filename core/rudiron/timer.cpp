@@ -4,24 +4,14 @@
 namespace Rudiron
 {
 
-    bool Timer::hasTimerForPin(PortPinName pinName)
+    MDR_TIMER_TypeDef *Timer::get_MDR_TIMER() const
     {
-        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
-        return descriptor.has;
+        return MDR_TIMER;
     }
 
-    /// Настоятельно рекомендуется проверять методом hasTimerForPin наличие таймера для пина
-    TimerName Timer::getTimerNameForPin(PortPinName pinName)
+    uint16_t Timer::get_ARR() const
     {
-        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
-        if (!descriptor.has)
-        {
-            return Timer_None;
-        }
-        else
-        {
-            return descriptor.timer;
-        }
+        return ARR;
     }
 
     Timer::Timer(TimerName name)
@@ -35,25 +25,54 @@ namespace Rudiron
             this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER1;
             this->TIMER_IRQn = TIMER1_IRQn;
             this->DMA_Channel = DMA_Channel_TIM1;
+            Timer_1_DMA_Interrupt_Handler = &DMA_Interrupt_Handler_1;
             break;
         case Timer_2:
             this->MDR_TIMER = MDR_TIMER2;
             this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER2;
             this->TIMER_IRQn = TIMER2_IRQn;
             this->DMA_Channel = DMA_Channel_TIM2;
+            Timer_2_DMA_Interrupt_Handler = &DMA_Interrupt_Handler_2;
             break;
         case Timer_3:
             this->MDR_TIMER = MDR_TIMER3;
             this->RST_CLK_PCLK = RST_CLK_PCLK_TIMER3;
             this->TIMER_IRQn = TIMER3_IRQn;
             this->DMA_Channel = DMA_Channel_TIM3;
+            Timer_3_DMA_Interrupt_Handler = &DMA_Interrupt_Handler_3;
             break;
         default:
             return;
         }
 
-        /* Enable TIMER1 clock */
+        enable_unit();
+    }
+
+    Timer::~Timer()
+    {
+        disable_unit();
+    }
+
+    void Timer::enable_unit()
+    {
         RST_CLK_PCLKcmd(RST_CLK_PCLK, ENABLE);
+    }
+
+    void Timer::disable_unit()
+    {
+        RST_CLK_PCLKcmd(RST_CLK_PCLK, DISABLE);
+    }
+
+    void Timer::enable()
+    {
+        TIMER_Cmd(this->MDR_TIMER, ENABLE);
+        NVIC_EnableIRQ(TIMER_IRQn);
+    }
+
+    void Timer::disable()
+    {
+        NVIC_DisableIRQ(TIMER_IRQn);
+        TIMER_Cmd(this->MDR_TIMER, DISABLE);
     }
 
     bool Timer::isHighFrequency()
@@ -61,7 +80,7 @@ namespace Rudiron
         return this->frequency > 50000;
     }
 
-    void Timer::PWM_setup(uint32_t frequency)
+    void Timer::setup(uint32_t frequency)
     {
         if (this->frequency == frequency || frequency == 0)
         {
@@ -81,15 +100,12 @@ namespace Rudiron
         TIMER_BRGInit(this->MDR_TIMER, (isHighFrequency ? TIMER_HCLKdiv1 : TIMER_HCLKdiv16));
 
         auto timer_herz = Rudiron::CLK::getCPUFrequency();
-        if (!isHighFrequency){
+        if (!isHighFrequency)
+        {
             timer_herz /= 16;
         }
 
-        // uint32_t fullARR = (isHighFrequency() ? 16000000 : 1000000) / frequency;
         uint32_t fullARR = timer_herz / frequency;
-
-        // fullARR /= CLK::getCPU_Multiplier();
-
         prescaler = fullARR / 0xffff;
         ARR = fullARR - (prescaler * 0xffff) - 1;
 
@@ -124,7 +140,7 @@ namespace Rudiron
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
         PWM_activateChannel(pinName, ppm, true);
-        disable();
+        enable();
     }
 
     void Timer::PWM_initPin(PortPinName pinName)
@@ -144,7 +160,7 @@ namespace Rudiron
         PORT_InitTypeDef PORT_InitStructure;
         PORT_StructInit(&PORT_InitStructure);
 
-        uint16_t pin = GPIO::getPinNumber(pinName);
+        uint16_t pin = GPIO::get_arduino_gpio(pinName);
         PORT_InitStructure.PORT_Pin = pin;
         PORT_InitStructure.PORT_OE = PORT_OE_OUT;
         PORT_InitStructure.PORT_FUNC = func;
@@ -154,6 +170,12 @@ namespace Rudiron
         return PORT_InitStructure;
     }
 
+    const uint16_t Timer::PPM_MIN = 0;
+
+    const uint16_t Timer::PPM_MAX = 1000;
+
+    const uint16_t Timer::PPM_MEAN = (Timer::PPM_MAX - Timer::PPM_MIN) / 2;
+
     int Timer::PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative, bool ignoreCompare)
     {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
@@ -162,13 +184,13 @@ namespace Rudiron
             return -1;
         }
 
-        if (ppm >= 1000)
+        if (ppm >= Timer::PPM_MAX)
         {
             GPIO::configPinOutput(pinName);
             GPIO::writePin(pinName, true);
             return -1;
         }
-        if (ppm == 0)
+        if (ppm == Timer::PPM_MIN)
         {
             GPIO::configPinOutput(pinName);
             GPIO::writePin(pinName, false);
@@ -188,7 +210,7 @@ namespace Rudiron
         // Степень заполнения
         if (!ignoreCompare)
         {
-            TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, ppm * this->ARR / 1000);
+            TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, ppm * this->ARR / Timer::PPM_MAX);
         }
 
         // Выход канала
@@ -241,11 +263,42 @@ namespace Rudiron
         TIMER_ChnOutInit(this->MDR_TIMER, &sTIM_ChnOutInit);
     }
 
-    void Timer::PWM_DMA_init(uint32_t channel_number, uint16_t *buffer, uint16_t buffer_length)
+    uint8_t Timer::getDmaChannel() const
     {
-        this->DMA_TIMER_CHANNEL = channel_number;
-        this->BUF_DMA = (uint8_t *)buffer;
-        this->BUF_DMA_LENGTH = buffer_length;
+        return DMA_Channel;
+    }
+
+    void Timer::DMA_Interrupt_Handler_1()
+    {
+        Timer &timer = getTimer1();
+        if (timer.dma_interrupt_handler)
+        {
+            timer.dma_interrupt_handler(timer);
+        }
+    }
+
+    void Timer::DMA_Interrupt_Handler_2()
+    {
+        Timer &timer = getTimer2();
+        if (timer.dma_interrupt_handler)
+        {
+            timer.dma_interrupt_handler(timer);
+        }
+    }
+
+    void Timer::DMA_Interrupt_Handler_3()
+    {
+        Timer &timer = getTimer3();
+        if (timer.dma_interrupt_handler)
+        {
+            timer.dma_interrupt_handler(timer);
+        }
+    }
+
+    void Timer::PWM_DMA_init(uint32_t channel_number, uint16_t *buffer, uint16_t buffer_length,
+                             void (*dma_interrupt_handler)(Timer &timer))
+    {
+        this->dma_interrupt_handler = dma_interrupt_handler;
 
         // Run DMA clock
         RST_CLK_PCLKcmd((RST_CLK_PCLK_DMA), ENABLE);
@@ -253,13 +306,13 @@ namespace Rudiron
         /* DMA_Channel_TIM1 configuration ---------------------------------*/
         /* Set Primary Control Data */
         DMA_DeInit();
-        DMA_PriCtrlStr.DMA_SourceBaseAddr = (uint32_t)BUF_DMA;
+        DMA_PriCtrlStr.DMA_SourceBaseAddr = (uint32_t)((uint8_t *)buffer);
         DMA_PriCtrlStr.DMA_DestBaseAddr = (uint32_t)(&(this->MDR_TIMER->CCR1) + channel_number);
         DMA_PriCtrlStr.DMA_SourceIncSize = DMA_SourceIncHalfword;
         DMA_PriCtrlStr.DMA_DestIncSize = DMA_DestIncNo;
         DMA_PriCtrlStr.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
         DMA_PriCtrlStr.DMA_Mode = DMA_Mode_Basic;
-        DMA_PriCtrlStr.DMA_CycleSize = BUF_DMA_LENGTH;
+        DMA_PriCtrlStr.DMA_CycleSize = buffer_length;
         DMA_PriCtrlStr.DMA_NumContinuous = DMA_Transfers_1;
         DMA_PriCtrlStr.DMA_SourceProtCtrl = DMA_SourcePrivileged;
         DMA_PriCtrlStr.DMA_DestProtCtrl = DMA_DestPrivileged;
@@ -275,53 +328,60 @@ namespace Rudiron
         TIMER_DMACmd(this->MDR_TIMER, (TIMER_STATUS_CNT_ARR), ENABLE);
     }
 
-    void Timer::PWM_DMA_setup(PortPinName pinName, uint16_t *buffer, uint16_t buffer_length)
+    void Timer::PWM_DMA_setup(PortPinName pinName, uint16_t *buffer, uint16_t buffer_length,
+                              void (*dma_interrupt_handler)(Timer &timer))
     {
         PWM_initPin(pinName);
-        int channel_number = PWM_activateChannel(pinName, 500, false, true);
+        int channel_number = PWM_activateChannel(pinName, Timer::PPM_MEAN, false, true);
         if (channel_number >= 0)
         {
-            PWM_DMA_init(channel_number, buffer, buffer_length);
+            PWM_DMA_init(channel_number, buffer, buffer_length, dma_interrupt_handler);
+            PWM_DMA_repeat();
         }
     }
 
-    void Timer::PWM_DMA_setup(PortPinName pinName, PortPinName invertedPinName, uint16_t *buffer, uint16_t buffer_length)
+    void
+    Timer::PWM_DMA_setup(PortPinName pinName, PortPinName invertedPinName, uint16_t *buffer, uint16_t buffer_length,
+                         void (*dma_interrupt_handler)(Timer &timer))
     {
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
-        int channel_number = PWM_activateChannel(pinName, 500, true, true);
+        int channel_number = PWM_activateChannel(pinName, Timer::PPM_MEAN, true, true);
         if (channel_number >= 0)
         {
-            PWM_DMA_init(channel_number, buffer, buffer_length);
+            PWM_DMA_init(channel_number, buffer, buffer_length, dma_interrupt_handler);
+            PWM_DMA_repeat();
         }
     }
 
-    void Timer::PWM_DMA_setBuffer(uint16_t *buffer, uint16_t buffer_length)
+    bool Timer::PWM_DMA_done()
     {
-        this->BUF_DMA = (uint8_t *)buffer;
-        this->BUF_DMA_LENGTH = buffer_length;
-
-        DMA_PriCtrlStr.DMA_SourceBaseAddr = (uint32_t)BUF_DMA;
-        DMA_PriCtrlStr.DMA_CycleSize = BUF_DMA_LENGTH;
+        return !DMA_GetFlagStatus(DMA_Channel, DMA_FLAG_CHNL_ENA);
     }
 
-    void Timer::PWM_DMA_start_single()
+    void Timer::PWM_DMA_wait_done()
     {
         while ((DMA_GetFlagStatus(DMA_Channel, DMA_FLAG_CHNL_ENA)))
         {
         }
+    }
 
+    void Timer::PWM_DMA_repeat()
+    {
+        PWM_DMA_wait_done();
         DMA_Init(DMA_Channel, &DMA_InitStr);
         enable();
     }
 
-    void Timer::PWM_DMA_start_single(uint16_t *buffer, uint16_t buffer_length)
+    void Timer::PWM_DMA_update(uint16_t *buffer, uint16_t buffer_length)
     {
         while (DMA_GetFlagStatus(DMA_Channel, DMA_FLAG_CHNL_ENA))
         {
         }
 
-        PWM_DMA_setBuffer(buffer, buffer_length);
+        DMA_PriCtrlStr.DMA_SourceBaseAddr = (uint32_t)((uint8_t *)buffer);
+        DMA_PriCtrlStr.DMA_CycleSize = buffer_length;
+
         DMA_Init(DMA_Channel, &DMA_InitStr);
         enable();
     }
@@ -331,38 +391,59 @@ namespace Rudiron
         TIMER_DMACmd(this->MDR_TIMER, (TIMER_STATUS_CNT_ARR), DISABLE);
     }
 
-    Timer *Timer::getTimerForPinName(PortPinName pinName)
+    TimerName Timer::getTimerNameForPin(PortPinName pinName)
     {
-        auto descriptor = TimerUtility::getTimerChannel(pinName);
-
-        switch (descriptor.timer)
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
+        if (!descriptor.has)
         {
-        case TimerName::Timer_1:
-            return Timer::getTimer1();
+            return Timer_None;
+        }
+        else
+        {
+            return descriptor.timer_name;
+        }
+    }
+
+    Timer &Timer::getTimer_by_name(TimerName name)
+    {
+        switch (name)
+        {
         case TimerName::Timer_2:
             return Timer::getTimer2();
         case TimerName::Timer_3:
             return Timer::getTimer3();
         default:
-            return nullptr;
+            return Timer::getTimer1();
         }
     }
 
-    Timer *Timer::getTimer1()
+    bool Timer::hasTimer_for_pinName(PortPinName pinName)
+    {
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
+        return descriptor.has;
+    }
+
+    Timer &Timer::getTimer_by_pinName(PortPinName name)
+    {
+        TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(name);
+        return getTimer_by_name(descriptor.timer_name);
+    }
+
+    Timer &Timer::getTimer1()
     {
         static Timer timer = Timer(TimerName::Timer_1);
-        return &timer;
+        return timer;
     }
 
-    Timer *Timer::getTimer2()
+    Timer &Timer::getTimer2()
     {
         static Timer timer = Timer(TimerName::Timer_2);
-        return &timer;
+        return timer;
     }
 
-    Timer *Timer::getTimer3()
+    Timer &Timer::getTimer3()
     {
         static Timer timer = Timer(TimerName::Timer_3);
-        return &timer;
+        return timer;
     }
 }

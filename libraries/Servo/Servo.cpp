@@ -64,17 +64,16 @@ bool Servo::attach(uint8_t pin, uint16_t minPW, uint16_t maxPW, int16_t minAngle
     }
 
     this->pin = pin;
+    this->portPin = Rudiron::GPIO::get_rudiron_gpio(pin);
     this->minPW = minPW;
     this->maxPW = maxPW;
     this->minAngle = minAngle;
     this->maxAngle = maxAngle;
 
-    portPin = Rudiron::GPIO::pinMap[pin];
-    if (Rudiron::Timer::hasTimerForPin(portPin))
+    if (Rudiron::Timer::hasTimer_for_pinName(portPin))
     {
-        timer = Rudiron::Timer::getTimerForPinName(portPin);
-        timer->start();
-        timer->PWM_setup(50);
+        Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(portPin);
+        timer.setup(50);
         return true;
     }
     else
@@ -92,11 +91,9 @@ bool Servo::detach()
 
     this->resetFields();
 
-    Rudiron::PortPinName portPin = Rudiron::GPIO::pinMap[pin];
-    if (Rudiron::Timer::hasTimerForPin(portPin))
+    if (Rudiron::Timer::hasTimer_for_pinName(portPin))
     {
-        Rudiron::Timer *timer = Rudiron::Timer::getTimerForPinName(portPin);
-        timer->PWM_stop(portPin);
+        Rudiron::Timer::getTimer_by_pinName(portPin).PWM_stop(portPin);
     }
 
     return true;
@@ -128,7 +125,7 @@ void Servo::writeMicroseconds(uint16_t pulseWidth)
 
     this->currentUS = constrain(pulseWidth, this->minPW, this->maxPW);
     auto pwmValue = map(currentUS, this->minPW, this->maxPW, this->minPW / 20, this->maxPW / 20);
-    timer->PWM_start(portPin, pwmValue);
+    Rudiron::Timer::getTimer_by_pinName(portPin).PWM_start(portPin, pwmValue);
 }
 
 uint16_t Servo::readMicroseconds() const

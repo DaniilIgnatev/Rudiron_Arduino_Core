@@ -126,7 +126,7 @@ namespace Rudiron
         {
             if (*_rx_buffer_tail == *_rx_buffer_head)
             {
-                //нет данных для чтения
+                // нет данных для чтения
                 return EndOfStream;
             }
 
@@ -175,7 +175,7 @@ namespace Rudiron
         return true;
     };
 
-    UART *UART::getUART1()
+    UART &UART::getUART1()
     {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
@@ -199,11 +199,12 @@ namespace Rudiron
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static UART uart(MDR_UART1, RST_CLK_PCLK_UART1, PORT_PIN_A6, RX_PortInit, PORT_PIN_A7, TX_PortInit, UART1_IRQn, &_uart1_rx_buffer_head, &_uart1_rx_buffer_tail, _uart1_rx_buffer);
-        return &uart;
+        static UART uart(MDR_UART1, RST_CLK_PCLK_UART1, PORT_PIN_A6, RX_PortInit, PORT_PIN_A7, TX_PortInit, UART1_IRQn,
+                         &_uart1_rx_buffer_head, &_uart1_rx_buffer_tail, _uart1_rx_buffer);
+        return uart;
     }
 
-    UART *UART::getUART2()
+    UART &UART::getUART2()
     {
         PORT_InitTypeDef RX_PortInit;
         RX_PortInit.PORT_PULL_UP = PORT_PULL_UP_OFF;
@@ -227,7 +228,8 @@ namespace Rudiron
         TX_PortInit.PORT_MODE = PORT_MODE_DIGITAL;
         TX_PortInit.PORT_OE = PORT_OE_OUT;
 
-        static UART uart(MDR_UART2, RST_CLK_PCLK_UART2, PORT_PIN_D0, RX_PortInit, PORT_PIN_D1, TX_PortInit, UART2_IRQn, &_uart2_rx_buffer_head, &_uart2_rx_buffer_tail, _uart2_rx_buffer);
-        return &uart;
+        static UART uart(MDR_UART2, RST_CLK_PCLK_UART2, PORT_PIN_D0, RX_PortInit, PORT_PIN_D1, TX_PortInit, UART2_IRQn,
+                         &_uart2_rx_buffer_head, &_uart2_rx_buffer_tail, _uart2_rx_buffer);
+        return uart;
     }
 }

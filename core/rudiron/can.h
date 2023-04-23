@@ -19,15 +19,17 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #define CAN_H
 
 #include "Stream.h"
-#include "can_utility.h"
+#include "rudiron/can_types.h"
 #include "gpio.h"
 
 namespace Rudiron
 {
-    /// Потоко-ориентированный интерфейс для работы с CAN
+    /// Потоко-ориентированный интерфейс для работы с CAN. Не использовать с переменными типа auto, будет ошибка
     class CAN : public Stream
     {
     private:
+        CAN_Name can_name;
+
         bool activeID_extended = false;
 
         uint32_t activeID = 0;
@@ -50,6 +52,7 @@ namespace Rudiron
 
     public:
         explicit CAN(
+            CAN_Name can_name,
             MDR_CAN_TypeDef *MDR_CAN,
             uint32_t RST_CLK_PCLK_CAN,
             IRQn CAN_IRQn,
@@ -82,9 +85,9 @@ namespace Rudiron
 
         operator bool() { return true; }
 
-        static CAN *getCAN1();
+        static CAN &getCAN1();
 
-        static CAN *getCAN2();
+        static CAN &getCAN2();
     };
 }
 

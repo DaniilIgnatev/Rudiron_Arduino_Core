@@ -24,42 +24,42 @@
 */
 
 #define ARDUINO_MAIN
+
 #include "wiring_private.h"
 #include "pins_arduino.h"
 #include "rudiron/gpio.h"
 
 void pinMode(uint8_t pin, uint8_t mode)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  // Rudiron::ADC::configurePin(pinName, false);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
 
-  switch (mode)
-  {
-  case INPUT:
-    Rudiron::GPIO::configPinInput(pinName);
-    break;
-  case INPUT_PULLUP:
-    Rudiron::GPIO::configPinInputPullUp(pinName);
-    break;
-  case INPUT_PULLDOWN:
-    Rudiron::GPIO::configPinInputPullDown(pinName);
-    break;
-  case OUTPUT:
-    Rudiron::GPIO::configPinOutput(pinName);
-    break;
-  default:
-    break;
-  }
+    switch (mode)
+    {
+    case INPUT:
+        Rudiron::GPIO::configPinInput(pinName);
+        break;
+    case INPUT_PULLUP:
+        Rudiron::GPIO::configPinInputPullUp(pinName);
+        break;
+    case INPUT_PULLDOWN:
+        Rudiron::GPIO::configPinInputPullDown(pinName);
+        break;
+    case OUTPUT:
+        Rudiron::GPIO::configPinOutput(pinName);
+        break;
+    default:
+        break;
+    }
 }
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  Rudiron::GPIO::writePin(pinName, (bool)val);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
+    Rudiron::GPIO::writePin(pinName, (bool)val);
 }
 
 int digitalRead(uint8_t pin)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
-  return Rudiron::GPIO::readPin(pinName);
+    Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
+    return Rudiron::GPIO::readPin(pinName);
 }

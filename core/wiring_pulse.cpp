@@ -37,7 +37,7 @@
  */
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
   return Rudiron::GPIO::pulseIn(pinName, state, timeout);
 }
 
@@ -51,6 +51,6 @@ unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
  */
 unsigned long pulseInLong(uint8_t pin, uint8_t state, unsigned long timeout)
 {
-  Rudiron::PortPinName pinName = Rudiron::GPIO::pinMap[pin];
+  Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
   return Rudiron::GPIO::pulseIn(pinName, state, timeout);
 }

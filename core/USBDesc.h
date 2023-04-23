@@ -14,35 +14,35 @@
 //   WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
 //   ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
 //   SOFTWARE.
-// 
+//
 // Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
 //*/
 //
-//#define PLUGGABLE_USB_ENABLED
+// #define PLUGGABLE_USB_ENABLED
 //
-//#if defined(EPRST6)
-//#define USB_ENDPOINTS 7 // AtMegaxxU4
-//#else
-//#define USB_ENDPOINTS 5 // AtMegaxxU2
-//#endif
+// #if defined(EPRST6)
+// #define USB_ENDPOINTS 7 // AtMegaxxU4
+// #else
+// #define USB_ENDPOINTS 5 // AtMegaxxU2
+// #endif
 //
-//#define ISERIAL_MAX_LEN     20
+// #define ISERIAL_MAX_LEN     20
 //
-//#define CDC_INTERFACE_COUNT	2
-//#define CDC_ENPOINT_COUNT	3
+// #define CDC_INTERFACE_COUNT	2
+// #define CDC_ENPOINT_COUNT	3
 //
-//#define CDC_ACM_INTERFACE	0	// CDC ACM
-//#define CDC_DATA_INTERFACE	1	// CDC Data
-//#define CDC_FIRST_ENDPOINT	1
-//#define CDC_ENDPOINT_ACM	(CDC_FIRST_ENDPOINT)							// CDC First
-//#define CDC_ENDPOINT_OUT	(CDC_FIRST_ENDPOINT+1)
-//#define CDC_ENDPOINT_IN		(CDC_FIRST_ENDPOINT+2)
+// #define CDC_ACM_INTERFACE	0	// CDC ACM
+// #define CDC_DATA_INTERFACE	1	// CDC Data
+// #define CDC_FIRST_ENDPOINT	1
+// #define CDC_ENDPOINT_ACM	(CDC_FIRST_ENDPOINT)							// CDC First
+// #define CDC_ENDPOINT_OUT	(CDC_FIRST_ENDPOINT+1)
+// #define CDC_ENDPOINT_IN		(CDC_FIRST_ENDPOINT+2)
 //
-//#define INTERFACE_COUNT		(MSC_INTERFACE + MSC_INTERFACE_COUNT)
+// #define INTERFACE_COUNT		(MSC_INTERFACE + MSC_INTERFACE_COUNT)
 //
-//#define CDC_RX CDC_ENDPOINT_OUT
-//#define CDC_TX CDC_ENDPOINT_IN
+// #define CDC_RX CDC_ENDPOINT_OUT
+// #define CDC_TX CDC_ENDPOINT_IN
 //
-//#define IMANUFACTURER   1
-//#define IPRODUCT        2
-//#define ISERIAL         3
+// #define IMANUFACTURER   1
+// #define IPRODUCT        2
+// #define ISERIAL         3

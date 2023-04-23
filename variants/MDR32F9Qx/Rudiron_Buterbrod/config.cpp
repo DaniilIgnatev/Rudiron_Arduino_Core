@@ -3,9 +3,17 @@
 // CLK
 volatile uint64_t _micros = 0;
 
+// Timer
+void (*Timer_1_DMA_Interrupt_Handler)(void) = nullptr;
+
+void (*Timer_2_DMA_Interrupt_Handler)(void) = nullptr;
+
+void (*Timer_3_DMA_Interrupt_Handler)(void) = nullptr;
+
 // I2C
 
 void (*I2C_TX_Event)(void) = 0;
+
 void (*I2C_RX_Event)(uint8_t *, int) = 0;
 
 // UART
@@ -31,3 +39,5 @@ NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head = 0;
 NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail = 0;
 
 uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
+
+void (*DAC_DMA_Interrupt_Handler)(void) = nullptr;

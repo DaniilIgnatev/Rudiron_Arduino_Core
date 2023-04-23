@@ -18,162 +18,85 @@ along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef GPIO_H
 #define GPIO_H
 
-
 #include "config.h"
-#include "MDR_config.h"
+#include "MDR32F9Qx_config.h"
 #include "MDR32Fx.h"
-#include "MDR_port.h"
-#include "MDR_rst_clk.h"
+#include "MDR32F9Qx_port.h"
+#include "MDR32F9Qx_rst_clk.h"
 
-#include "pins_arduino.h"
+#include "gpio_utility.h"
 
-namespace Rudiron {
-
-    typedef enum {
-        PORT_A,
-        PORT_B,
-        PORT_C,
-        PORT_D,
-        PORT_E,
-        PORT_F
-    } __attribute__ ((__packed__)) PortName;
-
-
-    typedef enum {
-        PORT_PIN_NONE,
-        PORT_PIN_A0,
-        PORT_PIN_A1,
-        PORT_PIN_A2,
-        PORT_PIN_A3,
-        PORT_PIN_A4,
-        PORT_PIN_A5,
-        PORT_PIN_A6,
-        PORT_PIN_A7,
-
-        PORT_PIN_B0,
-        PORT_PIN_B1,
-        PORT_PIN_B2,
-        PORT_PIN_B3,
-        PORT_PIN_B4,
-        PORT_PIN_B5,
-        PORT_PIN_B6,
-        PORT_PIN_B7,
-        PORT_PIN_B8,
-        PORT_PIN_B9,
-        PORT_PIN_B10,
-
-        PORT_PIN_C0,
-        PORT_PIN_C1,
-        PORT_PIN_C2,
-
-        PORT_PIN_D0,
-        PORT_PIN_D1,
-        PORT_PIN_D2,
-        PORT_PIN_D3,
-        PORT_PIN_D4,
-        PORT_PIN_D5,
-        PORT_PIN_D6,
-        PORT_PIN_D7,
-
-        PORT_PIN_E0,
-        PORT_PIN_E1,
-        PORT_PIN_E2,
-        PORT_PIN_E3,
-        PORT_PIN_E4,
-        PORT_PIN_E5,
-        PORT_PIN_E6,
-        PORT_PIN_E7,
-
-        PORT_PIN_F0,
-        PORT_PIN_F1,
-        PORT_PIN_F2,
-        PORT_PIN_F3
-    } __attribute__ ((__packed__)) PortPinName;
-
-
-    class GPIO {
+namespace Rudiron
+{
+    class GPIO
+    {
     public:
+        static void enableCLK(PortName portName);
 
-        static const PortPinName pinMap[NUM_DIGITAL_PINS];
+        static void disableCLK(PortName portName);
 
+        static MDR_PORT_TypeDef *getPortPointer(PortPinName pinName);
 
-        static const PortPinName pinADCMap[NUM_ANALOG_INPUTS];
+        static PortName getPortName(PortPinName pinName);
 
+        static void configPin(PortPinName name, PORT_InitTypeDef &config);
+
+        static void configPinInput(PortPinName name);
+
+        static void configPinInputPullUp(PortPinName name);
+
+        static void configPinInputPullDown(PortPinName name);
+
+        static void configPinOutput(PortPinName name);
+
+        static void writeWord(PortName name, uint16_t value);
+
+        static void writePin(PortPinName name, bool value);
+
+        static uint16_t readWord(PortName name);
+
+        static bool readPin(PortPinName name);
+
+        static unsigned long pulseIn(PortPinName pin, bool state, unsigned long timeout);
+
+        static PortPinName get_rudiron_gpio(uint8_t pin);
+
+        static uint16_t get_arduino_gpio(PortPinName pinName);
 
 #ifdef LED_BUILTIN_1
-        static inline void writeLED_1(bool value) {
-            GPIO::writePin(pinMap[LED_BUILTIN_1], value);
+        static inline void writeLED_1(bool value)
+        {
+            GPIO::writePin(get_rudiron_gpio(LED_BUILTIN_1), value);
         }
 #endif
 
 #ifdef LED_BUILTIN_2
-        static inline void writeLED_2(bool value) {
-            GPIO::writePin(pinMap[LED_BUILTIN_2], value);
+        static inline void writeLED_2(bool value)
+        {
+            GPIO::writePin(get_rudiron_gpio(LED_BUILTIN_2), value);
         }
 #endif
 
 #ifdef BUTTON_BUILTIN_1
-        static inline bool readButton_1() {
-            return GPIO::readPin(pinMap[BUTTON_BUILTIN_1]);
+        static inline bool readButton_1()
+        {
+            return GPIO::readPin(get_rudiron_gpio(BUTTON_BUILTIN_1));
         }
 #endif
 
 #ifdef BUTTON_BUILTIN_2
-        static inline bool readButton_2() {
-            return GPIO::readPin(pinMap[BUTTON_BUILTIN_2]);
+        static inline bool readButton_2()
+        {
+            return GPIO::readPin(get_rudiron_gpio(BUTTON_BUILTIN_2));
         }
 #endif
 
 #ifdef BUTTON_BUILTIN_3
-        static inline bool readButton_3() {
-            return GPIO::readPin(pinMap[BUTTON_BUILTIN_3]);
+        static inline bool readButton_3()
+        {
+            return GPIO::readPin(get_rudiron_gpio(BUTTON_BUILTIN_3));
         }
 #endif
-
-        static void enableCLK(PortName portName);
-
-
-        static void disableCLK(PortName portName);
-
-
-        static uint16_t getPinNumber(PortPinName pinName);
-
-
-        static MDR_PORT_TypeDef *getPortPointer(PortPinName pinName);
-
-
-        static PortName getPortName(PortPinName pibName);
-
-
-        static void configPin(PortPinName name, PORT_InitTypeDef &config);
-
-
-        static void configPinInput(PortPinName name);
-
-
-        static void configPinInputPullUp(PortPinName name);
-
-
-        static void configPinInputPullDown(PortPinName name);
-
-
-        static void configPinOutput(PortPinName name);
-
-
-        static void writeWord(PortName name, uint16_t value);
-
-
-        static void writePin(PortPinName name, bool value);
-
-
-        static uint16_t readWord(PortName name);
-
-
-        static bool readPin(PortPinName name);
-
-
-        static unsigned long pulseIn(PortPinName pin, bool state, unsigned long timeout);
-
     };
 
 }

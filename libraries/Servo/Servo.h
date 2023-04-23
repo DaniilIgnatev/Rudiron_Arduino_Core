@@ -194,13 +194,12 @@ public:
 
 private:
     int16_t pin;
+    Rudiron::PortPinName portPin;
     uint16_t minPW;
     uint16_t maxPW;
     int16_t minAngle;
     int16_t maxAngle;
 
-    Rudiron::PortPinName portPin;
-    Rudiron::Timer *timer;
     int currentUS;
 
     void resetFields(void);

@@ -19,7 +19,7 @@
   Public License along with this library; if not, write to the
   Free Software Foundation, Inc., 59 Temple Place, Suite 330,
   Boston, MA  02111-1307  USA
-  
+
   Modified 24 November 2006 by David A. Mellis
   Modified 1 August 2010 by Mark Sproul
   Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
@@ -30,11 +30,10 @@
 
 #include "wiring_private.h"
 
-
-void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode) {
-
+void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode)
+{
 }
 
-void detachInterrupt(uint8_t interruptNum) {
-
+void detachInterrupt(uint8_t interruptNum)
+{
 }
