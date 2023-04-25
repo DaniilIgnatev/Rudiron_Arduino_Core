@@ -74,22 +74,15 @@ namespace Rudiron
 
         void PWM_initPin(PortPinName pinName);
 
-    public:
-        static const uint16_t PPM_MIN;
-
-        static const uint16_t PPM_MAX;
-
-        static const uint16_t PPM_MEAN;
-
     private:
-        int PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative, bool ignoreCompare = false);
+        int PWM_activateChannel(PortPinName pinName, uint16_t width, uint16_t width_max, bool withNegative, bool ignoreCompare = false);
 
     public:
-        // Запустить генерацию ШИМ на выводе pinName и с заполнением ppm, между PPM_MAX (1000) и PPM_MIN (0)
-        void PWM_start(PortPinName pinName, uint16_t ppm);
+        // Запустить генерацию ШИМ на выводе pinName и с заполнением width, между 0 и width_max
+        void PWM_start(PortPinName pinName, uint16_t width, uint16_t width_max);
 
-        // Запустить генерацию ШИМ на выводах pinName и invertedPinName и с заполнением ppm, между PPM_MAX (1000) и PPM_MIN (0)
-        void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t ppm);
+        // Запустить генерацию ШИМ на выводах pinName и invertedPinName и с заполнением width, между 0 и width_max
+        void PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t width, uint16_t width_max);
 
         // Остановить генерацию ШИМ на выводе pinName
         void PWM_stop(PortPinName pinName);
@@ -169,6 +162,8 @@ namespace Rudiron
 
         static Timer &getTimer3();
     };
+
+    void pwm(uint8_t pin, uint32_t frequency, uint16_t width, uint16_t width_max);
 }
 
 #endif // TIMER_H

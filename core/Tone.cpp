@@ -52,7 +52,7 @@ void tone(uint8_t pin, unsigned int frequency, unsigned long duration)
         pinMode(pin, OUTPUT);
 
         timer.setup(frequency);
-        timer.PWM_start(pinName, 500);
+        timer.PWM_start(pinName, 500, 1000);
 
         if (duration)
         {

@@ -97,12 +97,12 @@ namespace Rudiron
         RST_CLK_GetClocksFreq(&RST_CLK_Clocks);
 
         bool isHighFrequency = this->isHighFrequency();
-        TIMER_BRGInit(this->MDR_TIMER, (isHighFrequency ? TIMER_HCLKdiv1 : TIMER_HCLKdiv16));
+        TIMER_BRGInit(this->MDR_TIMER, (isHighFrequency ? TIMER_HCLKdiv1 : CLK::getHCLKdiv() + 3));
 
-        auto timer_herz = Rudiron::CLK::getCPUFrequency();
+        uint32_t timer_herz = Rudiron::CLK::getCPUFrequency();
         if (!isHighFrequency)
         {
-            timer_herz /= 16;
+            timer_herz = timer_herz / CLK::getCPU_Multiplier() / 8;
         }
 
         uint32_t fullARR = timer_herz / frequency;
@@ -128,18 +128,18 @@ namespace Rudiron
         MDR_TIMER->STATUS = 0;
     }
 
-    void Timer::PWM_start(PortPinName pinName, uint16_t ppm)
+    void Timer::PWM_start(PortPinName pinName, uint16_t width, uint16_t width_max)
     {
         PWM_initPin(pinName);
-        PWM_activateChannel(pinName, ppm, false);
+        PWM_activateChannel(pinName, width, width_max, false);
         enable();
     }
 
-    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t ppm)
+    void Timer::PWM_start(PortPinName pinName, PortPinName invertedPinName, uint16_t width, uint16_t width_max)
     {
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
-        PWM_activateChannel(pinName, ppm, true);
+        PWM_activateChannel(pinName, width, width_max, true);
         enable();
     }
 
@@ -165,18 +165,12 @@ namespace Rudiron
         PORT_InitStructure.PORT_OE = PORT_OE_OUT;
         PORT_InitStructure.PORT_FUNC = func;
         PORT_InitStructure.PORT_MODE = PORT_MODE_DIGITAL;
-        PORT_InitStructure.PORT_SPEED = PORT_SPEED_FAST;
+        PORT_InitStructure.PORT_SPEED = PORT_SPEED_SLOW;
 
         return PORT_InitStructure;
     }
 
-    const uint16_t Timer::PPM_MIN = 0;
-
-    const uint16_t Timer::PPM_MAX = 1000;
-
-    const uint16_t Timer::PPM_MEAN = (Timer::PPM_MAX - Timer::PPM_MIN) / 2;
-
-    int Timer::PWM_activateChannel(PortPinName pinName, uint16_t ppm, bool withNegative, bool ignoreCompare)
+    int Timer::PWM_activateChannel(PortPinName pinName, uint16_t width, uint16_t width_max, bool withNegative, bool ignoreCompare)
     {
         TimerChannel_Descriptor descriptor = TimerUtility::getTimerChannel(pinName);
         if (!descriptor.has)
@@ -184,13 +178,13 @@ namespace Rudiron
             return -1;
         }
 
-        if (ppm >= Timer::PPM_MAX)
+        if (width >= width_max)
         {
             GPIO::configPinOutput(pinName);
             GPIO::writePin(pinName, true);
             return -1;
         }
-        if (ppm == Timer::PPM_MIN)
+        if (width == 0)
         {
             GPIO::configPinOutput(pinName);
             GPIO::writePin(pinName, false);
@@ -210,7 +204,7 @@ namespace Rudiron
         // Степень заполнения
         if (!ignoreCompare)
         {
-            TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, ppm * this->ARR / Timer::PPM_MAX);
+            TIMER_SetChnCompare(this->MDR_TIMER, TIMER_CHANNEL, (double)width * (double)this->ARR / (double)width_max);
         }
 
         // Выход канала
@@ -332,7 +326,7 @@ namespace Rudiron
                               void (*dma_interrupt_handler)(Timer &timer))
     {
         PWM_initPin(pinName);
-        int channel_number = PWM_activateChannel(pinName, Timer::PPM_MEAN, false, true);
+        int channel_number = PWM_activateChannel(pinName, 1, 2, false, true);
         if (channel_number >= 0)
         {
             PWM_DMA_init(channel_number, buffer, buffer_length, dma_interrupt_handler);
@@ -346,7 +340,7 @@ namespace Rudiron
     {
         PWM_initPin(pinName);
         PWM_initPin(invertedPinName);
-        int channel_number = PWM_activateChannel(pinName, Timer::PPM_MEAN, true, true);
+        int channel_number = PWM_activateChannel(pinName, 1, 2, true, true);
         if (channel_number >= 0)
         {
             PWM_DMA_init(channel_number, buffer, buffer_length, dma_interrupt_handler);
@@ -445,5 +439,16 @@ namespace Rudiron
     {
         static Timer timer = Timer(TimerName::Timer_3);
         return timer;
+    }
+
+    void pwm(uint8_t pin, uint32_t frequency, uint16_t width, uint16_t width_max){
+        Rudiron::PortPinName pinName = Rudiron::GPIO::get_rudiron_gpio(pin);
+
+        if (Rudiron::Timer::hasTimer_for_pinName(pinName))
+        {
+            Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(pinName);
+            timer.setup(frequency);
+            timer.PWM_start(pinName, width, width_max);
+        }
     }
 }

@@ -29,23 +29,15 @@
 #include "rudiron/timer.h"
 #include "rudiron/gpio.h"
 
-// 20 millisecond period config.  For a 1-based prescaler,
-//
-//    (prescaler * overflow / CYC_MSEC) msec = 1 timer cycle = 20 msec
-// => prescaler * overflow = 20 * CYC_MSEC
-//
-// This picks the smallest prescaler that allows an overflow < 2^16.
+// 20 millisecond period config
 #define MAX_OVERFLOW ((1 << 16) - 1)
-// #define CYC_MSEC (1000 * CYCLES_PER_MICROSECOND)
 #define TAU_MSEC 20
 #define TAU_USEC (TAU_MSEC * 1000)
-// #define TAU_CYC (TAU_MSEC * CYC_MSEC)
-// #define SERVO_PRESCALER (TAU_CYC / MAX_OVERFLOW + 1)
-// #define SERVO_OVERFLOW ((uint16_t)round((double)TAU_CYC / SERVO_PRESCALER))
+#define SERVO_OVERFLOW 1000
 
 // Unit conversions
-// #define US_TO_COMPARE(us) ((uint16_t)map((us), 0, TAU_USEC, 0, SERVO_OVERFLOW))
-// #define COMPARE_TO_US(c) ((uint32_t)map((c), 0, SERVO_OVERFLOW, 0, TAU_USEC))
+#define US_TO_COMPARE(us) ((uint16_t)map((us), 0, TAU_USEC, 0, SERVO_OVERFLOW))
+#define COMPARE_TO_US(c) ((uint32_t)map((c), 0, SERVO_OVERFLOW, 0, TAU_USEC))
 #define ANGLE_TO_US(a) ((uint16_t)(map((a), this->minAngle, this->maxAngle, \
                                        this->minPW, this->maxPW)))
 #define US_TO_ANGLE(us) ((int16_t)(map((us), this->minPW, this->maxPW, \
@@ -73,7 +65,8 @@ bool Servo::attach(uint8_t pin, uint16_t minPW, uint16_t maxPW, int16_t minAngle
     if (Rudiron::Timer::hasTimer_for_pinName(portPin))
     {
         Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(portPin);
-        timer.setup(50);
+        const uint16_t frequency = 1 * 1000000 / TAU_USEC;
+        timer.setup(frequency);
         return true;
     }
     else
@@ -124,8 +117,8 @@ void Servo::writeMicroseconds(uint16_t pulseWidth)
     }
 
     this->currentUS = constrain(pulseWidth, this->minPW, this->maxPW);
-    auto pwmValue = map(currentUS, this->minPW, this->maxPW, this->minPW / 20, this->maxPW / 20);
-    Rudiron::Timer::getTimer_by_pinName(portPin).PWM_start(portPin, pwmValue);
+    int pwmValue = US_TO_COMPARE(currentUS);
+    Rudiron::Timer::getTimer_by_pinName(portPin).PWM_start(portPin, pwmValue, SERVO_OVERFLOW);
 }
 
 uint16_t Servo::readMicroseconds() const

@@ -53,9 +53,9 @@ void analogWrite(uint8_t pin, int val)
     if (Rudiron::Timer::hasTimer_for_pinName(pinName))
     {
         Rudiron::Timer &timer = Rudiron::Timer::getTimer_by_pinName(pinName);
-        pinMode(pin, OUTPUT);
         timer.setup(analogWrite_Frequency);
-        long pwm_val = map(val, 0, 255, 0, 1000);
-        timer.PWM_start(pinName, pwm_val);
+        const uint16_t width_max = 65535;
+        long pwm_val = map(val, 0, 255, 0, width_max);
+        timer.PWM_start(pinName, pwm_val, width_max);
     }
 }
