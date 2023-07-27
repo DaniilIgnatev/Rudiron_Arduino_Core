@@ -17,7 +17,7 @@ cmake_minimum_required(VERSION 3.15.3)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
 
 # Название проекта
-project(Arduino_Core_Rudiron VERSION 1.0.1)
+project(Arduino_Core_Rudiron)
 
 # Sources
 set(core_path "${PROJECT_SOURCE_DIR}/core")
@@ -60,8 +60,10 @@ file(GLOB_RECURSE std_periph_driver_sources
 )
 
 set(system_path "${PROJECT_SOURCE_DIR}/system/${cpu_name}")
+set(system_board_path "${system_path}/${board_name}")
 file(GLOB_RECURSE system_sources
         ${system_path}/*
+        ${system_board_path}/*
 )
 
 set(variants_path "${PROJECT_SOURCE_DIR}/variants/${cpu_name}/${board_name}")
@@ -145,6 +147,7 @@ set(ARDUIRON_CORE_RUDIRON_INCLUDES
         ${std_periph_driver_src_path}
         ${std_periph_driver_src_usb_path}
         ${system_path}
+        ${system_board_path}
         ${variants_path}
 
         PARENT_SCOPE)
