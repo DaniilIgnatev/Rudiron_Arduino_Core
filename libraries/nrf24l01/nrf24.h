@@ -15,10 +15,8 @@ You should have received a copy of the GNU General Public License
 along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifdef NRF24_USE
-
-#ifndef NRF24_H
-#define NRF24_H
+#ifndef __NRF24_H
+#define __NRF24_H
 
 #include "MDR32F9Qx_config.h"
 #include "Stream.h"
@@ -51,8 +49,16 @@ namespace Rudiron
             uint8_t nRF24_ARC = 10                         // число повторных отправок неподтвержденных пакетов
         );
 
+    private:
+        void nRF24_InitIRQ();
+
+    public:
         void end();
 
+    private:
+        void nRF24_DeInitIRQ();
+
+    public:
         virtual int available(void) override;
 
         virtual int peek(void) override;
@@ -77,6 +83,4 @@ namespace Rudiron
 extern Rudiron::nRF24 nrf24;
 #endif
 
-#endif
-
-#endif
+#endif //__NRF24_H

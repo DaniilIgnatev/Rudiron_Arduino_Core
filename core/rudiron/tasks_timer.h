@@ -22,7 +22,6 @@ https://www.arduino.cc/reference/en/libraries/arduino-timer/
 
 #include "clk.h"
 #include <limits.h>
-#include "config.h"
 
 namespace Rudiron
 {

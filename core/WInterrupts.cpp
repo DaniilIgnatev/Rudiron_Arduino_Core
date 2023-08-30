@@ -22,18 +22,23 @@
 
   Modified 24 November 2006 by David A. Mellis
   Modified 1 August 2010 by Mark Sproul
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 28.08.2023
 */
 
 #include <inttypes.h>
 #include <stdio.h>
 
 #include "wiring_private.h"
+#include "rudiron/interrupt.h"
 
 void attachInterrupt(uint8_t interruptNum, void (*userFunc)(void), int mode)
 {
+  Rudiron::Interrupt_Name interrupt_name = (Rudiron::Interrupt_Name)interruptNum;
+  Rudiron::Interrupt::attach(interrupt_name, userFunc);
 }
 
 void detachInterrupt(uint8_t interruptNum)
 {
+  Rudiron::Interrupt_Name interrupt_name = (Rudiron::Interrupt_Name)interruptNum;
+  Rudiron::Interrupt::detach(interrupt_name);
 }

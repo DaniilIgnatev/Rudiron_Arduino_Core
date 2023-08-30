@@ -35,10 +35,6 @@
 #include "MDR32F9Qx_timer.h"
 #include "MDR32F9Qx_dma.h"
 
-#ifdef NRF24_USE
-#include "nrf24l01.h"
-#endif
-
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
@@ -270,7 +266,8 @@ void CAN2_IRQHandler(void)
  *******************************************************************************/
 void DMA_IRQHandler(void)
 {
-    if (DAC_DMA_Interrupt_Handler){
+    if (DAC_DMA_Interrupt_Handler)
+    {
         DAC_DMA_Interrupt_Handler();
     }
 }
@@ -390,10 +387,12 @@ void Timer1_IRQHandler(void)
     {
         if (MDR_DMA->STATUS & DMA_STATUS_MASTER_ENABLE)
         {
-            if (Timer_1_DMA_Interrupt_Handler){
+            if (Timer_1_DMA_Interrupt_Handler)
+            {
                 Timer_1_DMA_Interrupt_Handler();
             }
-            if (DAC_DMA_Interrupt_Handler){
+            if (DAC_DMA_Interrupt_Handler)
+            {
                 DAC_DMA_Interrupt_Handler();
             }
         }
@@ -414,10 +413,12 @@ void Timer2_IRQHandler(void)
     {
         if (MDR_DMA->STATUS & DMA_STATUS_MASTER_ENABLE)
         {
-            if (Timer_2_DMA_Interrupt_Handler){
+            if (Timer_2_DMA_Interrupt_Handler)
+            {
                 Timer_2_DMA_Interrupt_Handler();
             }
-            if (DAC_DMA_Interrupt_Handler){
+            if (DAC_DMA_Interrupt_Handler)
+            {
                 DAC_DMA_Interrupt_Handler();
             }
         }
@@ -438,10 +439,12 @@ void Timer3_IRQHandler(void)
     {
         if (MDR_DMA->STATUS & DMA_STATUS_MASTER_ENABLE)
         {
-            if (Timer_3_DMA_Interrupt_Handler){
+            if (Timer_3_DMA_Interrupt_Handler)
+            {
                 Timer_3_DMA_Interrupt_Handler();
             }
-            if (DAC_DMA_Interrupt_Handler){
+            if (DAC_DMA_Interrupt_Handler)
+            {
                 DAC_DMA_Interrupt_Handler();
             }
         }
@@ -509,6 +512,11 @@ void BACKUP_IRQHandler(void)
  *******************************************************************************/
 void EXT_INT1_IRQHandler(void)
 {
+    NVIC_ClearPendingIRQ(IRQn_Type::EXT_INT1_IRQn);
+    if (interrupt_callback_EXT_INT1_IRQHandler)
+    {
+        interrupt_callback_EXT_INT1_IRQHandler();
+    }
 }
 
 /*******************************************************************************
@@ -520,14 +528,11 @@ void EXT_INT1_IRQHandler(void)
  *******************************************************************************/
 void EXT_INT2_IRQHandler(void)
 {
-#ifdef NRF24_USE_INTERRUPT
-    NVIC_ClearPendingIRQ(EXT_INT2_IRQn);
-
-    nRF24_bufferPayload();
-
-    nRF24_ClearIRQFlags();
-    nRF24_maskIRQ(0, 0, 0);
-#endif
+    NVIC_ClearPendingIRQ(IRQn_Type::EXT_INT2_IRQn);
+    if (interrupt_callback_EXT_INT2_IRQHandler)
+    {
+        interrupt_callback_EXT_INT2_IRQHandler();
+    }
 }
 
 /*******************************************************************************
@@ -540,6 +545,11 @@ void EXT_INT2_IRQHandler(void)
  *******************************************************************************/
 void EXT_INT3_IRQHandler(void)
 {
+    NVIC_ClearPendingIRQ(IRQn_Type::EXT_INT3_IRQn);
+    if (interrupt_callback_EXT_INT3_IRQHandler)
+    {
+        interrupt_callback_EXT_INT3_IRQHandler();
+    }
 }
 
 /*******************************************************************************
@@ -551,6 +561,11 @@ void EXT_INT3_IRQHandler(void)
  *******************************************************************************/
 void EXT_INT4_IRQHandler(void)
 {
+    NVIC_ClearPendingIRQ(IRQn_Type::EXT_INT4_IRQn);
+    if (interrupt_callback_EXT_INT4_IRQHandler)
+    {
+        interrupt_callback_EXT_INT4_IRQHandler();
+    }
 }
 
 /******************* (C) COPYRIGHT 2011 Milandr *********/

@@ -3,7 +3,6 @@
 
 namespace Rudiron
 {
-
     typedef enum
     {
         PORT_A,

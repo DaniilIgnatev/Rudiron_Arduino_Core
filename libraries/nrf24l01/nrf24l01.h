@@ -13,8 +13,8 @@
  * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 13.03.2022
  */
 
-#ifndef __NRF24_H
-#define __NRF24_H
+#ifndef __NRF24L01_H
+#define __NRF24L01_H
 
 #ifdef __cplusplus
 extern "C"
@@ -292,4 +292,4 @@ extern "C"
 }
 #endif
 
-#endif // __NRF24_H
+#endif // __NRF24L01_H

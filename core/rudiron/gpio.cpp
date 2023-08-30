@@ -163,7 +163,23 @@ namespace Rudiron
     void GPIO::configPinInputPullDown(PortPinName name)
     {
         PORT_InitTypeDef config;
-        config.PORT_FUNC = ::PORT_FUNC_PORT;
+
+        switch (name)
+        {
+        case PortPinName::PORT_PIN_A0:
+            config.PORT_FUNC = ::PORT_FUNC_ALTER;
+            break;
+        case PortPinName::PORT_PIN_B10:
+            config.PORT_FUNC = ::PORT_FUNC_ALTER;
+            break;
+        case PortPinName::PORT_PIN_B9:
+            config.PORT_FUNC = ::PORT_FUNC_ALTER;
+            break;
+        default:
+            config.PORT_FUNC = ::PORT_FUNC_PORT;
+            break;
+        }
+
         config.PORT_GFEN = ::PORT_GFEN_OFF;
         config.PORT_MODE = ::PORT_MODE_DIGITAL;
         config.PORT_OE = ::PORT_OE_IN;

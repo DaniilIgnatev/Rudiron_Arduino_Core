@@ -78,10 +78,9 @@ set(ARDUINO_CORE_RUDIRON_LINKER_FILE "${cmsis_startup_path}/${cpu_name}.ld" PARE
 set(libraries_path "${PROJECT_SOURCE_DIR}/libraries")
 
 # Файлы исходного кода библиотек
-file(GLOB_RECURSE SPI_sources_ ${libraries_path}/SPI/*)
-set(SPI_sources ${SPI_sources_} PARENT_SCOPE)
-file(GLOB_RECURSE Wire_sources_ ${libraries_path}/Wire/*)
-set(Wire_sources ${Wire_sources_} PARENT_SCOPE)
+file(GLOB_RECURSE SPI_sources ${libraries_path}/SPI/*)
+file(GLOB_RECURSE Wire_sources ${libraries_path}/Wire/*)
+
 file(GLOB_RECURSE nrf24l01_sources_ ${libraries_path}/nrf24l01/*)
 set(nrf24l01_sources ${nrf24l01_sources_} PARENT_SCOPE)
 file(GLOB_RECURSE ESP_AT_Lib_sources_ ${libraries_path}/ESP_AT_Lib/*)
@@ -108,8 +107,9 @@ file(GLOB_RECURSE FastLED_sources_ ${libraries_path}/FastLED/*)
 set(FastLED_sources ${FastLED_sources_} PARENT_SCOPE)
 
 # Пути к заголовочным файлам библиотек
-set(SPI_includes ${libraries_path}/SPI PARENT_SCOPE)
-set(Wire_includes ${libraries_path}/Wire PARENT_SCOPE)
+set(SPI_includes ${libraries_path}/SPI)
+set(Wire_includes ${libraries_path}/Wire)
+
 set(nrf24l01_includes ${libraries_path}/nrf24l01 PARENT_SCOPE)
 set(ESP_AT_Lib_includes ${libraries_path}/ESP_AT_Lib PARENT_SCOPE)
 set(MPU6050_includes ${libraries_path}/MPU6050 PARENT_SCOPE)
@@ -133,6 +133,9 @@ set(ARDUIRON_CORE_RUDIRON_SOURCES
         ${std_periph_driver_sources}
         ${variants_sources}
 
+        ${SPI_sources}
+        ${Wire_sources}
+
         PARENT_SCOPE)
 
 # Перечень путей к файлам заголовков
@@ -149,5 +152,8 @@ set(ARDUIRON_CORE_RUDIRON_INCLUDES
         ${system_path}
         ${system_board_path}
         ${variants_path}
+
+        ${SPI_includes}
+        ${Wire_includes}
 
         PARENT_SCOPE)

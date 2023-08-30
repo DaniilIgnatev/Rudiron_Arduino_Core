@@ -5,16 +5,8 @@ volatile uint64_t _micros = 0;
 
 // Timer
 void (*Timer_1_DMA_Interrupt_Handler)(void) = nullptr;
-
 void (*Timer_2_DMA_Interrupt_Handler)(void) = nullptr;
-
 void (*Timer_3_DMA_Interrupt_Handler)(void) = nullptr;
-
-// I2C
-
-void (*I2C_TX_Event)(void) = 0;
-
-void (*I2C_RX_Event)(uint8_t *, int) = 0;
 
 // UART
 // указывает на следуюую ячеку для записи
@@ -40,4 +32,11 @@ NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail = 0;
 
 uint8_t _nrf24_rx_buffer[NRF24_RX_BUFFER_LENGTH];
 
+// DAC
 void (*DAC_DMA_Interrupt_Handler)(void) = nullptr;
+
+// EXTERNAL INTERRUPTS
+void (*interrupt_callback_EXT_INT1_IRQHandler)(void) = nullptr;
+void (*interrupt_callback_EXT_INT2_IRQHandler)(void) = nullptr;
+void (*interrupt_callback_EXT_INT3_IRQHandler)(void) = nullptr;
+void (*interrupt_callback_EXT_INT4_IRQHandler)(void) = nullptr;
