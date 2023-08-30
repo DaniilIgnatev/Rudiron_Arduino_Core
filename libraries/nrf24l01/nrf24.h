@@ -49,16 +49,8 @@ namespace Rudiron
             uint8_t nRF24_ARC = 10                         // число повторных отправок неподтвержденных пакетов
         );
 
-    private:
-        void nRF24_InitIRQ();
-
-    public:
         void end();
 
-    private:
-        void nRF24_DeInitIRQ();
-
-    public:
         virtual int available(void) override;
 
         virtual int peek(void) override;

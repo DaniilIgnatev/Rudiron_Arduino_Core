@@ -3,8 +3,6 @@
 
 void interrupt_callback()
 {
-    NVIC_ClearPendingIRQ(EXT_INT2_IRQn);
-
     nRF24_bufferPayload();
 
     nRF24_ClearIRQFlags();
@@ -34,7 +32,7 @@ namespace Rudiron
 #ifdef NRF24_USE_INTERRUPT
         if (isReceiver)
         {
-            nRF24_InitIRQ();
+            pinMode(BUTTON_BUILTIN_2, INPUT_PULLDOWN);
             attachInterrupt(digitalPinToInterrupt(BUTTON_BUILTIN_2), interrupt_callback);
         }
 #endif
@@ -116,43 +114,14 @@ namespace Rudiron
         return true;
     }
 
-    PORT_InitTypeDef PORT_NRF24L01_IRQ;
-
-    void nRF24::nRF24_InitIRQ()
-    {
-        PORT_NRF24L01_IRQ.PORT_Pin = nRF24_IRQ_PIN;
-        PORT_NRF24L01_IRQ.PORT_FUNC = PORT_FUNC_ALTER;
-        PORT_NRF24L01_IRQ.PORT_MODE = PORT_MODE_DIGITAL;
-        PORT_NRF24L01_IRQ.PORT_SPEED = PORT_SPEED_MAXFAST;
-        PORT_NRF24L01_IRQ.PORT_PULL_DOWN = PORT_PULL_DOWN_OFF;
-        PORT_NRF24L01_IRQ.PORT_PULL_UP = PORT_PULL_UP_OFF;
-        PORT_NRF24L01_IRQ.PORT_OE = PORT_OE_IN;
-        PORT_Init(nRF24_IRQ_PORT, &PORT_NRF24L01_IRQ);
-
-        NVIC_ClearPendingIRQ(IRQn_Type::EXT_INT2_IRQn);
-        NVIC_EnableIRQ(IRQn_Type::EXT_INT2_IRQn);
-        // NVIC->ICER[0] = (1 << EXT_INT2_IRQn);
-
-        nRF24_maskIRQ(1, 1, 0);
-    }
-
     void nRF24::end()
     {
         Rudiron::SPI::getSPI2().end();
         nRF24_GPIO_DeInit();
-        
+
 #ifdef NRF24_USE_INTERRUPT
-        nRF24_DeInitIRQ();
+        detachInterrupt(digitalPinToInterrupt(BUTTON_BUILTIN_2));
 #endif
-    }
-
-    void nRF24::nRF24_DeInitIRQ()
-    {
-        PORT_NRF24L01_IRQ.PORT_Pin = nRF24_IRQ_PIN;
-        PORT_Init(nRF24_IRQ_PORT, &PORT_NRF24L01_IRQ);
-
-        NVIC_ClearPendingIRQ(EXT_INT2_IRQn);
-        NVIC_DisableIRQ(EXT_INT2_IRQn);
     }
 
     int nRF24::available()

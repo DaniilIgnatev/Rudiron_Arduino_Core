@@ -283,8 +283,6 @@ extern "C"
 
     void nRF24_GPIO_Init(void);
     void nRF24_GPIO_DeInit(void);
-    void nRF24_InitIRQ();
-    void nRF24_DeInitIRQ();
     nRF24_TXResult nRF24_TransmitPacket(uint8_t *pBuf, uint8_t length);
     void nRF24_bufferPayload();
 
