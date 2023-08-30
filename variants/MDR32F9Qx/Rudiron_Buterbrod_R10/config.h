@@ -44,7 +44,7 @@ extern uint8_t _uart2_rx_buffer[SERIAL_RX_BUFFER_LENGTH];
 extern Rudiron::CAN_RX_Package _can_rx_buffer[CAN_RX_BUFFER_LENGTH];
 
 // NRF24
-#define NRF24_USE_INTERRUPT // Чтение данных через прерывание
+// #define NRF24_USE_INTERRUPT // Чтение данных через прерывание
 typedef uint8_t NRF24_BUFFER_INDEX_T;
 extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_head;
 extern NRF24_BUFFER_INDEX_T _nrf24_rx_buffer_tail;
