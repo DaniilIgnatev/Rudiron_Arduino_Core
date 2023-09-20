@@ -28,7 +28,7 @@ extern "C"
 #include "MDR32F9Qx_dma.h"
 #include "MDR32F9Qx_port.h"
 
-#include "rudiron/spi.h"
+#include "rudiron/ssp.h"
 #include "rudiron/clk.h"
 
 // CE (chip enable)

@@ -8,14 +8,14 @@ inline int delayNanoseconds(int){
     return 0;
 }
 
-#if defined(FASTLED_FORCE_SOFTWARE_PINS)
-#warning "Software pin support forced, pin access will be slightly slower."
-#define NO_HARDWARE_PIN_SUPPORT
-#undef HAS_HARDWARE_PIN_SUPPORT
+// #if defined(FASTLED_FORCE_SOFTWARE_PINS)
+// #warning "Software pin support forced, pin access will be slightly slower."
+// #define NO_HARDWARE_PIN_SUPPORT
+// #undef HAS_HARDWARE_PIN_SUPPORT
 
-#else
+// #else
 
-#endif // FASTLED_FORCE_SOFTWARE_PINS
+// #endif // FASTLED_FORCE_SOFTWARE_PINS
 
 FASTLED_NAMESPACE_END
 

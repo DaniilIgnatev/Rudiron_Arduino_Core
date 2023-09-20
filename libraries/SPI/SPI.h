@@ -13,11 +13,10 @@
  * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 13.03.2022
  */
 
-#ifndef _SPI_H_INCLUDED
-#define _SPI_H_INCLUDED
+#ifndef _SPI_H
+#define _SPI_H
 
 #include <Arduino.h>
-#include "rudiron/spi.h"
 
 #ifndef LSBFIRST
 #define LSBFIRST 0
@@ -61,8 +60,6 @@ public:
   }
 };
 
-#define spi_instance Rudiron::SPI::getSPI1()
-
 class SPIClass
 {
 protected:
@@ -80,34 +77,18 @@ public:
   static void usingInterrupt(uint8_t interruptNumber);
   static void notUsingInterrupt(uint8_t interruptNumber);
 
-  inline static void beginTransaction(SPISettings settings)
-  {
-    lastSettings = settings;
-    uint16_t SPH = settings.dataMode % 2 == 0 ? SSP_SPH_1Edge : SSP_SPH_2Edge;
-    uint16_t SPO = settings.dataMode < 2 ? SSP_SPO_Low : SSP_SPO_High;
-
-    spi_instance.begin(settings.clock, SPH, SPO, SSP_WordLength8b, SSP_FRF_SPI_Motorola, SSP_HardwareFlowControl_SSE);
-  }
+  static void beginTransaction(SPISettings settings);
 
   // Write to the SPI bus (MOSI pin) and also receive (MISO pin)
-  inline static uint8_t transfer(uint8_t data)
-  {
-    return spi_instance.read_write(data);
-  }
+  static uint8_t transfer(uint8_t data);
 
-  inline static uint16_t transfer16(uint16_t data)
-  {
-    return spi_instance.read_write16(data);
-  }
+  static uint16_t transfer16(uint16_t data);
 
-  inline static void transfer(void *buf, size_t count)
-  {
-    spi_instance.write((const uint8_t *)buf, count);
-  }
+  static void transfer(void *buf, size_t count);
 
   // After performing a group of transfers and releasing the chip select
   // signal, this function allows others to access the SPI bus
-  inline static void endTransaction(void)
+  static void endTransaction(void)
   {
 
   }

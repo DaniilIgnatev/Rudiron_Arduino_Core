@@ -27,7 +27,7 @@ namespace Rudiron
 
         isReceiver = receiver;
         nRF24_GPIO_Init();
-        Rudiron::SPI::getSPI2().begin(4000000, SSP_SPH_1Edge, SSP_SPO_Low, SSP_WordLength8b, SSP_FRF_SPI_Motorola, SSP_HardwareFlowControl_SSE);
+        Rudiron::SSP::getSSP2().begin(4000000, SSP_SPH_1Edge, SSP_SPO_Low, SSP_WordLength8b, SSP_FRF_SPI_Motorola, SSP_HardwareFlowControl_SSE);
 
 #ifdef NRF24_USE_INTERRUPT
         if (isReceiver)
@@ -116,7 +116,7 @@ namespace Rudiron
 
     void nRF24::end()
     {
-        Rudiron::SPI::getSPI2().end();
+        Rudiron::SSP::getSSP2().end();
         nRF24_GPIO_DeInit();
 
 #ifdef NRF24_USE_INTERRUPT
