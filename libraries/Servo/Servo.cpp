@@ -24,6 +24,8 @@
  * SOFTWARE.
  *****************************************************************************/
 
+// Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
+
 #include "math.h"
 #include "Servo.h"
 #include "rudiron/timer.h"

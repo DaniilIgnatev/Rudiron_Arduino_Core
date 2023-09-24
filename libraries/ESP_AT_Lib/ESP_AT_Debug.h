@@ -19,6 +19,8 @@
   1.4.1   K Hoang      10/10/2021  Update `platform.ini` and `library.json`
  *****************************************************************************************************************************/
 
+// Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
+
 #ifndef __ESP_AT_DEBUG_H__
 #define __ESP_AT_DEBUG_H__
 

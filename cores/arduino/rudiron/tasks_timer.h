@@ -1,24 +1,29 @@
 /*
-This file is part of Arduino_Core_Rudiron.
+This file is part of Arduino_Core_Rudiron_MDR32F9Qx.
 
-Arduino_Core_Rudiron is free software: you can redistribute it and/or modify
+Arduino_Core_Rudiron_MDR32F9Qx is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-Arduino_Core_Rudiron is distributed in the hope that it will be useful,
+Arduino_Core_Rudiron_MDR32F9Qx is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
+along with Rudiron. If not, see <https://www.gnu.org/licenses/>.
 
+Author: Daniil Ignatev
+*/
+
+/*
 The original idea and code was taken from arduino-timer_name library (regards to the author), then heavily optimized, simplified and tuned in the sdk to improve the user experience.
 https://www.arduino.cc/reference/en/libraries/arduino-timer/
 */
 
-#pragma once
+#ifndef TASKS_TIMER_H
+#define TASKS_TIMER_H
 
 #include "clk.h"
 #include <limits.h>
@@ -219,4 +224,6 @@ namespace Rudiron
 
 #ifdef TASKS_TIMER_ENABLED
 extern Rudiron::TasksTimer tasksTimer;
+#endif
+
 #endif

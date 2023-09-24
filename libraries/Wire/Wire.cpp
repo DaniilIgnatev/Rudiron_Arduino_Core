@@ -19,6 +19,7 @@
   Modified 2012 by Todd Krein (todd@krein.org) to implement repeated starts
   Modified 2017 by Chuck Todd (ctodd@cableone.net) to correct Unconfigured Slave Mode reboot
   Modified 2020 by Greyson Christoforo (grey@christoforo.net) to implement timeouts
+   Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
 */
 
 #include <stdlib.h>

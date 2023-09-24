@@ -10,7 +10,7 @@
  * or the GNU Lesser General Public License version 2.1, both as
  * published by the Free Software Foundation.
  *
- * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 13.03.2022
+ *  Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
  */
 
 #include "SPI.h"

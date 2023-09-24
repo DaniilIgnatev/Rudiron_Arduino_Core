@@ -1,0 +1,77 @@
+{
+  "packages": [
+    {
+      "name": "Rudiron",
+      "maintainer": "Rudiron",
+      "websiteUrl": "https://%D1%80%D1%83%D0%B4%D0%B8%D1%80%D0%BE%D0%BD.%D1%80%D1%84",
+      "Url": "http://localhost/distributive/arduino/package_Rudiron_index.json",
+      "email": "",
+      "platforms": [
+        {
+          "name": "Rudiron MDR32F9Qx MCU based boards",
+          "architecture": "MDR32F9Qx",
+          "version": "2.0.0",
+          "deprecated": false,
+          "category": "",
+          "url": "http://localhost/distributive/arduino/hardware/Arduino_Core_Rudiron_MDR32F9Qx_2.0.0.zip",
+          "archiveFileName": "Arduino_Core_Rudiron_MDR32F9Qx_2.0.0.zip",
+          "checksum": "SHA-256:25BFA00729DE4435D3FD60A89A77E5504BA732E3DEAFA24C54632E9EC7C14C4E",
+          "size": "1221273",
+          "boards": [
+            {
+              "name": "Rudiron_Buterbrod_R9_16MHz"
+            },
+            {
+              "name": "Rudiron_Buterbrod_R9_20MHz"
+            }
+          ],
+          "help": {},
+          "toolsDependencies": [
+            {
+              "packager": "Rudiron",
+              "name": "gcc-arm-none-eabi",
+              "version": "10.3-2021.10"
+            },
+            {
+              "packager": "Rudiron",
+              "name": "Rudiron Programmer",
+              "version": "1.1.1"
+            }
+          ],
+          "discoveryDependencies": [],
+          "monitorDependencies": []
+        }
+      ],
+      "tools": [
+        {
+          "name": "Rudiron Programmer",
+          "version": "1.1.1",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "url": "http://localhost/distributive/arduino/tools/Rudiron_Programmer_i686-mingw32_1.1.1.zip",
+              "archiveFileName": "Rudiron_Programmer_i686-mingw32_1.1.1.zip",
+              "size": "5105212",
+              "checksum": "SHA-256:91FB01B9B888455A47651BBEFC1687FF431BD72B6B3E105FD63C2EF88124BD1A"
+            }
+          ]
+        },
+        {
+          "name": "gcc-arm-none-eabi",
+          "version": "10.3-2021.10",
+          "systems": [
+            {
+              "host": "i686-mingw32",
+              "url": "http://localhost/distributive/arduino/tools/gcc-arm-none-eabi_i686-mingw32_10.3-2021.10.zip",
+              "archiveFileName": "gcc-arm-none-eabi_i686-mingw32_10.3-2021.10",
+              "size": "206496845",
+              "checksum": "SHA-256:6EBB20C823DE97C32EC662A881E413D9C66986FF966B44A905AC9C803BD0B7A1"
+            }
+          ]
+        }
+      ],
+      "help": {}
+    }
+  ],
+  "IsTrusted": false
+}

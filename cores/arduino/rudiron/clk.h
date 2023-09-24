@@ -1,5 +1,5 @@
 /*
-This file is part of Arduino_Core_Rudiron.
+This file is part of Arduino_Core_Rudiron_MDR32F9Qx.
 
 Arduino_Core_Rudiron is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -12,7 +12,9 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Arduino_Core_Rudiron.  If not, see <https://www.gnu.org/licenses/>.
+along with Arduino_Core_Rudiron. If not, see <https://www.gnu.org/licenses/>.
+
+Author: Daniil Ignatev
 */
 
 #ifndef CLK_H
