@@ -20,7 +20,7 @@
   Boston, MA  02111-1307  USA
 
   Modified 28 September 2010 by Mark Sproul
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 04.04.2023
+  Modified for Arduino_Core_Rudiron_MDR32F9Qx by Daniil Ignatev on 04.04.2023
 */
 
 #include "wiring_private.h"

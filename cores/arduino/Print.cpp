@@ -18,7 +18,7 @@
 
  Modified 23 November 2006 by David A. Mellis
  Modified 03 August 2015 by Chuck Todd
- Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+ Modified for Arduino_Core_Rudiron_MDR32F9Qx by Daniil Ignatev on 08.03.2022
  */
 
 #include <stdlib.h>

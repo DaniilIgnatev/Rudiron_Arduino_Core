@@ -23,7 +23,7 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  Modified for Arduino_Core_Rudiron_MDR32F9Qx by Daniil Ignatev on 08.03.2022
   */
 
 #include "WString.h"

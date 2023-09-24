@@ -1,3 +1,5 @@
+// Modified 2023 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
+
 #ifndef __INC_PLATFORMS_H
 #define __INC_PLATFORMS_H
 

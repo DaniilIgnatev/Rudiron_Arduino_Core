@@ -1,3 +1,5 @@
+// Modified 2023 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
+
 #define FASTLED_INTERNAL
 #include "FastLED.h"
 

@@ -1,5 +1,6 @@
 # For more info:
 # https://arduino.github.io/arduino-cli/latest/platform-specification/
+# Modified 2023 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
 
 name=Rudiron MDR32F9Qx Boards
 version=1.0.0

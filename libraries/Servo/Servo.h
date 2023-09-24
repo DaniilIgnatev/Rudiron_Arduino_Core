@@ -28,7 +28,7 @@
  * Arduino srl - www.arduino.org
  * 2017 Feb 23: Edited by Francesco Alessi (alfran) - francesco@arduino.org
  * 
- * Modified for Arduino_Core_Rudiron by Daniil Ignatev on 18.08.2022
+ *  Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
  */
 #ifndef _SERVO_H_
 #define _SERVO_H_

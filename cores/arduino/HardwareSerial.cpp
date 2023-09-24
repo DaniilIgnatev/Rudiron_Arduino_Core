@@ -20,7 +20,7 @@
   Modified 28 September 2010 by Mark Sproul
   Modified 14 August 2012 by Alarus
   Modified 3 December 2013 by Matthijs Kooijman
-  Modified for Arduino_Core_Rudiron by Daniil Ignatev on 08.03.2022
+  Modified for Arduino_Core_Rudiron_MDR32F9Qx by Daniil Ignatev on 08.03.2022
 */
 
 #include <stdlib.h>
