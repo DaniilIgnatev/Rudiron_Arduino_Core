@@ -22,7 +22,7 @@ compiler.flags=-c -mcpu={build.mcu} -mthumb -gdwarf-2 -MD -MMD -MP -MF -Wall "-O
 compiler.c.cmd=arm-none-eabi-gcc
 compiler.c.flags={compiler.flags} -std=c99
 compiler.c.elf.cmd=arm-none-eabi-gcc
-compiler.c.elf.flags="-mcpu={build.mcu}" "-T{build.core.path}/system/linker_scripts/MDR32F9Qx.ld" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -lc -lstdc++ -Wl,--end-group -lm -lgcc --specs=nano.specs --specs=nosys.specs "-Wl,--print-memory-usage" -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl,--warn-section-align "-ffreestanding"
+compiler.c.elf.flags="-mcpu={build.mcu}" "-T{build.core.path}/system/linker_scripts/MDR32F9Qx.ld" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -lc -lstdc++ -Wl,--end-group -lm -lgcc --specs=nano.specs --specs=nosys.specs "-Wl,--print-memory-usage" -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl, "-ffreestanding"
 
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.S.flags={compiler.flags} -std=c99
