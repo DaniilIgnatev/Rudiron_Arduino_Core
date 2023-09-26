@@ -22,7 +22,7 @@ compiler.flags=-c -mcpu={build.mcu} -mthumb -gdwarf-2 -MD -MMD -MP -MF -Wall "-O
 compiler.c.cmd=arm-none-eabi-gcc
 compiler.c.flags={compiler.flags} -std=c99
 compiler.c.elf.cmd=arm-none-eabi-gcc
-compiler.c.elf.flags="-mcpu={build.mcu}" "-T{build.core.path}/system/linker_scripts/MDR32F9Qx.ld" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -lc -lstdc++ -Wl,--end-group -lm -lgcc --specs=nano.specs --specs=nosys.specs "-Wl,--print-memory-usage" -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -Wl, "-ffreestanding"
+compiler.c.elf.flags="-mcpu={build.mcu}" "-T{build.core.path}/system/linker_scripts/MDR32F9Qx.ld" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.c.elf.extra_flags} {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" "-L{build.path}" -Wl,--start-group {object_files} -Wl,--whole-archive "{build.path}/{archive_file}" -Wl,--no-whole-archive -lc -lstdc++ -Wl,--end-group -lm -lgcc --specs=nano.specs --specs=nosys.specs "-Wl,--print-memory-usage" -Wl,--cref -Wl,--check-sections -Wl,--gc-sections -Wl,--unresolved-symbols=report-all -Wl,--warn-common -ffreestanding
 
 compiler.S.cmd=arm-none-eabi-gcc
 compiler.S.flags={compiler.flags} -std=c99
@@ -116,13 +116,13 @@ tools.rp.upload.verify=
 tools.rp.upload.params.verbose=-d
 tools.rp.upload.params.quiet=
 tools.rp.upload.params="--english" "--erase" "--load" "--run" "--speed" "8" "--port" "{serial.port}"
-tools.rp.upload.pattern="{path}/{cmd}" "{runtime.platform.path}/bootloaders/bootloader_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.upload.params}
+tools.rp.upload.pattern="{path}/{cmd}" "{runtime.tools.bootloaders.path}/MDR32F9Qx_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.upload.params}
 
 #tools.rp.program.verify=
 #tools.rp.program.params.verbose=-d
 #tools.rp.program.params.quiet=
 #tools.rp.program.params="--english" "--erase" "--load" "--run" "--speed" 8
-#tools.rp.program.pattern="{path}/{cmd}" "{runtime.platform.path}/bootloaders/bootloader_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.upload.params}
+#tools.rp.program.pattern="{path}/{cmd}" "{runtime.tools.bootloaders.path}/MDR32F9Qx_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.upload.params}
 
 #tools.rp.erase.params="--english" "--erase" "--speed" 8
-#tools.rp.erase.pattern="{path}/{cmd}" "{runtime.platform.path}/bootloaders/bootloader_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.erase.params}
+#tools.rp.erase.pattern="{path}/{cmd}" "{runtime.tools.bootloaders.path}/MDR32F9Qx_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.erase.params}
