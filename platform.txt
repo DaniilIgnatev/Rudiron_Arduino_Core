@@ -115,7 +115,7 @@ tools.rp.path.windows={runtime.tools.Rudiron Programmer.path}
 tools.rp.upload.verify=
 tools.rp.upload.params.verbose=-d
 tools.rp.upload.params.quiet=
-tools.rp.upload.params="--english" "--erase" "--load" "--run" "--speed" "8" "--port" "{serial.port}"
+tools.rp.upload.params="--english" "--erase" "--load" "--run" "--speed" "8"
 tools.rp.upload.pattern="{path}/{cmd}" "{runtime.tools.bootloaders.path}/MDR32F9Qx_default.hex" "{build.path}/{build.project_name}.hex" {tools.rp.upload.params}
 
 #tools.rp.program.verify=
