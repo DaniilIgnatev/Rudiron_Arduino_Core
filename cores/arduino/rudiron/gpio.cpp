@@ -222,7 +222,7 @@ namespace Rudiron
         config.PORT_PD_SHM = ::PORT_PD_SHM_OFF;
         config.PORT_PULL_DOWN = ::PORT_PULL_DOWN_OFF;
         config.PORT_PULL_UP = ::PORT_PULL_UP_OFF;
-        config.PORT_SPEED = ::PORT_SPEED_SLOW;
+        config.PORT_SPEED = ::PORT_SPEED_FAST;
 
         configPin(name, config);
     }
