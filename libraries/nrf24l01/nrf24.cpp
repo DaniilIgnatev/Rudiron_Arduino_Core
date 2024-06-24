@@ -16,6 +16,17 @@ along with Rudiron. If not, see <https://www.gnu.org/licenses/>.
 
 Author: Daniil Ignatev
 */
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
 
 #include "nrf24.h"
 #include "Arduino.h"
@@ -283,4 +294,4 @@ namespace Rudiron
 
 #if NRF24_RX_BUFFER_LENGTH > 0
 Rudiron::nRF24 nrf24;
-#endif
+#endi

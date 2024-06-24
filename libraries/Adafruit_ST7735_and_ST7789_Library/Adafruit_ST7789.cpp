@@ -170,4 +170,15 @@ void Adafruit_ST7789::setRotation(uint8_t m) {
   }
 
   sendCommand(ST77XX_MADCTL, &madctl, 1);
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
 }

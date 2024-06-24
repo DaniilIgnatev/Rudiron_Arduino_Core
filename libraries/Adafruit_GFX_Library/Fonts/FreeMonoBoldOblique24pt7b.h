@@ -741,4 +741,15 @@ const GFXfont FreeMonoBoldOblique24pt7b = {
     (uint8_t *)FreeMonoBoldOblique24pt7bBitmaps,
     (GFXglyph *)FreeMonoBoldOblique24pt7bGlyphs, 0x20, 0x7E, 47};
 
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
 // Approx. 8307 bytes

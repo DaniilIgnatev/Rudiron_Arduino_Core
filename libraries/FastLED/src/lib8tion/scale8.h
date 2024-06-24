@@ -775,4 +775,15 @@ LIB8STATIC uint8_t brighten8_lin( uint8_t x )
 /// @} Dimming
 /// @} lib8tion
 
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
 #endif
