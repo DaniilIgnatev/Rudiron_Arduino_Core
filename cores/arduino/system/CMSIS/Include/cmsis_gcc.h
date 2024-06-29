@@ -21,6 +21,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
 
 #ifndef __CMSIS_GCC_H
 #define __CMSIS_GCC_H

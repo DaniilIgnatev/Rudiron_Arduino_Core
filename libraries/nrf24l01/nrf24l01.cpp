@@ -1,6 +1,17 @@
 // Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
 
 // Functions to manage the nRF24L01+ transceiver
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
 
 #include "nrf24l01.h"
 
@@ -954,4 +965,4 @@ void nRF24_bufferPayload()
 			}
 		}
 	}
-}
+
