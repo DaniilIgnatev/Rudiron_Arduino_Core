@@ -21,17 +21,6 @@ Author: Daniil Ignatev
 The original idea and code was taken from arduino-timer_name library (regards to the author), then heavily optimized, simplified and tuned in the sdk to improve the user experience.
 https://www.arduino.cc/reference/en/libraries/arduino-timer/
 */
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 
 #ifndef TASKS_TIMER_H
 #define TASKS_TIMER_H
@@ -237,4 +226,4 @@ namespace Rudiron
 extern Rudiron::TasksTimer tasksTimer;
 #endif
 
-#endi
+#endif

@@ -16,17 +16,6 @@ along with Arduino_Core_Rudiron_MDR32F9Qx. If not, see <https://www.gnu.org/lice
 
 Author: Daniil Ignatev
 */
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 
 #include "uart.h"
 #include "clk.h"
@@ -262,4 +251,4 @@ namespace Rudiron
                          &_uart2_rx_buffer_head, &_uart2_rx_buffer_tail, _uart2_rx_buffer);
         return uart;
     }
-
+}

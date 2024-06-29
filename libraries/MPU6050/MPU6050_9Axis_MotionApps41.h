@@ -29,17 +29,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ===============================================
 */
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 
 #ifndef _MPU6050_9AXIS_MOTIONAPPS41_H_
 #define _MPU6050_9AXIS_MOTIONAPPS41_H_
