@@ -1,17 +1,6 @@
 /// @file hsv2rgb.cpp
 /// Functions to convert from the HSV colorspace to the RGB colorspace
 
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 /// Disables pragma messages and warnings
 #define FASTLED_INTERNAL
 #include <stdint.h>

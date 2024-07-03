@@ -27,15 +27,4 @@ private:
   uint16_t windowHeight;
 };
 
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 #endif // _ADAFRUIT_ST7789H_

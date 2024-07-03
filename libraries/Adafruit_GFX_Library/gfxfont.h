@@ -1,15 +1,4 @@
 // Font structures for newer Adafruit_GFX (1.1 and later).
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 // Example fonts are included in 'Fonts' directory.
 // To use a font in your Arduino sketch, #include the corresponding .h
 // file and pass address of GFXfont struct to setFont().  Pass NULL to

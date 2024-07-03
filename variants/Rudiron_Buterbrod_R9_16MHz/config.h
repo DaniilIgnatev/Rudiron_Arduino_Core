@@ -16,17 +16,6 @@ along with Arduino_Core_Rudiron_MDR32F9Qx. If not, see <https://www.gnu.org/lice
 
 Author: Daniil Ignatev
 */
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -94,4 +83,4 @@ extern void (*interrupt_callback_EXT_INT2_IRQHandler)(void);
 extern void (*interrupt_callback_EXT_INT3_IRQHandler)(void);
 extern void (*interrupt_callback_EXT_INT4_IRQHandler)(void);
 
-#endi
+#endif

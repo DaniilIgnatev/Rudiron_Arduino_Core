@@ -18,17 +18,6 @@
    <http://www.gnu.org/licenses/>.
 */
 #if defined(__arm__) // Arduino Due Board follows
-// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
-
-#define Aquarius
-
-#if defined(Aquarius)
-#define HelloString "Rudiron System Aquarius! Welcome!"
-#define HelloStringLength 33
-#else
-#define HelloString "Welcome!"
-#define HelloStringLength 8
-#endif
 
 #ifndef Sd2PinMap_h
   #define Sd2PinMap_h
