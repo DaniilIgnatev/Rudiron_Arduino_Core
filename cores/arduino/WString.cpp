@@ -26,6 +26,18 @@
   Modified for Arduino_Core_Rudiron_MDR32F9Qx by Daniil Ignatev on 08.03.2022
   */
 
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
+
 #include "WString.h"
 
 #define BUFSIZE (sizeof(long) * 8 + 1)

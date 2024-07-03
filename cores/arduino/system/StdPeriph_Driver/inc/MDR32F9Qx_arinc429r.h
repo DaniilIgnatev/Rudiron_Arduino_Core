@@ -4,6 +4,18 @@
   * FILE MDR32F9Qx_arinc429r.h
   */
 
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef MDR32F9QX_ARINC429R_H_
 #define MDR32F9QX_ARINC429R_H_
