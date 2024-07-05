@@ -43,6 +43,18 @@ THE SOFTWARE.
 ===============================================
 */
 
+// Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
+
+#define Aquarius
+
+#if defined(Aquarius)
+#define HelloString "Rudiron System Aquarius! Welcome!"
+#define HelloStringLength 33
+#else
+#define HelloString "Welcome!"
+#define HelloStringLength 8
+#endif
+
 #include "I2Cdev.h"
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE || I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_SBWIRE
