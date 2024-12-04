@@ -150,6 +150,20 @@ namespace Rudiron
                            uint16_t buffer_length,
                            void (*dma_interrupt_handler)(Timer &timer));
 
+        // Настроить и запустить 3 канала DMA с заданными параметрами
+        // pinName_ch1 - вывод GPIO для первого канала ШИМ
+        // pinName_ch2 - вывод GPIO для второго канала ШИМ
+        // pinName_ch3 - вывод GPIO для третьего канала ШИМ
+        // buffer - источник данных для трех каналов с длиной 3
+        // dma_interrupt_handler - обработчик, вызываемый после обновления всех каналов
+        void PWM_DMA_setup_all_channels(
+            PortPinName pinName_ch1,
+            PortPinName pinName_ch2,
+            PortPinName pinName_ch3,
+            uint16_t *buffer,
+            void (*dma_interrupt_handler)(Timer &timer)
+        );
+
         bool PWM_DMA_done();
 
         void PWM_DMA_wait_done();

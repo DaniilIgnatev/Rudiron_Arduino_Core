@@ -379,6 +379,58 @@ namespace Rudiron
         }
     }
 
+    void Timer::PWM_DMA_setup_all_channels(
+        PortPinName pinName_ch1,
+        PortPinName pinName_ch2,
+        PortPinName pinName_ch3,
+        uint16_t *buffer,
+        void (*dma_interrupt_handler)(Timer &timer)
+        )
+    {
+        PWM_initPin(pinName_ch1);
+        PWM_initPin(pinName_ch2);
+        PWM_initPin(pinName_ch3);
+
+        int channel_1 = PWM_activateChannel(pinName_ch1, 1, 2, false, true);
+        int channel_2 = PWM_activateChannel(pinName_ch2, 1, 2, false, true);
+        int channel_3 = PWM_activateChannel(pinName_ch3, 1, 2, false, true);
+
+        if (channel_1 >= 0 && channel_2 >= 0 && channel_3 >= 0)
+        {
+            this->dma_interrupt_handler = dma_interrupt_handler;
+
+            // Run DMA clock
+            RST_CLK_PCLKcmd((RST_CLK_PCLK_DMA), ENABLE);
+
+            /* DMA_Channel_TIM1 configuration ---------------------------------*/
+            /* Set Primary Control Data */
+            DMA_DeInit();
+            DMA_PriCtrlStr.DMA_SourceBaseAddr = (uint32_t)((uint8_t *)buffer);
+            DMA_PriCtrlStr.DMA_DestBaseAddr = (uint32_t)(&(this->MDR_TIMER->CCR1));
+            DMA_PriCtrlStr.DMA_SourceIncSize = DMA_SourceIncHalfword;
+            DMA_PriCtrlStr.DMA_DestIncSize = DMA_DestIncWord;
+            DMA_PriCtrlStr.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+            DMA_PriCtrlStr.DMA_Mode = DMA_Mode_Basic;
+            DMA_PriCtrlStr.DMA_CycleSize = 3;
+            DMA_PriCtrlStr.DMA_NumContinuous = DMA_Transfers_1;
+            DMA_PriCtrlStr.DMA_SourceProtCtrl = DMA_SourcePrivileged;
+            DMA_PriCtrlStr.DMA_DestProtCtrl = DMA_DestPrivileged;
+
+            /* Set Channel Structure */
+            DMA_StructInit(&DMA_InitStr);
+            DMA_InitStr.DMA_PriCtrlData = &DMA_PriCtrlStr;
+            DMA_InitStr.DMA_Priority = DMA_Priority_High;
+            DMA_InitStr.DMA_UseBurst = DMA_BurstClear;
+            DMA_InitStr.DMA_SelectDataStructure = DMA_CTRL_DATA_PRIMARY;
+
+            /* Enable TIMER DMA request */
+            TIMER_DMACmd(this->MDR_TIMER, (TIMER_STATUS_CNT_ARR), ENABLE);
+
+
+            PWM_DMA_repeat();
+        }
+    }
+
     bool Timer::PWM_DMA_done()
     {
         return !DMA_GetFlagStatus(DMA_Channel, DMA_FLAG_CHNL_ENA);
