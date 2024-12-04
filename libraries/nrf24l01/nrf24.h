@@ -16,6 +16,7 @@ along with Rudiron. If not, see <https://www.gnu.org/licenses/>.
 
 Author: Daniil Ignatev
 */
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -88,4 +89,4 @@ namespace Rudiron
 extern Rudiron::nRF24 nrf24;
 #endif
 
-#endif //__NRF24_
+#endif //__NRF24_H

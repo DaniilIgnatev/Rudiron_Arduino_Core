@@ -1,5 +1,6 @@
 /// @file fastspi_types.h
 /// Data types and constants used by SPI interfaces
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

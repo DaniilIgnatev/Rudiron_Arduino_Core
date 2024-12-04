@@ -16,6 +16,7 @@ along with Arduino_Core_Rudiron_MDR32F9Qx. If not, see <https://www.gnu.org/lice
 
 Author: Daniil Ignatev
 */
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -38,4 +39,4 @@ Author: Daniil Ignatev
 /// @return Номер внешнего прерывания или -1
 int digitalPinToInterrupt(int pin);
 
-#endif // INTERRUPT_UTILITY_
+#endif // INTERRUPT_UTILITY_H

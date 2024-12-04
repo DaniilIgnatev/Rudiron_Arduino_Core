@@ -18,6 +18,7 @@
   *
   * <h2><center>&copy; COPYRIGHT 2011 Milandr</center></h2>
   */
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

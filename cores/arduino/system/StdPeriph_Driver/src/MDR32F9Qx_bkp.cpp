@@ -2,6 +2,7 @@
 
 /**
   * FILE MDR32F9Qx_bkp.c
+  */
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -13,7 +14,7 @@
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
-  */
+
 /* Includes ------------------------------------------------------------------*/
 #include "MDR32F9Qx_bkp.h"
 #include "MDR32F9Qx_rst_clk.h"

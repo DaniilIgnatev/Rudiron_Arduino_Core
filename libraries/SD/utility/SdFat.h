@@ -16,6 +16,7 @@
    You should have received a copy of the GNU General Public License
    along with the Arduino SdFat Library.  If not, see
    <http://www.gnu.org/licenses/>.
+*/
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -27,7 +28,7 @@
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
-*/
+
 #ifndef SdFat_h
 #define SdFat_h
 /**

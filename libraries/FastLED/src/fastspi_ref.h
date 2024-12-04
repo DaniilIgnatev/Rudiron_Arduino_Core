@@ -1,6 +1,7 @@
 /// @file fastspi_ref.h
 /// Example of a hardware SPI support class.
 /// @note Example for developers. Not a functional part of the library.
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

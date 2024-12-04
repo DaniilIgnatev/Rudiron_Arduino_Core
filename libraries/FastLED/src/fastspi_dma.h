@@ -11,4 +11,5 @@
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
+
 /// @deprecated This header file is empty.

@@ -1,5 +1,6 @@
 // Picopixel by Sebastian Weber.  A tiny font
 // with all characters within a 6 pixel height.
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

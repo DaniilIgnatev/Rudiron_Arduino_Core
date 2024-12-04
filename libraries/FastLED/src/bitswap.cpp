@@ -1,6 +1,7 @@
 /// @file bitswap.cpp
 /// Functions for doing a rotation of bits/bytes used by parallel output
 
+/// Disables pragma messages and warnings
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -12,7 +13,7 @@
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
-/// Disables pragma messages and warnings
+
 #define FASTLED_INTERNAL
 
 #include "FastLED.h"

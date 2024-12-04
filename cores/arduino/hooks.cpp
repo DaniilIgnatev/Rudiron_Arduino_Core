@@ -41,4 +41,5 @@ static void __empty()
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
+
 void yield(void);

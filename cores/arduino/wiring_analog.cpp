@@ -22,6 +22,7 @@
   Modified 28 September 2010 by Mark Sproul
   Modified for Arduino_Core_Rudiron_MDR32F9Qx by Daniil Ignatev on 04.04.2023
 */
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

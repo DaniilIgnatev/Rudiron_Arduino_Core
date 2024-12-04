@@ -2,6 +2,7 @@
 /// Fast, efficient 8-bit math functions specifically
 /// designed for high-performance LED programming. 
 
+/// Disables pragma messages and warnings
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -13,7 +14,7 @@
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
-/// Disables pragma messages and warnings
+
 #define FASTLED_INTERNAL
 
 #include <stdint.h>

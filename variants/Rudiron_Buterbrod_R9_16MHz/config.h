@@ -16,6 +16,7 @@ along with Arduino_Core_Rudiron_MDR32F9Qx. If not, see <https://www.gnu.org/lice
 
 Author: Daniil Ignatev
 */
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -94,4 +95,4 @@ extern void (*interrupt_callback_EXT_INT2_IRQHandler)(void);
 extern void (*interrupt_callback_EXT_INT3_IRQHandler)(void);
 extern void (*interrupt_callback_EXT_INT4_IRQHandler)(void);
 
-#endi
+#endif

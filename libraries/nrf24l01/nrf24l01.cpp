@@ -1,6 +1,7 @@
 // Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
 
 // Functions to manage the nRF24L01+ transceiver
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -965,4 +966,4 @@ void nRF24_bufferPayload()
 			}
 		}
 	}
-
+}

@@ -18,6 +18,7 @@
    <http://www.gnu.org/licenses/>.
 */
 #if defined(__arm__) // Arduino Due Board follows
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

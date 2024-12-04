@@ -24,6 +24,7 @@
 */
 
 extern "C"
+{
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -35,7 +36,7 @@ extern "C"
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
-{
+
 #include "stdlib.h"
 }
 

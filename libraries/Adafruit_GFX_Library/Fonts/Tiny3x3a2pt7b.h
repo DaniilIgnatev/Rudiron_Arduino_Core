@@ -11,6 +11,7 @@
 *
 * Converted by eadmaster with fontconvert
 **/
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius

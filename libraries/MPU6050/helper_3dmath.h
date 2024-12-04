@@ -28,6 +28,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ===============================================
 */
+
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -224,4 +225,4 @@ class VectorFloat {
         }
 };
 
-#endif /* _HELPER_3DMATH_H_ *
+#endif /* _HELPER_3DMATH_H_ */

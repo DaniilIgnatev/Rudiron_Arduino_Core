@@ -29,6 +29,7 @@
  * 2017 Feb 23: Edited by Francesco Alessi (alfran) - francesco@arduino.org
  * 
  *  Modified 2022 by Daniil Ignatev for Arduino_Core_Rudiron_MDR32F9Qx
+ */
 // Modified in 2024 by Yuri Denisov for AQUARIUS_Arduino_Core_Rudiron_MDR32F9Qx
 
 #define Aquarius
@@ -40,7 +41,7 @@
 #define HelloString "Welcome!"
 #define HelloStringLength 8
 #endif
- */
+
 #ifndef _SERVO_H_
 #define _SERVO_H_
 
