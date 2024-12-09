@@ -33,6 +33,7 @@
 #define HelloStringLength 8
 #endif
 
+
 /* Includes ------------------------------------------------------------------*/
 #include "MDR32F9Qx_it.h"
 
@@ -408,6 +409,10 @@ void Timer1_IRQHandler(void)
                 DAC_DMA_Interrupt_Handler();
             }
         }
+        if (Timer_1_Interrupt_Handler)
+        {
+            Timer_1_Interrupt_Handler();
+        }
     }
     MDR_TIMER1->STATUS = 0;
 }
@@ -434,6 +439,10 @@ void Timer2_IRQHandler(void)
                 DAC_DMA_Interrupt_Handler();
             }
         }
+        if (Timer_2_Interrupt_Handler)
+        {
+            Timer_2_Interrupt_Handler();
+        }
     }
     MDR_TIMER2->STATUS = 0;
 }
@@ -459,6 +468,10 @@ void Timer3_IRQHandler(void)
             {
                 DAC_DMA_Interrupt_Handler();
             }
+        }
+        if (Timer_3_Interrupt_Handler)
+        {
+            Timer_3_Interrupt_Handler();
         }
     }
     MDR_TIMER3->STATUS = 0;

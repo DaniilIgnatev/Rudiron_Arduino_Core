@@ -29,6 +29,7 @@ Author: Daniil Ignatev
 #define HelloStringLength 8
 #endif
 
+
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -47,6 +48,10 @@ Author: Daniil Ignatev
 extern volatile uint64_t _micros;
 
 // Timer
+extern void (*Timer_1_Interrupt_Handler)(void);
+extern void (*Timer_2_Interrupt_Handler)(void);
+extern void (*Timer_3_Interrupt_Handler)(void);
+
 extern void (*Timer_1_DMA_Interrupt_Handler)(void);
 extern void (*Timer_2_DMA_Interrupt_Handler)(void);
 extern void (*Timer_3_DMA_Interrupt_Handler)(void);
